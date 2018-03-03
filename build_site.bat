@@ -1,0 +1,1 @@
+jekyll build --destination ..\github_io
