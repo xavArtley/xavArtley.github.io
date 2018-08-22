@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="elem in data">
+                <p>{{ elem }}</p>
+            </li>
+        </ul>
+    </div>
+</body>
+<!-- vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- Firebase -->
+<script src="https://gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+<!-- VueFire -->
+<script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
+<!-- vue-resource -->
+<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+<script>
+    var firebaseApp = firebase.initializeApp({
+        databaseURL: "https://xartradeapp.firebaseio.com/"
+    })
+    var db = firebaseApp.database()
+    var cac40Ref = db.ref('cac40')
+
+    var vm = new Vue({
+        el: '#app',
+        firebase: {
+            data: cac40Ref.limitToLast(25)
+        },
+        methods: {
+            time2date(time) {
+                return new Date(time);
+            }
+        },
+        computed: {
+            datelist() {
+                return this.data.map(d => time2date(d.time));
+            }
+        }
+    })
+</script>
+
+</html>
