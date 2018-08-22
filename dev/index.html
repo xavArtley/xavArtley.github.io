@@ -88,7 +88,7 @@
                     type: "scatter",
                     name: this.selectedValue[i]
                 }))
-                Plotly.newPlot('plotlydiv', traces);
+                Plotly.react('plotlydiv', traces);
             },
             selectValue(Valeur) {
                 return this.data.map(d => d.data).map(d => d.filter(e =>
