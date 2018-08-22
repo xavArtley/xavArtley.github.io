@@ -101,7 +101,7 @@
             string2float(val) {
                 if (isNaN(val)) {
                     if ((val = val.match(/([0-9\.,]+\d)/g))) {
-                        val = val[0].replace(/[^\d\.]+/g, '')
+                        val = val[0].replace(/[^\d\.]+/g, '.')
                     }
                 }
                 return parseFloat(val)
