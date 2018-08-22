@@ -5,47 +5,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Firebase -->
+    <script src="https://gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+    <!-- VueFire -->
+    <script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
+    <!-- vue-resource -->
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+    <!-- ploty -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <!-- propperjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+
+    <!-- bootstrap v4 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/vue-multiselect@2.1.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">
     <title>Document</title>
 </head>
 
 <body>
     <div id="app">
-        <ul>
-            <li v-for="elem in data">
-                <p>{{ elem }}</p>
-            </li>
-        </ul>
+        <div class="container" v-if="loaded">
+            <div class="row">
+                <vue-multiselect class="col-3 pr-1" v-model="selectedColumn" :options="columns.slice(1)"></vue-multiselect>
+                <vue-multiselect class="col-3  pr-1" multiple v-model="selectedValue" :options="values">
+                </vue-multiselect>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="plotlydiv">
     </div>
 </body>
-<!-- vue -->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<!-- Firebase -->
-<script src="https://gstatic.com/firebasejs/4.2.0/firebase.js"></script>
-<!-- VueFire -->
-<script src="https://unpkg.com/vuefire/dist/vuefire.js"></script>
-<!-- vue-resource -->
-<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
 <script>
-    var firebaseApp = firebase.initializeApp({
+    const firebaseApp = firebase.initializeApp({
         databaseURL: "https://xartradeapp.firebaseio.com/"
     })
-    var db = firebaseApp.database()
-    var cac40Ref = db.ref('cac40')
+    const db = firebaseApp.database()
+    const cac40Ref = db.ref('cac40')
 
-    var vm = new Vue({
+    // register globally
+    Vue.component('vue-multiselect', window.VueMultiselect.default)
+    const vm = new Vue({
         el: '#app',
+        data: {
+            selectedColumn: "Cours",
+            selectedValue: [],
+        },
         firebase: {
-            data: cac40Ref.limitToLast(25)
+            rawdata: cac40Ref.limitToLast(200)
+        },
+        watch: {
+            selectedValue() {
+                this.updatePlot();
+            },
+            selectedColumn() {
+                this.updatePlot();
+            }
         },
         methods: {
+            updatePlot() {
+                let tabValues = this.selectedValue.map(key => this.selectValue(
+                    key).map(d => d[this.selectedColumn]).map(
+                    val => this.string2float(val)));
+                let traces = tabValues.map((y, i) => ({
+                    x: this.datelist,
+                    y: y,
+                    type: "scatter",
+                    name: this.selectedValue[i]
+                }))
+                Plotly.newPlot('plotlydiv', traces);
+            },
+            selectValue(Valeur) {
+                return this.data.map(d => d.data).map(d => d.filter(e =>
+                    e.Valeur ==
+                    Valeur)[0])
+            },
             time2date(time) {
                 return new Date(time);
-            }
+            },
+            string2float(val) {
+                if (isNaN(val)) {
+                    if ((val = val.match(/([0-9\.,]+\d)/g))) {
+                        val = val[0].replace(/[^\d\.]+/g, '')
+                    }
+                }
+                return parseFloat(val)
+            },
         },
         computed: {
+            loaded() {
+                return this.rawdata.length > 0;
+            },
+            data() {
+                if (this.rawdata) {
+                    var datatransform = []
+                    this.rawdata.map(d => {
+                        datatransform.push({
+                            date: this.time2date(d.time),
+                            data: JSON.parse(d.data)
+                        })
+                    });
+                    return datatransform
+                }
+            },
             datelist() {
-                return this.data.map(d => time2date(d.time));
+                return this.data.map(d => d.date);
+            },
+            columns() {
+                return Object.keys(this.data[0].data[0]);
+            },
+            values() {
+                return this.data[0].data.map(d => d[this.columns[0]])
             }
+        },
+        created() {
+            this.$watch('rawdata', {
+                deep: true,
+                handler(newArray) {
+                    console.log('Firebase change detected...');
+                    this.updatePlot();
+                }
+            });
+        },
+        mounted() {
+            Plotly.newPlot('plotlydiv', []);
         }
     })
 </script>
