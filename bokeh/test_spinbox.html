@@ -1,0 +1,210 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+      <meta charset="utf-8">
+      <title>Bokeh Plot</title>
+      
+      
+        
+          
+        <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.css" type="text/css" />
+        <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.css" type="text/css" />
+        
+        
+          
+        <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.js"></script>
+        <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.js"></script>
+        <script type="text/javascript">
+            Bokeh.set_log_level("info");
+        </script>
+        
+      
+      
+    
+  </head>
+  
+  
+  <body>
+    
+      
+        
+          
+          
+            
+              <div class="bk-root" id="043c47ae-626d-4d78-9e0a-b375ff9bd86a" data-root-id="1044"></div>
+            
+          
+        
+      
+      
+        <script type="application/json" id="1117">
+          {"5cff251d-a2af-4f09-8c51-2cf1b536e5bb":{"roots":{"references":[{"attributes":{"callback":null,"data":{"x":{"__ndarray__":"AErLbLSq6T80v3P50SrFPwYcGbou1uQ/yH7XIeXexz8AzMaIyjeVP/zAInJdzdA/5EdJu8bI0D/03jJZifvePx1aBnI91es/jLiDaH+c1z8=","dtype":"float64","shape":[10]},"y":{"__ndarray__":"iO6+Ures3z/UBr7hQqXZPzQuD4zIXds/qJc+LUwz5D8gdn8NMzXuPz1OHmVkC+s/PPoXL+fXxD8z/LMAmJzmP2D7dNXbSag/zIDor9GI7T8=","dtype":"float64","shape":[10]}},"selected":{"id":"1051","type":"Selection"},"selection_policy":{"id":"1052","type":"UnionRenderers"}},"id":"1001","type":"ColumnDataSource"},{"attributes":{"fill_color":{"value":"#1f77b4"},"line_color":{"value":"#1f77b4"},"x":{"field":"x"},"y":{"field":"y"}},"id":"1037","type":"Scatter"},{"attributes":{},"id":"1007","type":"LinearScale"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"1029","type":"BoxAnnotation"},{"attributes":{},"id":"1009","type":"LinearScale"},{"attributes":{"formatter":{"id":"1047","type":"BasicTickFormatter"},"plot":{"id":"1002","subtype":"Figure","type":"Plot"},"ticker":{"id":"1012","type":"BasicTicker"}},"id":"1011","type":"LinearAxis"},{"attributes":{"high":20,"js_property_callbacks":{"change:value":[{"id":"1042","type":"CustomJS"}]},"low":1,"step":1,"title":"Glyph size","value":4},"id":"1041","type":"SpinBox"},{"attributes":{},"id":"1012","type":"BasicTicker"},{"attributes":{"args":{"points":{"id":"1039","type":"GlyphRenderer"}},"code":"\npoints.glyph.size = cb_obj.value\n"},"id":"1042","type":"CustomJS"},{"attributes":{},"id":"1047","type":"BasicTickFormatter"},{"attributes":{"children":[{"id":"1043","type":"WidgetBox"},{"id":"1002","subtype":"Figure","type":"Plot"}]},"id":"1044","type":"Row"},{"attributes":{"plot":{"id":"1002","subtype":"Figure","type":"Plot"},"ticker":{"id":"1012","type":"BasicTicker"}},"id":"1015","type":"Grid"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"value":"#1f77b4"},"line_alpha":{"value":0.1},"line_color":{"value":"#1f77b4"},"x":{"field":"x"},"y":{"field":"y"}},"id":"1038","type":"Scatter"},{"attributes":{"data_source":{"id":"1001","type":"ColumnDataSource"},"glyph":{"id":"1037","type":"Scatter"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1038","type":"Scatter"},"selection_glyph":null,"view":{"id":"1040","type":"CDSView"}},"id":"1039","type":"GlyphRenderer"},{"attributes":{"children":[{"id":"1041","type":"SpinBox"}]},"id":"1043","type":"WidgetBox"},{"attributes":{"formatter":{"id":"1049","type":"BasicTickFormatter"},"plot":{"id":"1002","subtype":"Figure","type":"Plot"},"ticker":{"id":"1017","type":"BasicTicker"}},"id":"1016","type":"LinearAxis"},{"attributes":{},"id":"1017","type":"BasicTicker"},{"attributes":{"dimension":1,"plot":{"id":"1002","subtype":"Figure","type":"Plot"},"ticker":{"id":"1017","type":"BasicTicker"}},"id":"1020","type":"Grid"},{"attributes":{"plot":null,"text":""},"id":"1045","type":"Title"},{"attributes":{"source":{"id":"1001","type":"ColumnDataSource"}},"id":"1040","type":"CDSView"},{"attributes":{},"id":"1021","type":"PanTool"},{"attributes":{},"id":"1022","type":"WheelZoomTool"},{"attributes":{},"id":"1049","type":"BasicTickFormatter"},{"attributes":{"below":[{"id":"1011","type":"LinearAxis"}],"left":[{"id":"1016","type":"LinearAxis"}],"renderers":[{"id":"1011","type":"LinearAxis"},{"id":"1015","type":"Grid"},{"id":"1016","type":"LinearAxis"},{"id":"1020","type":"Grid"},{"id":"1029","type":"BoxAnnotation"},{"id":"1039","type":"GlyphRenderer"}],"title":{"id":"1045","type":"Title"},"toolbar":{"id":"1027","type":"Toolbar"},"x_range":{"id":"1003","type":"Range1d"},"x_scale":{"id":"1007","type":"LinearScale"},"y_range":{"id":"1005","type":"Range1d"},"y_scale":{"id":"1009","type":"LinearScale"}},"id":"1002","subtype":"Figure","type":"Plot"},{"attributes":{"overlay":{"id":"1029","type":"BoxAnnotation"}},"id":"1023","type":"BoxZoomTool"},{"attributes":{},"id":"1051","type":"Selection"},{"attributes":{},"id":"1024","type":"SaveTool"},{"attributes":{},"id":"1052","type":"UnionRenderers"},{"attributes":{"callback":null},"id":"1003","type":"Range1d"},{"attributes":{},"id":"1025","type":"ResetTool"},{"attributes":{},"id":"1026","type":"HelpTool"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"1021","type":"PanTool"},{"id":"1022","type":"WheelZoomTool"},{"id":"1023","type":"BoxZoomTool"},{"id":"1024","type":"SaveTool"},{"id":"1025","type":"ResetTool"},{"id":"1026","type":"HelpTool"}]},"id":"1027","type":"Toolbar"},{"attributes":{"callback":null},"id":"1005","type":"Range1d"}],"root_ids":["1044"]},"title":"Bokeh Application","version":"1.0.4"}}
+        </script>
+        <script type="text/javascript">
+          (function(root, factory) {
+          //  if(typeof exports === 'object' && typeof module === 'object')
+          //    factory(require("Bokeh"));
+          //  else if(typeof define === 'function' && define.amd)
+          //    define(["Bokeh"], factory);
+          //  else if(typeof exports === 'object')
+          //    factory(require("Bokeh"));
+          //  else
+              factory(root["Bokeh"]);
+          })(this, function(Bokeh) {
+            var define;
+            return (function outer(modules, entry) {
+            if (Bokeh != null) {
+              return Bokeh.register_plugin(modules, {}, entry);
+            } else {
+              throw new Error("Cannot find Bokeh. You have to load it prior to loading plugins.");
+            }
+          })
+          ({
+            "custom/main": function(require, module, exports) {
+              var models = {
+                "SpinBox": require("custom/spinbox.spin_box").SpinBox
+              };
+              require("base").register_models(models);
+              module.exports = models;
+            },
+            "custom/spinbox.spin_box": function(require, module, exports) {
+          "use strict";
+          var __extends = (this && this.__extends) || (function () {
+              var extendStatics = function (d, b) {
+                  extendStatics = Object.setPrototypeOf ||
+                      ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+                      function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+                  return extendStatics(d, b);
+              };
+              return function (d, b) {
+                  extendStatics(d, b);
+                  function __() { this.constructor = d; }
+                  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+              };
+          })();
+          Object.defineProperty(exports, "__esModule", { value: true });
+          var p = require("core/properties");
+          var dom_1 = require("core/dom");
+          var input_widget_1 = require("models/widgets/input_widget");
+          var SpinBoxView = /** @class */ (function (_super) {
+              __extends(SpinBoxView, _super);
+              function SpinBoxView() {
+                  return _super !== null && _super.apply(this, arguments) || this;
+              }
+              SpinBoxView.prototype.initialize = function (options) {
+                  _super.prototype.initialize.call(this, options);
+                  this.render();
+              };
+              SpinBoxView.prototype.connect_signals = function () {
+                  var _this = this;
+                  _super.prototype.connect_signals.call(this);
+                  this.connect(this.model.change, function () { return _this.render(); });
+              };
+              SpinBoxView.prototype.css_classes = function () {
+                  return _super.prototype.css_classes.call(this).concat("bk-widget-form-group");
+              };
+              SpinBoxView.prototype.render = function () {
+                  var _this = this;
+                  _super.prototype.render.call(this);
+                  dom_1.empty(this.el);
+                  var labelEl = dom_1.label({ for: this.model.id }, this.model.title);
+                  this.el.appendChild(labelEl);
+                  this.inputEl = dom_1.input({
+                      class: "bk-widget-form-input",
+                      id: this.model.id,
+                      name: this.model.name,
+                      min: this.model.low,
+                      max: this.model.high,
+                      value: this.model.value,
+                      step: this.model.step,
+                      disabled: this.model.disabled,
+                      type: "number",
+                  });
+                  this.inputEl.append(this.model.value.toString());
+                  this.inputEl.addEventListener("change", function () { return _this.change_input(); });
+                  this.el.appendChild(this.inputEl);
+                  if (this.model.width)
+                      this.inputEl.style.width = this.model.width - 35 + "px";
+                  // TODO - This 35 is a hack we should be able to compute it
+                  if (this.model.height)
+                      this.inputEl.style.height = this.model.height - 35 + "px";
+              };
+              SpinBoxView.prototype.change_input = function () {
+                  var new_value = Number(this.inputEl.value);
+                  this.model.value = Math.min(Math.max(new_value, this.model.low), this.model.high);
+                  if (this.model.value != new_value) {
+                      this.model.change.emit();
+                  }
+                  _super.prototype.change_input.call(this);
+              };
+              return SpinBoxView;
+          }(input_widget_1.InputWidgetView));
+          exports.SpinBoxView = SpinBoxView;
+          var SpinBox = /** @class */ (function (_super) {
+              __extends(SpinBox, _super);
+              function SpinBox() {
+                  return _super !== null && _super.apply(this, arguments) || this;
+              }
+              SpinBox.initClass = function () {
+                  this.prototype.type = "SpinBox";
+                  this.prototype.default_view = SpinBoxView;
+                  this.define({
+                      value: [p.Number, 0],
+                      low: [p.Number],
+                      high: [p.Number],
+                      step: [p.Number, 1],
+                  });
+              };
+              return SpinBox;
+          }(input_widget_1.InputWidget));
+          exports.SpinBox = SpinBox;
+          SpinBox.initClass();
+          
+          }
+          }, "custom/main");
+          ;
+          });
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('1117').textContent;
+                  var render_items = [{"docid":"5cff251d-a2af-4f09-8c51-2cf1b536e5bb","roots":{"1044":"043c47ae-626d-4d78-9e0a-b375ff9bd86a"}}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        embed_document(root);
+                        clearInterval(timer);
+                      }
+                      attempts++;
+                      if (attempts > 100) {
+                        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                        clearInterval(timer);
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+  </body>
+  
+</html>
