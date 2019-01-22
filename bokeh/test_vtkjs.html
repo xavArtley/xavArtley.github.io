@@ -1,0 +1,236 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+      <meta charset="utf-8">
+      <title>Bokeh Plot</title>
+      
+      
+        
+          
+        <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.css" type="text/css" />
+        <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.css" type="text/css" />
+        
+        
+          
+        <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.js"></script>
+        <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.js"></script>
+        <script type="text/javascript">
+            Bokeh.set_log_level("info");
+        </script>
+        
+      
+      
+    
+  </head>
+  
+  
+  <body>
+    
+      
+        
+          
+          
+            
+              <div class="bk-root" id="8d04a1f0-ac2c-41fe-abc3-4a8b458a1a5c" data-root-id="1005"></div>
+            
+          
+        
+      
+      
+        <script type="application/json" id="1006">
+          {"32619048-dc57-4ae6-8942-0a42733f62aa":{"roots":{"references":[{"attributes":{"height":400,"width":400},"id":"1001","type":"VtkJs"},{"attributes":{"callback":null,"end":100,"js_property_callbacks":{"change:value":[{"id":"1003","type":"CustomJS"}]},"start":1,"value":10},"id":"1002","type":"Slider"},{"attributes":{"args":{"vtkjs":{"id":"1001","type":"VtkJs"}},"code":"\nvtkjs.resolution = cb_obj.value\n"},"id":"1003","type":"CustomJS"},{"attributes":{"children":[{"id":"1001","type":"VtkJs"},{"id":"1004","type":"WidgetBox"}]},"id":"1005","type":"Row"},{"attributes":{"children":[{"id":"1002","type":"Slider"}]},"id":"1004","type":"WidgetBox"}],"root_ids":["1005"]},"title":"Bokeh Application","version":"1.0.4-5-ge24b62cb5"}}
+        </script>
+        <script type="text/javascript">
+          (function(root, factory) {
+          //  if(typeof exports === 'object' && typeof module === 'object')
+          //    factory(require("Bokeh"));
+          //  else if(typeof define === 'function' && define.amd)
+          //    define(["Bokeh"], factory);
+          //  else if(typeof exports === 'object')
+          //    factory(require("Bokeh"));
+          //  else
+              factory(root["Bokeh"]);
+          })(this, function(Bokeh) {
+            var define;
+            return (function outer(modules, entry) {
+            if (Bokeh != null) {
+              return Bokeh.register_plugin(modules, {}, entry);
+            } else {
+              throw new Error("Cannot find Bokeh. You have to load it prior to loading plugins.");
+            }
+          })
+          ({
+            "custom/main": function(require, module, exports) {
+              var models = {
+                "VtkJs": require("custom/vtk_js.vtk_js").VtkJs
+              };
+              require("base").register_models(models);
+              module.exports = models;
+            },
+            "custom/vtk_js.vtk_js": function(require, module, exports) {
+          "use strict";
+          var __extends = (this && this.__extends) || (function () {
+              var extendStatics = function (d, b) {
+                  extendStatics = Object.setPrototypeOf ||
+                      ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+                      function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+                  return extendStatics(d, b);
+              };
+              return function (d, b) {
+                  extendStatics(d, b);
+                  function __() { this.constructor = d; }
+                  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+              };
+          })();
+          Object.defineProperty(exports, "__esModule", { value: true });
+          var p = require("core/properties");
+          var layout_dom_1 = require("models/layouts/layout_dom");
+          var dom_1 = require("core/dom");
+          var VtkJsView = /** @class */ (function (_super) {
+              __extends(VtkJsView, _super);
+              function VtkJsView() {
+                  return _super !== null && _super.apply(this, arguments) || this;
+              }
+              VtkJsView.prototype.initialize = function (options) {
+                  var _this = this;
+                  _super.prototype.initialize.call(this, options);
+                  var url = "https://unpkg.com/vtk.js@8.3.3/dist/vtk.js";
+                  var script = document.createElement('script');
+                  script.src = url;
+                  script.async = false;
+                  script.onreadystatechange = (script.onload = function () { return _this._init(); });
+                  document.querySelector("head").appendChild(script);
+              };
+              VtkJsView.prototype._init = function () {
+                  var _this = this;
+                  _super.prototype.render.call(this);
+                  dom_1.empty(this.el);
+                  //Select div for rendering
+                  var vtkRenderScreen = vtk.Rendering.Misc.vtkFullScreenRenderWindow.newInstance({
+                      container: this.el,
+                      background: [0., 0., 0.],
+                  });
+                  debugger;
+                  this.coneSource = vtk.Filters.Sources.vtkConeSource.newInstance({
+                      height: 1.0,
+                      resolution: 10,
+                  });
+                  var filter = vtk.Filters.General.vtkCalculator.newInstance();
+                  var AttributeTypes = vtk.Common.DataModel.vtkDataSetAttributes.AttributeTypes;
+                  var FieldDataTypes = vtk.Common.DataModel.vtkDataSet.FieldDataTypes;
+                  filter.setInputConnection(this.coneSource.getOutputPort());
+                  // filter.setFormulaSimple(FieldDataTypes.CELL, [], 'random', () => Math.random());
+                  filter.setFormula({
+                      getArrays: function (inputDataSets) { return ({
+                          input: [],
+                          output: [
+                              {
+                                  location: FieldDataTypes.CELL,
+                                  name: 'Random',
+                                  dataType: 'Float32Array',
+                                  attribute: AttributeTypes.SCALARS,
+                              },
+                          ],
+                      }); },
+                      evaluate: function (arraysIn, arraysOut) {
+                          var scalars = arraysOut.map(function (d) { return d.getData(); })[0];
+                          for (var i = 0; i < scalars.length; i++) {
+                              scalars[i] = Math.random();
+                          }
+                      },
+                  });
+                  //Create volume to render
+                  var mapper = vtk.Rendering.Core.vtkMapper.newInstance();
+                  mapper.setInputConnection(filter.getOutputPort());
+                  var actor = vtk.Rendering.Core.vtkActor.newInstance();
+                  actor.setMapper(mapper);
+                  //this.cone = vtk.Filters.Sources.vtkConeSource.newInstance()
+                  //this.cone.resolution(this.model.resolution)
+                  vtkRenderScreen.getRenderer().addActor(actor);
+                  vtkRenderScreen.getRenderer().resetCamera();
+                  //Start rendering
+                  this.renderWindow = vtkRenderScreen.getRenderWindow();
+                  this._render();
+                  this.connect(this.model.change, function () { return _this.update_resolution(); });
+              };
+              VtkJsView.prototype.update_resolution = function () {
+                  this.coneSource.setResolution(this.model.resolution);
+                  this._render();
+              };
+              VtkJsView.prototype.get_width = function () {
+                  throw new Error("unused");
+              };
+              VtkJsView.prototype.get_height = function () {
+                  throw new Error("unused");
+              };
+              VtkJsView.prototype._render = function () {
+                  this.renderWindow.render();
+              };
+              return VtkJsView;
+          }(layout_dom_1.LayoutDOMView));
+          exports.VtkJsView = VtkJsView;
+          var VtkJs = /** @class */ (function (_super) {
+              __extends(VtkJs, _super);
+              function VtkJs() {
+                  return _super !== null && _super.apply(this, arguments) || this;
+              }
+              VtkJs.initClass = function () {
+                  this.prototype.type = "VtkJs";
+                  this.prototype.default_view = VtkJsView;
+                  this.define({
+                      resolution: [p.Number, 10],
+                  });
+              };
+              return VtkJs;
+          }(layout_dom_1.LayoutDOM));
+          exports.VtkJs = VtkJs;
+          VtkJs.initClass();
+          
+          }
+          }, "custom/main");
+          ;
+          });
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('1006').textContent;
+                  var render_items = [{"docid":"32619048-dc57-4ae6-8942-0a42733f62aa","roots":{"1005":"8d04a1f0-ac2c-41fe-abc3-4a8b458a1a5c"}}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        embed_document(root);
+                        clearInterval(timer);
+                      }
+                      attempts++;
+                      if (attempts > 100) {
+                        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                        clearInterval(timer);
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+  </body>
+  
+</html>
