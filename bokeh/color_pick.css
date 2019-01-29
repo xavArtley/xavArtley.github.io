@@ -1,0 +1,103 @@
+.bk-color-picker-wg {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor:pointer;
+}
+
+.bk-color-picker-wg span{
+    display: block;
+    width: 100%;
+    min-height: 5px;
+    border: 1px solid black;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+.bk-color-picker-ctn{
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background-color: gainsboro;
+    display: flex;
+    position: relative;
+    width: 200px;
+    padding: 9px;
+}
+
+.bk-gradient-pnl{/*used for saturation and Lightness values*/
+    display: block;
+    width: 150px;
+    height: 150px;
+    border: 1px solid black;
+    display: block;
+    background: red;
+    cursor: crosshair;
+}
+
+.bk-gradient-pnl-overlay-1{
+    height: 151px;
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    border-bottom: 1px solid black;
+}
+
+.bk-gradient-pnl-overlay-2{
+    height: 151px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+}
+
+.bk-gradient-pnl-cursor-outer{
+	background:none;
+	position: absolute;
+	width: 11px;
+	height: 11px;
+	margin: 100px 0 0 100px;
+	border: 2px solid black;
+    border-radius: 50%;
+}
+
+.bk-gradient-pnl-cursor-inner{
+	position: absolute;
+	width: 9px;
+	height: 9px;
+	border: 1px solid white;
+    border-radius: 50%;
+}
+
+.bk-hue-sld-ctn{
+    padding-left: 2px;
+    padding-right: 2px;
+    display: flex;
+    width: 36px;
+    height: 150px;
+    cursor: n-resize;
+}
+
+.bk-hue-sld-bar{
+    width: 20px;
+    height: 100%;
+    border: 1px solid #aaa;
+}
+
+.bk-hue-sld-larr{
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 7px solid #858585;
+    margin-top: -5px
+}
+
+.bk-hue-sld-rarr{
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 7px solid #858585;
+    margin-top: -5px
+}
+
+.bk-clr-spin-ctn{
+    width: 100px;
+    border: 1px solid #aaa;
+}
