@@ -1,0 +1,549 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+      <meta charset="utf-8">
+      <title>Bokeh Plot</title>
+      
+      
+        
+          
+        <link rel="stylesheet" href="g:\PythonWorkspace\bokeh_cutom_ext\Extensions\ColorWidget\dev_polyfill\color_pick.css" type="text/css" />
+        <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.css" type="text/css" />
+        <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.css" type="text/css" />
+        
+        
+          
+        <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.0.4.min.js"></script>
+        <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.0.4.min.js"></script>
+        <script type="text/javascript">
+            Bokeh.set_log_level("info");
+        </script>
+        
+      
+      
+    
+  </head>
+  
+  
+  <body>
+    
+      
+        
+          
+          
+            
+              <div class="bk-root" id="bec415c5-b7b7-4b91-b267-985a7667c986" data-root-id="1050"></div>
+            
+          
+        
+      
+      
+        <script type="application/json" id="1139">
+          {"70ed6746-d57b-4439-96c5-8ac9a2d152c2":{"roots":{"references":[{"attributes":{"overlay":{"id":"1030","type":"BoxAnnotation"}},"id":"1024","type":"BoxZoomTool"},{"attributes":{"color":"#008000","height":20,"js_property_callbacks":{"change:color":[{"id":"1047","type":"CustomJS"}]},"width":50},"id":"1001","type":"ColorPick"},{"attributes":{},"id":"1025","type":"SaveTool"},{"attributes":{"below":[{"id":"1012","type":"LinearAxis"}],"left":[{"id":"1017","type":"LinearAxis"}],"renderers":[{"id":"1012","type":"LinearAxis"},{"id":"1016","type":"Grid"},{"id":"1017","type":"LinearAxis"},{"id":"1021","type":"Grid"},{"id":"1030","type":"BoxAnnotation"},{"id":"1040","type":"GlyphRenderer"},{"id":"1045","type":"GlyphRenderer"}],"title":{"id":"1052","type":"Title"},"toolbar":{"id":"1028","type":"Toolbar"},"x_range":{"id":"1004","type":"Range1d"},"x_scale":{"id":"1008","type":"LinearScale"},"y_range":{"id":"1006","type":"Range1d"},"y_scale":{"id":"1010","type":"LinearScale"}},"id":"1003","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"1026","type":"ResetTool"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"value":"#1f77b4"},"line_alpha":{"value":0.1},"line_color":{"value":"#1f77b4"},"size":{"units":"screen","value":20},"x":{"field":"x"},"y":{"field":"y"}},"id":"1039","type":"Scatter"},{"attributes":{},"id":"1027","type":"HelpTool"},{"attributes":{"plot":null,"text":""},"id":"1052","type":"Title"},{"attributes":{"callback":null},"id":"1004","type":"Range1d"},{"attributes":{"data_source":{"id":"1037","type":"ColumnDataSource"},"glyph":{"id":"1038","type":"Scatter"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1039","type":"Scatter"},"selection_glyph":null,"view":{"id":"1041","type":"CDSView"}},"id":"1040","type":"GlyphRenderer"},{"attributes":{"callback":null},"id":"1006","type":"Range1d"},{"attributes":{},"id":"1054","type":"BasicTickFormatter"},{"attributes":{"bottom_units":"screen","fill_alpha":{"value":0.5},"fill_color":{"value":"lightgrey"},"left_units":"screen","level":"overlay","line_alpha":{"value":1.0},"line_color":{"value":"black"},"line_dash":[4,4],"line_width":{"value":2},"plot":null,"render_mode":"css","right_units":"screen","top_units":"screen"},"id":"1030","type":"BoxAnnotation"},{"attributes":{},"id":"1008","type":"LinearScale"},{"attributes":{},"id":"1056","type":"BasicTickFormatter"},{"attributes":{},"id":"1010","type":"LinearScale"},{"attributes":{},"id":"1058","type":"Selection"},{"attributes":{"formatter":{"id":"1056","type":"BasicTickFormatter"},"plot":{"id":"1003","subtype":"Figure","type":"Plot"},"ticker":{"id":"1013","type":"BasicTicker"}},"id":"1012","type":"LinearAxis"},{"attributes":{"source":{"id":"1037","type":"ColumnDataSource"}},"id":"1041","type":"CDSView"},{"attributes":{},"id":"1059","type":"UnionRenderers"},{"attributes":{},"id":"1013","type":"BasicTicker"},{"attributes":{"callback":null,"data":{"x":{"__ndarray__":"mpmZmZmZyT9nZmZmZmbWPwAAAAAAAOA/zszMzMzM5D+amZmZmZnpPw==","dtype":"float64","shape":[5]},"y":{"__ndarray__":"mpmZmZmZ6T/NzMzMzMzkPwAAAAAAAOA/ZmZmZmZm1j+amZmZmZnJPw==","dtype":"float64","shape":[5]}},"selected":{"id":"1060","type":"Selection"},"selection_policy":{"id":"1061","type":"UnionRenderers"}},"id":"1042","type":"ColumnDataSource"},{"attributes":{},"id":"1060","type":"Selection"},{"attributes":{"fill_color":{"value":"#FF0000"},"line_color":{"value":"#FF0000"},"size":{"units":"screen","value":20},"x":{"field":"x"},"y":{"field":"y"}},"id":"1043","type":"Scatter"},{"attributes":{"plot":{"id":"1003","subtype":"Figure","type":"Plot"},"ticker":{"id":"1013","type":"BasicTicker"}},"id":"1016","type":"Grid"},{"attributes":{},"id":"1061","type":"UnionRenderers"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"value":"#1f77b4"},"line_alpha":{"value":0.1},"line_color":{"value":"#1f77b4"},"size":{"units":"screen","value":20},"x":{"field":"x"},"y":{"field":"y"}},"id":"1044","type":"Scatter"},{"attributes":{"formatter":{"id":"1054","type":"BasicTickFormatter"},"plot":{"id":"1003","subtype":"Figure","type":"Plot"},"ticker":{"id":"1018","type":"BasicTicker"}},"id":"1017","type":"LinearAxis"},{"attributes":{"data_source":{"id":"1042","type":"ColumnDataSource"},"glyph":{"id":"1043","type":"Scatter"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1044","type":"Scatter"},"selection_glyph":null,"view":{"id":"1046","type":"CDSView"}},"id":"1045","type":"GlyphRenderer"},{"attributes":{},"id":"1018","type":"BasicTicker"},{"attributes":{"source":{"id":"1042","type":"ColumnDataSource"}},"id":"1046","type":"CDSView"},{"attributes":{"dimension":1,"plot":{"id":"1003","subtype":"Figure","type":"Plot"},"ticker":{"id":"1018","type":"BasicTicker"}},"id":"1021","type":"Grid"},{"attributes":{"color":"#FF0000","height":20,"js_property_callbacks":{"change:color":[{"id":"1048","type":"CustomJS"}]},"width":50},"id":"1002","type":"ColorPick"},{"attributes":{"args":{"s":{"id":"1040","type":"GlyphRenderer"}},"code":"\ns.glyph.fill_color = cb_obj.color\n"},"id":"1047","type":"CustomJS"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"1022","type":"PanTool"},{"id":"1023","type":"WheelZoomTool"},{"id":"1024","type":"BoxZoomTool"},{"id":"1025","type":"SaveTool"},{"id":"1026","type":"ResetTool"},{"id":"1027","type":"HelpTool"}]},"id":"1028","type":"Toolbar"},{"attributes":{"fill_color":{"value":"#008000"},"line_color":{"value":"#008000"},"size":{"units":"screen","value":20},"x":{"field":"x"},"y":{"field":"y"}},"id":"1038","type":"Scatter"},{"attributes":{"args":{"s":{"id":"1045","type":"GlyphRenderer"}},"code":"\ns.glyph.fill_color = cb_obj.color\n"},"id":"1048","type":"CustomJS"},{"attributes":{"children":[{"id":"1001","type":"ColorPick"},{"id":"1002","type":"ColorPick"}]},"id":"1049","type":"WidgetBox"},{"attributes":{"callback":null,"data":{"x":{"__ndarray__":"mpmZmZmZyT9nZmZmZmbWPwAAAAAAAOA/zszMzMzM5D+amZmZmZnpPw==","dtype":"float64","shape":[5]},"y":{"__ndarray__":"mpmZmZmZyT9nZmZmZmbWPwAAAAAAAOA/zszMzMzM5D+amZmZmZnpPw==","dtype":"float64","shape":[5]}},"selected":{"id":"1058","type":"Selection"},"selection_policy":{"id":"1059","type":"UnionRenderers"}},"id":"1037","type":"ColumnDataSource"},{"attributes":{},"id":"1022","type":"PanTool"},{"attributes":{"children":[{"id":"1049","type":"WidgetBox"},{"id":"1003","subtype":"Figure","type":"Plot"}]},"id":"1050","type":"Row"},{"attributes":{},"id":"1023","type":"WheelZoomTool"}],"root_ids":["1050"]},"title":"Bokeh Application","version":"1.0.4-5-gfaa324278"}}
+        </script>
+        <script type="text/javascript">
+          (function(root, factory) {
+          //  if(typeof exports === 'object' && typeof module === 'object')
+          //    factory(require("Bokeh"));
+          //  else if(typeof define === 'function' && define.amd)
+          //    define(["Bokeh"], factory);
+          //  else if(typeof exports === 'object')
+          //    factory(require("Bokeh"));
+          //  else
+              factory(root["Bokeh"]);
+          })(this, function(Bokeh) {
+            var define;
+            return (function outer(modules, entry) {
+            if (Bokeh != null) {
+              return Bokeh.register_plugin(modules, {}, entry);
+            } else {
+              throw new Error("Cannot find Bokeh. You have to load it prior to loading plugins.");
+            }
+          })
+          ({
+            "custom/main": function(require, module, exports) {
+              var models = {
+                "ColorPick": require("custom/color_pick.color_pick").ColorPick
+              };
+              require("base").register_models(models);
+              module.exports = models;
+            },
+            "custom/color_pick.color_pick": function(require, module, exports) {
+          "use strict";
+          var __extends = (this && this.__extends) || (function () {
+              var extendStatics = function (d, b) {
+                  extendStatics = Object.setPrototypeOf ||
+                      ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+                      function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+                  return extendStatics(d, b);
+              };
+              return function (d, b) {
+                  extendStatics(d, b);
+                  function __() { this.constructor = d; }
+                  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+              };
+          })();
+          Object.defineProperty(exports, "__esModule", { value: true });
+          var p = require("core/properties");
+          var dom_1 = require("core/dom");
+          var widget_1 = require("models/widgets/widget");
+          var signaling_1 = require("core/signaling");
+          function isDescendant(parent, child) {
+              if (child == null) {
+                  return false;
+              }
+              else {
+                  var node = child.parentNode;
+                  while (node != null) {
+                      if (node == parent) {
+                          return true;
+                      }
+                      node = node.parentNode;
+                  }
+                  return false;
+              }
+          }
+          var ColorPickView = /** @class */ (function (_super) {
+              __extends(ColorPickView, _super);
+              function ColorPickView() {
+                  return _super !== null && _super.apply(this, arguments) || this;
+              }
+              ColorPickView.prototype.initialize = function (options) {
+                  var _this = this;
+                  _super.prototype.initialize.call(this, options);
+                  //init_html_elements
+                  this.colorPickerEl = dom_1.div({
+                      class: "bk-widget-form-input bk-color-picker-wg",
+                      id: this.model.id,
+                  });
+                  this.colorSpanEl = dom_1.span();
+                  this.colorPickerEl.appendChild(this.colorSpanEl);
+                  this.colorPickerEl.style.height = this.model.height + 'px';
+                  this.colorPickerEl.style.width = this.model.width + 'px';
+                  this.containerSelectorEl = dom_1.div({
+                      class: "bk-color-picker-ctn",
+                  });
+                  this.gradientPanelView = new GradientPanelView();
+                  this.hueSliderView = new HueSliderView();
+                  this.containerSelectorEl.appendChild(this.gradientPanelView.gradienPanelEl);
+                  this.containerSelectorEl.appendChild(dom_1.div({ style: "width:7px" }));
+                  this.containerSelectorEl.appendChild(this.hueSliderView.hueSliderEl);
+                  //show the picker on button click
+                  this.colorPickerEl.addEventListener("click", function () { return _this._show_picker(); });
+                  //hide the picker
+                  document.addEventListener("mousedown", function (ev) { return _this._hide_picker(ev); });
+                  //events on models change
+                  this.connect(this.hueSliderView.model.change, function () {
+                      _this.gradientPanelView.model.hue = _this.hueSliderView.model.hue;
+                  });
+                  this.connect(this.gradientPanelView.model.change, function () {
+                      _this.model.color = hslToHex({
+                          h: _this.gradientPanelView.model.hue,
+                          s: _this.gradientPanelView.model.saturation,
+                          l: _this.gradientPanelView.model.lightness,
+                      });
+                  });
+                  this.connect(this.model.change, function () { return _this.update_span_color(); });
+                  this.render();
+              };
+              ColorPickView.prototype.render = function () {
+                  _super.prototype.render.call(this);
+                  dom_1.empty(this.el);
+                  this.containerSelectorEl.style.visibility = "hidden";
+                  this.el.appendChild(this.colorPickerEl);
+                  this.el.appendChild(this.containerSelectorEl);
+                  this.update_span_color();
+              };
+              ColorPickView.prototype._set_hsl = function (hsl) {
+                  var h = hsl.h, s = hsl.s, l = hsl.l;
+                  this.gradientPanelView.model.setv({ saturation: s, lightness: l }, { silent: true });
+                  this.hueSliderView.model.setv({ hue: h });
+                  this.gradientPanelView.model.change.emit();
+              };
+              ColorPickView.prototype.update_span_color = function () {
+                  this.colorSpanEl.style.backgroundColor = this.model.color;
+              };
+              ColorPickView.prototype._hide_picker = function (ev) {
+                  if (this.containerSelectorEl.style.visibility == "visible" &&
+                      !isDescendant(this.containerSelectorEl, ev.target) &&
+                      this.containerSelectorEl != ev.target) {
+                      this.containerSelectorEl.style.visibility = "hidden";
+                  }
+              };
+              ColorPickView.prototype._show_picker = function () {
+                  this.containerSelectorEl.style.visibility = "visible";
+                  this._set_hsl(hexToHsl(this.model.color));
+              };
+              return ColorPickView;
+          }(widget_1.WidgetView));
+          exports.ColorPickView = ColorPickView;
+          var ColorPick = /** @class */ (function (_super) {
+              __extends(ColorPick, _super);
+              function ColorPick() {
+                  return _super !== null && _super.apply(this, arguments) || this;
+              }
+              ColorPick.initClass = function () {
+                  this.prototype.type = "ColorPick";
+                  this.prototype.default_view = ColorPickView;
+                  this.define({
+                      color: [p.Color, "#ff0000"],
+                  });
+              };
+              return ColorPick;
+          }(widget_1.Widget));
+          exports.ColorPick = ColorPick;
+          ColorPick.initClass();
+          var GradientPanelView = /** @class */ (function (_super) {
+              __extends(GradientPanelView, _super);
+              function GradientPanelView() {
+                  var _this = _super.call(this) || this;
+                  _this._drag_start = function (ev) {
+                      ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
+                      _this._update_cursor_position(ev.pageX, ev.pageY);
+                      document.addEventListener("mouseup", _this._drag_stop);
+                      document.addEventListener("mousemove", _this._drag_move);
+                  };
+                  _this._drag_move = function (event) {
+                      _this._process_drag_move(event);
+                  };
+                  _this._drag_stop = function (event) {
+                      _this._process_drag_stop(event);
+                  };
+                  _this.gradienPanelEl = dom_1.div({ class: "bk-gradient-pnl" });
+                  var overlay_1 = dom_1.div({ class: "bk-gradient-pnl-overlay-1" });
+                  var overlay_2 = dom_1.div({ class: "bk-gradient-pnl-overlay-2" });
+                  overlay_1.appendChild(overlay_2);
+                  _this.cursorEl = dom_1.div({ class: "bk-gradient-pnl-cursor-outer" });
+                  _this.cursorEl.appendChild(dom_1.div({ class: "bk-gradient-pnl-cursor-inner" }));
+                  overlay_2.appendChild(_this.cursorEl);
+                  _this.gradienPanelEl.appendChild(overlay_1);
+                  _this.model = new GradienPanel();
+                  _this.gradienPanelEl.addEventListener("mousedown", function (ev) { return _this._drag_start(ev); });
+                  _this.connect(_this.model.change, function () {
+                      _this._update_background();
+                      _this._update_pos_x();
+                      _this._update_pos_y();
+                  });
+                  _this.connect(_this.model.properties.hue.change, function () { return _this._update_background(); });
+                  _this.connect(_this.model.properties.saturation.change, function () { return _this._update_pos_x(); });
+                  _this.connect(_this.model.properties.lightness.change, function () { return _this._update_pos_y(); });
+                  return _this;
+              }
+              GradientPanelView.prototype._update_cursor_position = function (pageX, pageY) {
+                  var _a = this.gradienPanelEl.getBoundingClientRect(), pn_left = _a.left, pn_top = _a.top;
+                  var pos_x = pageX - pn_left;
+                  var pos_y = pageY - pn_top;
+                  this._set_pos_x(pos_x);
+                  this._set_pos_y(pos_y);
+              };
+              GradientPanelView.prototype._update_background = function () {
+                  this._hue_to_background(this.model.hue);
+              };
+              GradientPanelView.prototype._update_pos_x = function () {
+                  this._set_pos_x(this._sat_to_pos_x(this.model.saturation));
+              };
+              GradientPanelView.prototype._update_pos_y = function () {
+                  this._set_pos_y(this._light_to_pos_y(this.model.lightness));
+              };
+              GradientPanelView.prototype._set_pos_x = function (pos_x) {
+                  var cursor_diameter = this.cursorEl.getBoundingClientRect().width;
+                  var pn_width = this.gradienPanelEl.getBoundingClientRect().width;
+                  var bound_pos_x = Math.max(Math.min(pos_x, pn_width - 1), 1);
+                  var cursor_margin_left = Math.round(bound_pos_x - cursor_diameter / 2 - 1).toString() + 'px';
+                  this.cursorEl.style.marginLeft = cursor_margin_left;
+                  this.model.saturation = 100 * bound_pos_x / pn_width;
+              };
+              GradientPanelView.prototype._set_pos_y = function (pos_y) {
+                  var cursor_diameter = this.cursorEl.getBoundingClientRect().height;
+                  var pn_height = this.gradienPanelEl.getBoundingClientRect().height;
+                  var bound_pos_y = Math.max(Math.min(pos_y, pn_height - 1), 1);
+                  var cursor_margin_top = Math.round(bound_pos_y - cursor_diameter / 2 - 1).toString() + 'px';
+                  this.cursorEl.style.marginTop = cursor_margin_top;
+                  this.model.lightness = 100 * (pn_height - bound_pos_y) / pn_height;
+              };
+              GradientPanelView.prototype._hue_to_background = function (hue) {
+                  this.gradienPanelEl.style.backgroundColor = hslToHex({
+                      h: hue,
+                      s: 100,
+                      l: 100,
+                  });
+              };
+              GradientPanelView.prototype._sat_to_pos_x = function (s) {
+                  var pn_width = this.gradienPanelEl.getBoundingClientRect().width;
+                  return s * pn_width / 100;
+              };
+              GradientPanelView.prototype._light_to_pos_y = function (l) {
+                  var pn_height = this.gradienPanelEl.getBoundingClientRect().height;
+                  return pn_height - l * pn_height / 100;
+              };
+              GradientPanelView.prototype._process_drag_move = function (ev) {
+                  this._update_cursor_position(ev.pageX, ev.pageY);
+              };
+              GradientPanelView.prototype._process_drag_stop = function (event) {
+                  console.log("drag stop :" + event);
+                  document.removeEventListener("mouseup", this._drag_stop);
+                  document.removeEventListener("mousemove", this._drag_move);
+              };
+              return GradientPanelView;
+          }(signaling_1.Signalable()));
+          var GradienPanel = /** @class */ (function (_super) {
+              __extends(GradienPanel, _super);
+              function GradienPanel(attrs) {
+                  return _super.call(this, attrs) || this;
+              }
+              GradienPanel.initClass = function () {
+                  this.prototype.type = "GradienPanel";
+                  this.define({
+                      hue: [p.Number, 0],
+                      saturation: [p.Number, 100],
+                      lightness: [p.Number, 100],
+                  });
+              };
+              return GradienPanel;
+          }(widget_1.Widget));
+          GradienPanel.initClass();
+          var HueSliderView = /** @class */ (function (_super) {
+              __extends(HueSliderView, _super);
+              function HueSliderView() {
+                  var _this = _super.call(this) || this;
+                  _this._drag_start = function (ev) {
+                      ev.preventDefault ? ev.preventDefault() : ev.returnValue = false;
+                      _this._update_cursor_position(ev.pageY);
+                      document.addEventListener("mouseup", _this._drag_stop);
+                      document.addEventListener("mousemove", _this._drag_move);
+                  };
+                  _this._drag_move = function (event) {
+                      _this._process_drag_move(event);
+                  };
+                  _this._drag_stop = function (event) {
+                      _this._process_drag_stop(event);
+                  };
+                  _this.hueSliderEl = dom_1.div({
+                      class: "bk-hue-sld-ctn",
+                  });
+                  _this.bar = dom_1.div({ class: "bk-hue-sld-bar" });
+                  _this.cursorEl = {
+                      left: dom_1.div({ class: "bk-hue-sld-larr" }),
+                      right: dom_1.div({ class: "bk-hue-sld-rarr" }),
+                  };
+                  _this.hueSliderEl.appendChild(_this.cursorEl.left);
+                  _this.hueSliderEl.appendChild(_this.bar);
+                  _this.hueSliderEl.appendChild(_this.cursorEl.right);
+                  _this.model = new HueSlider();
+                  _this._paint();
+                  _this.hueSliderEl.addEventListener("mousedown", function (ev) { return _this._drag_start(ev); });
+                  _this.connect(_this.model.properties.hue.change, function () { return _this._change_hue(); });
+                  return _this;
+              }
+              HueSliderView.prototype._change_hue = function () {
+                  this._set_cursor_pos(this._hue_to_pos(this.model.hue));
+              };
+              HueSliderView.prototype._paint = function () {
+                  var stops = ['#ff0000', '#ff0080', '#ff00ff', '#8000ff',
+                      '#0000ff', '#0080ff', '#00ffff', '#00ff80',
+                      '#00ff00', '#80ff00', '#ffff00', '#ff8000', '#ff0000'];
+                  var stopList = stops.join(',');
+                  this.bar.setAttribute('style', 'background: linear-gradient(to bottom,' + stopList + ');');
+              };
+              HueSliderView.prototype._set_cursor_pos = function (pos) {
+                  var cursor_height = this.cursorEl.left.getBoundingClientRect().height;
+                  var cursor_margin = Math.round(pos - cursor_height / 2 + 1).toString() + 'px';
+                  this.cursorEl.left.style.marginTop = cursor_margin;
+                  this.cursorEl.right.style.marginTop = cursor_margin;
+              };
+              HueSliderView.prototype._update_cursor_position = function (pageY) {
+                  var slider_height = this.hueSliderEl.getBoundingClientRect().height;
+                  var corrected_pos = pageY - this.hueSliderEl.getBoundingClientRect().top;
+                  var bound_pos = Math.max(Math.min(corrected_pos, slider_height), 0);
+                  this.model.hue = this._pos_to_hue(bound_pos);
+              };
+              HueSliderView.prototype._hue_to_pos = function (hue) {
+                  var slider_height = this.hueSliderEl.getBoundingClientRect().height;
+                  return slider_height - (Math.round(hue) % 360) * slider_height / 359;
+              };
+              HueSliderView.prototype._pos_to_hue = function (pos) {
+                  var slider_height = this.hueSliderEl.getBoundingClientRect().height;
+                  return 359 * (slider_height - pos) / slider_height; //[0;359]
+              };
+              HueSliderView.prototype._process_drag_move = function (ev) {
+                  this._update_cursor_position(ev.pageY);
+              };
+              HueSliderView.prototype._process_drag_stop = function (event) {
+                  console.log("drag stop :" + event);
+                  document.removeEventListener("mouseup", this._drag_stop);
+                  document.removeEventListener("mousemove", this._drag_move);
+              };
+              return HueSliderView;
+          }(signaling_1.Signalable()));
+          var HueSlider = /** @class */ (function (_super) {
+              __extends(HueSlider, _super);
+              function HueSlider(attrs) {
+                  return _super.call(this, attrs) || this;
+              }
+              HueSlider.initClass = function () {
+                  this.prototype.type = "HueSlider";
+                  this.define({
+                      hue: [p.Number, 0],
+                  });
+              };
+              return HueSlider;
+          }(widget_1.Widget));
+          HueSlider.initClass();
+          function hexToRgb(hex) {
+              var hex_num = parseInt(((hex.indexOf('#') > -1) ? hex.substring(1) : hex), 16);
+              return { r: hex_num >> 16, g: (hex_num & 0x00FF00) >> 8, b: (hex_num & 0x0000FF) };
+          }
+          exports.hexToRgb = hexToRgb;
+          function hexToHsl(hex) {
+              return rgbToHsl(hexToRgb(hex));
+          }
+          exports.hexToHsl = hexToHsl;
+          function rgbToHsl(rgb) {
+              var hsl = { h: 0, s: 0, l: 0 };
+              var min = Math.min(rgb.r, rgb.g, rgb.b);
+              var max = Math.max(rgb.r, rgb.g, rgb.b);
+              var delta = max - min;
+              hsl.l = max;
+              hsl.s = max != 0 ? 255 * delta / max : 0;
+              if (hsl.s != 0) {
+                  if (rgb.r == max)
+                      hsl.h = (rgb.g - rgb.b) / delta;
+                  else if (rgb.g == max)
+                      hsl.h = 2 + (rgb.b - rgb.r) / delta;
+                  else
+                      hsl.h = 4 + (rgb.r - rgb.g) / delta;
+              }
+              else
+                  hsl.h = -1;
+              hsl.h *= 60;
+              if (hsl.h < 0)
+                  hsl.h += 360;
+              hsl.s *= 100 / 255;
+              hsl.l *= 100 / 255;
+              return hsl;
+          }
+          exports.rgbToHsl = rgbToHsl;
+          function hslToRgb(hsl) {
+              var rgb = {
+                  r: 0,
+                  g: 0,
+                  b: 0,
+              };
+              var h = hsl.h;
+              var s = hsl.s * 255 / 100;
+              var v = hsl.l * 255 / 100;
+              if (s == 0) {
+                  rgb.r = rgb.g = rgb.b = v;
+              }
+              else {
+                  var t1 = v;
+                  var t2 = (255 - s) * v / 255;
+                  var t3 = (t1 - t2) * (h % 60) / 60;
+                  if (h == 360)
+                      h = 0;
+                  if (h < 60) {
+                      rgb.r = t1;
+                      rgb.b = t2;
+                      rgb.g = t2 + t3;
+                  }
+                  else if (h < 120) {
+                      rgb.g = t1;
+                      rgb.b = t2;
+                      rgb.r = t1 - t3;
+                  }
+                  else if (h < 180) {
+                      rgb.g = t1;
+                      rgb.r = t2;
+                      rgb.b = t2 + t3;
+                  }
+                  else if (h < 240) {
+                      rgb.b = t1;
+                      rgb.r = t2;
+                      rgb.g = t1 - t3;
+                  }
+                  else if (h < 300) {
+                      rgb.b = t1;
+                      rgb.g = t2;
+                      rgb.r = t2 + t3;
+                  }
+                  else if (h < 360) {
+                      rgb.r = t1;
+                      rgb.g = t2;
+                      rgb.b = t1 - t3;
+                  }
+                  else {
+                      rgb.r = 0;
+                      rgb.g = 0;
+                      rgb.b = 0;
+                  }
+              }
+              return { r: Math.round(rgb.r), g: Math.round(rgb.g), b: Math.round(rgb.b) };
+          }
+          exports.hslToRgb = hslToRgb;
+          function rgbToHex(rgb) {
+              var hex = [
+                  rgb.r.toString(16),
+                  rgb.g.toString(16),
+                  rgb.b.toString(16),
+              ];
+              hex.forEach(function (val, idx) {
+                  if (val.length == 1) {
+                      hex[idx] = '0' + val;
+                  }
+              });
+              return '#' + hex.join('');
+          }
+          exports.rgbToHex = rgbToHex;
+          function hslToHex(hsl) {
+              return rgbToHex(hslToRgb(hsl));
+          }
+          exports.hslToHex = hslToHex;
+          
+          }
+          }, "custom/main");
+          ;
+          });
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('1139').textContent;
+                  var render_items = [{"docid":"70ed6746-d57b-4439-96c5-8ac9a2d152c2","roots":{"1050":"bec415c5-b7b7-4b91-b267-985a7667c986"}}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        embed_document(root);
+                        clearInterval(timer);
+                      }
+                      attempts++;
+                      if (attempts > 100) {
+                        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                        clearInterval(timer);
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+  </body>
+  
+</html>
