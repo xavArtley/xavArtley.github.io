@@ -1,46 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="styles.css">
-    <title>Document</title>
-    <script src="./mylib.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="styles.css">
+  <title>Document</title>
+  <script src="./mylib.js"></script>
 </head>
 
 <body>
-    <nav class="topnav" id="menu">
-        <a class="active" href="#home" id="home">Home</a>
-        <a href="#panel/vtk_examples/Gallery_VTK" id="examples">Examples</a>
-        <a href="#about" id="about">About</a>
-    </nav>
-    <article id="content">
-    </article>
+  <nav class="topnav" id="menu"></nav>
+  <article id="content"></article>
 </body>
 <script>
-    const page_to_load = document.URL.split('#')[1] ? document.URL.split('#')[1] : "home"
-    if (page_to_load)
+  var content = document.getElementById("content")
+  var menuItems = [
+  {
+    title: "home",
+    action: () => load_page("home.html", content)
+  },
+  {
+    title: "examples",
+    action: null,
+    subelems: [
     {
-        set_active(page_to_load)
-        load_page(page_to_load + '.html')
+      title: "VTK example",
+      action: () => load_page("panel/vtk_examples/Gallery_VTK.html", content)
     }
-    else
-        load_page("home.html")
-    document.getElementById('home').onclick = () => {
-        set_active('home')
-        load_page("home.html")
-    }
-    document.getElementById('about').onclick = () => {
-        set_active('about')
-        load_page("about.html")
-    }
-    document.getElementById('examples').onclick = () => {
-        set_active("panel/vtk_examples/Gallery_VTK")
-        load_page("panel/vtk_examples/Gallery_VTK.html")
-    }
-
+    ],
+  },
+  {
+    title: "about",
+    action: () => load_page("about.html", content)
+  },
+  ]
+  var myMenu = new Menu(document.getElementById('menu'), menuItems)
+  load_page("home.html", content)
 </script>
-
-
 </html>
