@@ -18,6 +18,7 @@
   var menuItems = [
   {
     title: "home",
+    href: "#home.html",
     action: () => load_page("home.html", content)
   },
   {
@@ -26,16 +27,19 @@
     subelems: [
     {
       title: "VTK example",
+      href: "#panel/vtk_examples/Gallery_VTK.html",
       action: () => load_page("panel/vtk_examples/Gallery_VTK.html", content)
     }
     ],
   },
   {
     title: "about",
+    href: "#about.html",
     action: () => load_page("about.html", content)
   },
   ]
-  var myMenu = new Menu(document.getElementById('menu'), menuItems)
-  load_page("home.html", content)
+  const myMenu = new Menu(document.getElementById('menu'), menuItems)
+  const page_to_load = document.URL.split('#').length==2 ? document.URL.split('#')[1] : "home.html"
+  load_page(page_to_load, content)
 </script>
 </html>

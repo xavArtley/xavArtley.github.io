@@ -1,13 +1,6 @@
 function load_page(page, content) {
     content.innerHTML = "<iframe  src=" + page + "></iframe>";
 }
-function set_active(href, id) {
-    if (id === void 0) { id = 'menu'; }
-    var menu = document.getElementById(id);
-    Array.from(menu.children).map(function (child) { return child.removeAttribute("class"); });
-    var selection = Array.from(menu.children).filter(function (child) { return child.getAttribute("href") == "#" + href; });
-    selection.map(function (elem) { return elem.setAttribute('class', 'active'); });
-}
 var Menu = /** @class */ (function () {
     function Menu(container, menuItems) {
         this.menuEl = document.createElement('ul');
@@ -19,6 +12,8 @@ var Menu = /** @class */ (function () {
             var itemEl = document.createElement('li');
             var linkEl = document.createElement('a');
             linkEl.text = item.title;
+            if (item.href != null)
+                linkEl.href = (item.href.slice(0, 1) == '#') ? item.href : '#' + item.href;
             itemEl.appendChild(linkEl);
             if (item.action != null)
                 itemEl.addEventListener('click', function () { return item.action(); });

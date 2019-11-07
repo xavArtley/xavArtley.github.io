@@ -6,16 +6,10 @@ function load_page(page: string, content:HTMLElement): void {
   content.innerHTML = `<iframe  src=${page}></iframe>`;
 }
 
-function set_active(href: string, id: string = 'menu'): void {
-  const menu = document.getElementById(id)
-  Array.from(menu.children).map((child: any) => child.removeAttribute("class"))
-  const selection = Array.from(menu.children).filter((child: any) => child.getAttribute("href") == `#${href}`)
-  selection.map((elem: any) => elem.setAttribute('class', 'active'))
-}
-
 type MenuItems = {
   title: string
   action: CallableFunction | null
+  href: string| null
   subelems?: MenuItems[]
 }
 
@@ -34,6 +28,8 @@ class Menu {
       const itemEl: HTMLLIElement = document.createElement('li')
       const linkEl: HTMLAnchorElement = document.createElement('a')
       linkEl.text = item.title
+      if (item.href != null) 
+        linkEl.href = (item.href.slice(0,1)=='#') ? item.href : '#' + item.href
       itemEl.appendChild(linkEl)
       if(item.action != null)
         itemEl.addEventListener('click', () => item.action())

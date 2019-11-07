@@ -25,9 +25,6 @@ nav li {
   float: left;
 }
 
-nav > ul > li:last-child {
-  float: right;
-}
 
 nav li a, .dropbtn {
   text-transform: capitalize;
@@ -36,6 +33,15 @@ nav li a, .dropbtn {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+nav > ul > li > a {
+  font-weight: bold;
+}
+
+nav > ul > li:last-child {
+  float: right;
 }
 
 nav li a:hover, .dropdown:hover .dropbtn {
