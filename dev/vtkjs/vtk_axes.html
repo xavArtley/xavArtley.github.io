@@ -38,7 +38,6 @@ vtkRenderer = vtk.Rendering.Core.vtkRenderer;
 vtkInteractorStyleTrackballCamera = vtk.Interaction.Style.vtkInteractorStyleTrackballCamera;
 vtkFullScreenRenderWindow = vtk.Rendering.Misc.vtkFullScreenRenderWindow;
 
-let dims
 
 function cartesian_product(...arrays){
     return arrays.reduce((acc, curr) =>
@@ -60,8 +59,6 @@ function _make_grid_lines(n, m, offset=0){
     }
     return out
 }
-
-
 
 function _create_grid_axes(origin, xticks, yticks, zticks){
     const pts = []
@@ -134,9 +131,13 @@ function create_axes(origin, xticks, yticks, zticks, canvas){
     const psMapper = vtkPixelSpaceCallbackMapper.newInstance();
     psMapper.setInputData(axesPolyData);
     psMapper.setUseZValues(true);
-    const textCtx = canvas.getContext("2d");
     psMapper.setCallback((coordsList, camera, aspect, depthBuffer) => {
-        if (textCtx && dims) {
+        const textCtx = canvas.getContext("2d");
+        if (textCtx) {
+            const dims = {
+                height: canvas.clientHeight*window.devicePixelRatio,
+                 width: canvas.clientWidth*window.devicePixelRatio
+            };
             const dataPoints = psMapper.getInputData().getPoints();
             const viewMatrix = camera.getViewMatrix();
             mat4.transpose(viewMatrix, viewMatrix);
@@ -193,37 +194,20 @@ textCanvas.style.top = "0";
 textCanvas.style.left = "0";
 textCanvas.style.right = "0";
 textCanvas.style.bottom = "0";
+textCanvas.style.width = "100%";
+textCanvas.style.height = "100%";
 container.appendChild(textCanvas);
 
 const renderer = fullScreenRenderer.getRenderer();
 const renderWindow = fullScreenRenderer.getRenderWindow();
 
 
-// ----------------------------------------------------------------------------
-// Setup an interactor to handle mouse events
-// ----------------------------------------------------------------------------
-
-const interactor = renderWindow.getInteractor();
-interactor.bindEvents(container);
-// Handle window resize
-function resize() {
-  dims = container.getBoundingClientRect();
-  textCanvas.setAttribute('width', dims.width);
-  textCanvas.setAttribute('height', dims.height);
-  renderWindow.render();
-}
-
-window.addEventListener('resize', resize);
-
-
 // Axes
-const axes_origin = [-1, 0.5, -1]
+const axes_origin = [1, -1, -1]
 const xticks = numeric.linspace(-1,1,11)
 const yticks = numeric.linspace(-1,1,11)
 const zticks = numeric.linspace(-1,1,11)
-
 const {psActor, axesActor, gridActor} = create_axes(axes_origin, xticks, yticks, zticks, textCanvas)
-
 
 
 // Pts
@@ -270,6 +254,14 @@ renderer.addActor(cubeActor2);
 
 renderer.resetCamera();
 
+function resize() {
+  const dims = container.getBoundingClientRect();
+  textCanvas.setAttribute('width', dims.width*window.devicePixelRatio);
+  textCanvas.setAttribute('height', dims.height*window.devicePixelRatio);
+  renderWindow.render();  
+}
+
+window.addEventListener('resize', resize);
 resize();
 
 </script>
