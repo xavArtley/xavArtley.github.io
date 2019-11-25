@@ -155,7 +155,7 @@ function create_axes(origin, xticks, yticks, zticks, canvas){
                     textCtx.textAlign = 'center';
                     textCtx.textBaseline = 'alphabetic';
                     textCtx.fillText(`.`, xy[0], textCtx.canvas.height - xy[1]+2);
-                    textCtx.font = '12px serif';
+                    textCtx.font = `${12*window.devicePixelRatio}px serif`;
                     textCtx.textAlign = 'right';
                     textCtx.textBaseline = 'top';
                     let label
