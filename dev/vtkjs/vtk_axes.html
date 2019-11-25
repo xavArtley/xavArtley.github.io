@@ -46,7 +46,59 @@ function cartesian_product(...arrays){
     );
 }
 
-function create_axes(xticks, yticks, zticks, canvas){
+function _make_grid_lines(n, m, offset=0){
+    const out = []
+    for (let i = 0; i < n-1;  i++) {
+        for (let j = 0; j < m-1;  j++) {
+            const v0 = i*m + j + offset
+            const v1 = i*m + j + 1 + offset
+            const v2 = (i + 1) *m + j + 1 + offset
+            const v3 = (i + 1) *m + j + offset
+            const line = [5, v0, v1, v2, v3, v0];
+            out.push(line)
+        }
+    }
+    return out
+}
+
+
+
+function _create_grid_axes(origin, xticks, yticks, zticks){
+    const pts = []
+    pts.push(cartesian_product(xticks, yticks, [origin[2]])) //xy
+    pts.push(cartesian_product([origin[0]], yticks, zticks)) //yz
+    pts.push(cartesian_product(xticks, [origin[1]], zticks)) //xz
+
+    const polys = []
+    polys.push(_make_grid_lines(xticks.length, yticks.length, offset=0)) //xy
+    polys.push(_make_grid_lines(xticks.length, yticks.length, offset=xticks.length*yticks.length)) //xy
+    polys.push(_make_grid_lines(xticks.length, yticks.length, offset=xticks.length*yticks.length + yticks.length*zticks.length)) //xy
+    const gridPolyData = vtk({
+        vtkClass: 'vtkPolyData',
+        points: {
+            vtkClass: 'vtkPoints',
+            dataType: 'Float32Array',
+            numberOfComponents: 3,
+            values: pts.flat(2),
+        },
+        lines: {
+            vtkClass: 'vtkCellArray',
+            dataType: 'Uint32Array',
+            values: polys.flat(2)
+        }
+    });
+    
+    const gridMapper = vtkMapper.newInstance();
+    const gridActor = vtkActor.newInstance();
+    gridMapper.setInputData(gridPolyData);
+    gridActor.setMapper(gridMapper);
+    gridActor.getProperty().setOpacity(0.1);
+
+    return gridActor;
+}
+
+
+function create_axes(origin, xticks, yticks, zticks, canvas){
     const xlen = xticks.length;
     const ylen = yticks.length;
     const zlen = zticks.length;
@@ -54,13 +106,13 @@ function create_axes(xticks, yticks, zticks, canvas){
         let coords = null
         switch (axis) {
             case 0:
-                coords = cartesian_product(arr, [0], [0]);
+                coords = cartesian_product(arr, [origin[1]], [origin[2]]);
                 break;
             case 1:
-                coords = cartesian_product([0], arr, [0]);
+                coords = cartesian_product([origin[0]], arr, [origin[2]]);
                 break;
             case 2:
-                coords = cartesian_product([0], [0], arr);
+                coords = cartesian_product([origin[0]], [origin[1]], arr);
                 break;
         }
         return coords
@@ -98,6 +150,10 @@ function create_axes(xticks, yticks, zticks, canvas){
                 vc[2] += 0.05; // sensibility
                 vec3.transformMat4(vc, vc, projMatrix);
                 if (vc[2] - 0.001 < xy[3]) {
+                    textCtx.font = '30px serif';
+                    textCtx.textAlign = 'center';
+                    textCtx.textBaseline = 'alphabetic';
+                    textCtx.fillText(`.`, xy[0], textCtx.canvas.height - xy[1]+2);
                     textCtx.font = '12px serif';
                     textCtx.textAlign = 'right';
                     textCtx.textBaseline = 'top';
@@ -121,8 +177,11 @@ function create_axes(xticks, yticks, zticks, canvas){
     const axesActor = vtkActor.newInstance();
     axesActor.setMapper(axesMapper)
 
-    return {psActor, axesActor}
+    const gridActor = _create_grid_axes(origin, xticks, yticks, zticks)
+
+    return {psActor, axesActor, gridActor}
 }
+
 
 const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance();
 const container = fullScreenRenderer.getContainer();
@@ -158,11 +217,14 @@ window.addEventListener('resize', resize);
 
 
 // Axes
-xticks = numeric.linspace(-1,1,11)
-yticks = numeric.linspace(-1,1,11)
-zticks = numeric.linspace(-1,1,11)
+const axes_origin = [-1, 0.5, -1]
+const xticks = numeric.linspace(-1,1,11)
+const yticks = numeric.linspace(-1,1,11)
+const zticks = numeric.linspace(-1,1,11)
 
-const {psActor, axesActor} = create_axes(xticks, yticks, zticks, textCanvas)
+const {psActor, axesActor, gridActor} = create_axes(axes_origin, xticks, yticks, zticks, textCanvas)
+
+
 
 // Pts
 const pointSource = vtkPointSource.newInstance({
@@ -201,6 +263,7 @@ cubeActor2.getProperty().setRepresentationToWireframe()
 
 renderer.addActor(psActor);
 renderer.addActor(axesActor);
+renderer.addActor(gridActor);
 renderer.addActor(ptsActor);
 renderer.addActor(cubeActor1);
 renderer.addActor(cubeActor2);
