@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src='https://unpkg.com/vtk.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js'></script>
+    <script src="https://www.ruan-jian.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
+    <title>VTK Axes Tests</title>
+    <style>
+        .container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    
+</body>
+
+<script>
+vtkActor = vtk.Rendering.Core.vtkActor;
+vtkLineSource = vtk.Filters.Sources.vtkLineSource;
+vtkPlaneSource = vtk.Filters.Sources.vtkPlaneSource;
+vtkPointSource = vtk.Filters.Sources.vtkPointSource;
+vtkSphereMapper = vtk.Rendering.Core.vtkSphereMapper;
+vtkCubeSource = vtk.Filters.Sources.vtkCubeSource;
+vtkMapper = vtk.Rendering.Core.vtkMapper;
+vtkOpenGLRenderWindow = vtk.Rendering.OpenGL.vtkRenderWindow;
+vtkPixelSpaceCallbackMapper = vtk.Rendering.Core.vtkPixelSpaceCallbackMapper;
+vtkRenderWindow = vtk.Rendering.Core.vtkRenderWindow;
+vtkRenderWindowInteractor = vtk.Rendering.Core.vtkRenderWindowInteractor;
+vtkRenderer = vtk.Rendering.Core.vtkRenderer;
+vtkInteractorStyleTrackballCamera = vtk.Interaction.Style.vtkInteractorStyleTrackballCamera;
+vtkFullScreenRenderWindow = vtk.Rendering.Misc.vtkFullScreenRenderWindow;
+
+let dims
+
+function cartesian_product(...arrays){
+    return arrays.reduce((acc, curr) =>
+        acc.flatMap(c => curr.map(n => [].concat(c, n)))
+    );
+}
+
+function create_axes(xticks, yticks, zticks, canvas){
+    const xlen = xticks.length;
+    const ylen = yticks.length;
+    const zlen = zticks.length;
+    const points = [xticks, yticks, zticks].map((arr, axis) => {
+        let coords = null
+        switch (axis) {
+            case 0:
+                coords = cartesian_product(arr, [0], [0]);
+                break;
+            case 1:
+                coords = cartesian_product([0], arr, [0]);
+                break;
+            case 2:
+                coords = cartesian_product([0], [0], arr);
+                break;
+        }
+        return coords
+    }).flat(2);
+    const axesPolyData = vtk({
+        vtkClass: 'vtkPolyData',
+        points: {
+            vtkClass: 'vtkPoints',
+            dataType: 'Float32Array',
+            numberOfComponents: 3,
+            values: points,
+        },
+        lines: {
+            vtkClass: 'vtkCellArray',
+            dataType: 'Uint32Array',
+            values: [2, 0, xlen-1, 2, xlen, xlen+ylen-1, 2, xlen+ylen, xlen+ylen+zlen-1]
+        }
+    });
+    const psMapper = vtkPixelSpaceCallbackMapper.newInstance();
+    psMapper.setInputData(axesPolyData);
+    psMapper.setUseZValues(true);
+    const textCtx = canvas.getContext("2d");
+    psMapper.setCallback((coordsList, camera, aspect, depthBuffer) => {
+        if (textCtx && dims) {
+            const dataPoints = psMapper.getInputData().getPoints();
+            const viewMatrix = camera.getViewMatrix();
+            mat4.transpose(viewMatrix, viewMatrix);
+            const projMatrix = camera.getProjectionMatrix(aspect, -1, 1);
+            mat4.transpose(projMatrix, projMatrix);
+            textCtx.clearRect(0, 0, dims.width, dims.height);
+            coordsList.forEach((xy, idx) => {
+                const pdPoint = dataPoints.getPoint(idx);
+                const vc = vec3.fromValues(pdPoint[0], pdPoint[1], pdPoint[2]);
+                vec3.transformMat4(vc, vc, viewMatrix);
+                vc[2] += 0.05; // sensibility
+                vec3.transformMat4(vc, vc, projMatrix);
+                if (vc[2] - 0.001 < xy[3]) {
+                    textCtx.font = '12px serif';
+                    textCtx.textAlign = 'right';
+                    textCtx.textBaseline = 'top';
+                    let label
+                    if(idx<xlen)
+                        label = xticks[idx]
+                    else if(idx>=xlen && idx<xlen+ylen)
+                        label = yticks[idx-xlen]
+                    else
+                        label = zticks[idx-(xlen+ylen)]
+                    textCtx.fillText(`${label}`, xy[0], textCtx.canvas.height - xy[1]);
+                }
+            });
+        }
+    });
+    const psActor = vtkActor.newInstance();
+    psActor.setMapper(psMapper);
+
+    const axesMapper = vtkMapper.newInstance();
+    axesMapper.setInputData(axesPolyData)
+    const axesActor = vtkActor.newInstance();
+    axesActor.setMapper(axesMapper)
+
+    return {psActor, axesActor}
+}
+
+const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance();
+const container = fullScreenRenderer.getContainer();
+
+// Canvas for 2d context (text)
+const textCanvas = document.createElement('canvas');
+textCanvas.style.position = "absolute";
+textCanvas.style.top = "0";
+textCanvas.style.left = "0";
+textCanvas.style.right = "0";
+textCanvas.style.bottom = "0";
+container.appendChild(textCanvas);
+
+const renderer = fullScreenRenderer.getRenderer();
+const renderWindow = fullScreenRenderer.getRenderWindow();
+
+
+// ----------------------------------------------------------------------------
+// Setup an interactor to handle mouse events
+// ----------------------------------------------------------------------------
+
+const interactor = renderWindow.getInteractor();
+interactor.bindEvents(container);
+// Handle window resize
+function resize() {
+  dims = container.getBoundingClientRect();
+  textCanvas.setAttribute('width', dims.width);
+  textCanvas.setAttribute('height', dims.height);
+  renderWindow.render();
+}
+
+window.addEventListener('resize', resize);
+
+
+// Axes
+xticks = numeric.linspace(-1,1,11)
+yticks = numeric.linspace(-1,1,11)
+zticks = numeric.linspace(-1,1,11)
+
+const {psActor, axesActor} = create_axes(xticks, yticks, zticks, textCanvas)
+
+// Pts
+const pointSource = vtkPointSource.newInstance({
+  numberOfPoints: 100,
+  radius: 1,
+});
+const ptsMapper = vtkMapper.newInstance();
+const ptsActor = vtkActor.newInstance();
+ptsActor.getProperty().setEdgeVisibility(true);
+ptsActor.getProperty().setPointSize(5);
+ptsMapper.setInputConnection(pointSource.getOutputPort());
+ptsActor.setMapper(ptsMapper);
+
+// Cube
+const cubeSource1 = vtkCubeSource.newInstance({
+    xLength: 0.5,
+    yLength: 0.5,
+    zLength: 0.5,
+    center: [0.5, 0.5, 0.5]
+});
+
+const cubeSource2 = vtkCubeSource.newInstance();
+
+const cubeActor1 = vtkActor.newInstance();
+const cubeMapper1 = vtkMapper.newInstance();
+
+const cubeActor2 = vtkActor.newInstance();
+const cubeMapper2 = vtkMapper.newInstance();
+
+cubeActor1.setMapper(cubeMapper1);
+cubeMapper1.setInputConnection(cubeSource1.getOutputPort());
+
+cubeActor2.setMapper(cubeMapper2);
+cubeMapper2.setInputConnection(cubeSource2.getOutputPort());
+cubeActor2.getProperty().setRepresentationToWireframe()
+
+renderer.addActor(psActor);
+renderer.addActor(axesActor);
+renderer.addActor(ptsActor);
+renderer.addActor(cubeActor1);
+renderer.addActor(cubeActor2);
+
+renderer.resetCamera();
+
+resize();
+
+</script>
+</html>
