@@ -33,7 +33,7 @@
               <p>Email : <a href="mailto:xavier.artusi@cea.fr">xavier.artusi@cea.fr</a></p>
             </div>
             <div class="col-auto">
-              <p>Né le 28 Septembre 1984 (36 ans)</p>
+              <p>Né le 28 Septembre 1984 (${age} ans)</p>
               <p>Nationalité française</p>
               <p>Concubinage</p>
               <p>Permis B, véhicule</p>
@@ -408,6 +408,6 @@
        .filter(({nodeType}) => nodeType === document.TEXT_NODE)
        .forEach((textNode) => textNode.textContent = textNode.textContent.replace(pattern, string)))
     }
-    replaceOnDocument("$age", `${computeAge("09/28/1984")}`)
+    replaceOnDocument("${age}", `${computeAge("09/28/1984")}`)
   </script>
 </html>
