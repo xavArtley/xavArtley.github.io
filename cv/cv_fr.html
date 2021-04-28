@@ -394,5 +394,20 @@
       window.print()
       elem.style.visibility = "visible"
     }
+    function computeAge(birth){
+      const dob = new Date(birth)
+      const month_diff = Date.now() - dob.getTime()
+      const age_dt = new Date(month_diff)
+      const age = age_dt.getUTCFullYear() - 1970
+      return age
+    }
+	  function replaceOnDocument(pattern, string, {target = document.body} = {}){
+      [
+        target, ...target.querySelectorAll("*:not(script):not(noscript):not(style)")
+      ].forEach(({childNodes: [...nodes]}) => nodes
+       .filter(({nodeType}) => nodeType === document.TEXT_NODE)
+       .forEach((textNode) => textNode.textContent = textNode.textContent.replace(pattern, string)))
+    }
+    replaceOnDocument("$age", `${computeAge("09/28/1984")}`)
   </script>
 </html>
