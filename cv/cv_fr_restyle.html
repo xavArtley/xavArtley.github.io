@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
+  />
+  <link
+  rel="stylesheet"
+  type="text/css"
+  href="https://cdn.rawgit.com/dreampulse/computer-modern-web-font/master/fonts.css"
+  />
+  <link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+  integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+  crossorigin="anonymous"
+  />
+  <title>CV FR</title>
+</head>
+<body>
+  <div class="container-fluid" style="max-width: 1200px">
+    <!-- Header -->
+    <div class="row cv_header" style="position: relative; color: floralwhite; background-color: #6d6d6f; padding: 10px; border-radius: 5px 5px 0 0;">
+      <div id="print-button" style="position: absolute; top: 0; right: 0; z-index: 1">
+        <button class="btn btn-primary hidden-print" onclick="myPrintFunction()">
+          <span class="fa fa-print" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="photo"
+      style="
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      background-image: url('photo.JPG');
+      background-size: 90%;
+      background-position: 50% 50%;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      "
+      ></div>
+      <div class="col" style="margin-left: 10px; text-align: start;">
+        <div style="position: absolute; top: 0%; ">
+          <h1>Xavier Artusi</h1>
+          <h2 style="font-style: italic">Ingénieur-Chercheur</h2>
+        </div>
+        <div style="position: absolute; bottom: 0%;">
+          <p>2, résidence des Quinconces, 91 190 Gif-sur-Yvette, France</p>
+          <p style="font-style: italic;"><a style="color: unset;" href="tel:+33686407753">(+33) 6 86 40 77 53</a> <a href="mailto:xavier.artusi@cea.fr" style="padding-left: 10px; color: unset;">xavier.artusi@cea.fr</a></p>
+        </div>
+      </div>
+    </div>
+    <!-- Content -->
+    <div class="row cv_content">
+      <!-- Experiences and Formations -->
+      <div class="col-md cv_main">
+        <!-- Experiences -->
+        <div class="content">
+          <h1>Expériences professionnelles</h1>
+          <hr />
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">
+              2014 &horbar; <br /><span style="font-weight: normal">(En cours)</span>
+            </div>
+            <div class="col-md">
+              <p>
+                <span class="smcaps"
+                ><a href="https://www.cea.fr/">Commissariat à l'énergie atomique et aux énergies alternatives</a></span
+                >, France
+              </p>
+              <p>
+                Ingénieur-Chercheur au Laboratoire de Simulation et Modélisation Électromagnétique (LSME) : Traitement du
+                signal et développement d'outils statistiques pour le contrôle non destructif
+              </p>
+              <ul>
+                <li>
+                  <span
+                  >Interfaçage, développement et maintenance du module <span class="smcaps">Python</span> embarqué dans
+                  le logiciel <a href="http://www.extende.com/fr/civa-version-disponible">CIVA</a></span
+                  >
+                </li>
+                <li>
+                  <span>Métamodélisation de modèles physiques pour simulations intensives</span>
+                </li>
+                <li>
+                  <span>Traitement du signal et outils d'imagerie pour le CND</span>
+                </li>
+                <li>
+                  <span>Reconnaissance automatique de défauts lors d'inspections ultrasonores</span>
+                </li>
+                <li>
+                  <span>Outils statistiques: inversion, analyse en sensibilité, quantification d'incertitudes</span>
+                </li>
+                <li><span>Outils de visualisation des données</span></li>
+                <li>
+                  <span
+                  >Module <span class="smcaps">Python</span> de Matrices Hiérarchiques (&#8459;-Matrices) pour passage à
+                  l'échelle des codes de calcul d'intégrales de surface</span
+                  >
+                </li>
+                <li>
+                  <span
+                  >Plug-in CIVA de simulation des courants induits dans des pieds d'aubes de turbines lors d'un contrôle
+                  par induction (SAFRAN)</span
+                  >
+                </li>
+                <li>
+                  <span
+                  >Module <span class="smcaps">Python</span> pour le pilotage de bancs expérimentaux (acquisition de
+                  données, gestion de contrôleurs,...)</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">2012 &horbar; 2014</div>
+            <div class="col-md">
+              <p>
+                <span class="smcaps"
+                ><a href="https://www.cea.fr/">Commissariat à l'énergie atomique et aux énergies alternatives</a></span
+                >, France
+              </p>
+              <p>
+                Post-Doctorat, traitement du signal dans les réseaux de capteurs : détection précoce de fuites et de
+                contaminations dans les réseaux d'eau
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">
+              2008<br /><span style="font-weight: normal">(6 mois)</span>
+            </div>
+            <div class="col-md">
+              <p>
+                <span class="smcaps"
+                ><a href="https://www.ls2n.fr/"
+                >Institut de Recherche en Communications et Cybernétique de Nantes</a
+                ></span
+                >, France
+              </p>
+              <p>
+                Stage de recherche à l'IRCCyN, supervisé par le Directeur de Recherches Jérôme Idier et le Maître de
+                Conférence Saïd Moussaoui. Reconstruction de spectres RMN (Résonance Magnétique Nucléaire) 2D par des
+                méthodes de régularisation
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">
+              2006<br /><span style="font-weight: normal">(20 heures)</span>
+            </div>
+            <div class="col-md">
+              <p><span class="smcaps"><a href="https://www.lycee-rouviere.fr/">Lycée Rouvière</a></span>, France</p>
+              <p>Stage pédagogique en 1<sup>re</sup>S et en BTS Systèmes Électroniques</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">
+              2005<br /><span style="font-weight: normal">(1 mois)</span>
+            </div>
+            <div class="col-md">
+              <p>
+                <span class="smcaps"
+                ><a href="https://www.defense.gouv.fr/dga">Centre Technique Des Systèmes Navals</a>, Toulon,
+                France</span
+                >, France
+              </p>
+              <p>
+                Stage de découverte de l'entreprise (Développement d'un capteur de déplacement absolu insensible aux
+                hautes fréquences, pour mesurer le déplacement d'un sous marin lors d'une détonation sous-marine)
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Formations -->
+        <div class="content">
+          <h1>Formations</h1>
+          <hr />
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">2008 &horbar; 2012</div>
+            <div class="col-md">
+              <p><span class="smcaps"><a href="https://www.ec-nantes.fr/">École Centrale de Nantes</a></span>, France</p>
+              <p>Doctorat en Informatique, Automatique, Électronique et Génie Électrique, réalisé à l'<a href="https://www.ls2n.fr/">IRCCyN</a> (Institut de Recherche en Communications et Cybernétique de Nantes)</p>
+              <p>Sujet : Interface Cerveau Ordinateur (BCI : Brain Computer Interface) avec adaptation automatique à l'utilisateur</p>
+              <ul class="inline-list">
+                <li><span>Introduction au calcul parallèle</span></li>
+                <li><span>La recherche et l'entreprise</span></li>
+                <li><span>Reconnaissance de formes</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">2007 &horbar; 2008</div>
+            <div class="col-md">
+              <p><span class="smcaps"><a href="https://www.ec-nantes.fr/">École Centrale de Nantes</a></span>, France</p>
+              <p>2<sup>e</sup> année de Master, parcours ASP (Automatique et Système de Production), spécialité traitement du signal</p>
+              <ul class="inline-list">
+                <li><span>Automatique</span></li>
+                <li><span>Robotique</span></li>
+                <li><span>Traitement du Signal et de l'Image</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">2004 &horbar; 2007</div>
+            <div class="col-md">
+              <p><span class="smcaps"><a href="https://ens-paris-saclay.fr/">École Normale Supérieure de Cachan</a>, <a href="https://www.universite-paris-saclay.fr/">Université Paris-Sud 11 Orsay</a></span>, France</p>
+              <ul>
+                <li>
+                  <p>Année de préparation à l'agrégation de génie électrique - <em>Admissible</em></p>
+                </li>
+                <li>
+                  <p>1<sup>re</sup> année de Master, parcours IST (Information, Systèmes, Technologie)-EEA</p>
+                  <p>
+                    <ul class="inline-list">
+                      <li><span>Électronique de puissance des machines</span></li>
+                      <li><span>Commande numérique</span></li>
+                      <li><span>Électronique pour la transmission de l'information</span></li>
+                      <li><span>Informatique industrielle</span></li>
+                      <li><span>Signal et image</span></li>
+                    </ul>
+                  </p>
+                </li>
+                <li>
+                  <p>3<sup>e</sup> année de Licence de génie électrique à l'ENS de Cachan</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">2002 &horbar; 2004</div>
+            <div class="col-md">
+              <p><span class="smcaps"><a href="https://www.lycee-rouviere.fr/">Lycée Rouvière</a></span>, Toulon, France</p>
+              <p>Classe préparatoire aux Grandes Écoles - <em>Filière Physique Technologie (PT)</em></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto date" style="width: 130px">1999 &horbar; 2002</div>
+            <div class="col-md">
+              <p><span class="smcaps">Lycée du Coudon</span>, La Garde, France</p>
+              <p>Baccalauréat série S, option Sciences et Vie de la Terre, spécialité Mathématiques</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Side Bar -->
+      <div class="sidebar" style="background-color: #d3d3d8">
+        <div class="row">
+          <div class="col" style="margin-left: 15px; margin-right: 15px; padding-top: 10px;">
+            <h1>Informations personnelles</h1>
+            <hr/>
+            <div style="padding-left: 10px; padding-right: 10px; padding-top: 10px;">
+              <h2>Date de naissance</h2>
+              <p>28 Septembre 1984 (${age} ans)</p>
+              <h2>&Eacute;tat Civil</h2>
+              <p>Nationalité française</p>
+              <p>Concubinage, 1 enfant</p>
+              <h2>Autres</h2>
+              <p>Permis B, véhicule</p>
+              <h2>WWW</h2>
+              <p><a href="https://xavartley.github.io/">xavartley.github.io</a></p>
+            </div>
+            <h1>Compétences </h1>
+            <hr/>
+            <div style="padding-left: 10px; padding-right: 10px; padding-top: 10px;">
+              <ul>
+                <li>Traitement du signal et des données</li>
+                <li>Apprentissage</li>
+                <li>Visualisation des données</li>
+                <li>Simulation</li>
+                <li>Méthodes statistiques</li>
+                <li>Développement informatique</li>
+              </ul>
+            </div>
+            <h1>Programmation</h1>
+            <hr/>
+            <div style="padding-left: 10px; padding-right: 10px; padding-top: 10px;">
+              <h2>Python</h2>
+              <div style="text-align: right; margin-top: -10px; padding: 0; ">
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+              </div>
+              <h2>Matlab</h2>
+              <div style="text-align: right; margin-top: -10px; padding: 0; ">
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+              </div>
+              <h2 style="display: inline-block;">C++</h2>
+              <div style="text-align: right; margin-top: -10px; padding: 0; ">
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick"/>
+              </div>
+              <h2 style="display: inline-block;">Java</h2>
+              <div style="text-align: right; margin-top: -10px; padding: 0; ">
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick"/>
+                <hr class="tick"/>
+              </div>
+              <h2>Web (Javascript/HTML/CSS)</h2>
+              <div style="text-align: right; margin-top: -10px; padding: 0; ">
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick fill"/>
+                <hr class="tick"/>
+                <hr class="tick"/>
+              </div>
+              <hr/>
+              <h2>Systèmes d'exploitation</h2>
+              <ul class="inline-list">
+                <li>Windows</li>
+                <li>Linux</li>
+              </ul>
+              <!-- <hr/> -->
+            </div>
+            <h1>Languages</h1>
+            <hr/>
+            <div style="padding-left: 10px; padding-right: 10px; padding-top: 10px;">
+              <div style="position: relative;">
+                <h2>Français</h2>
+                <div style="text-align: right; margin-top: -10px; padding: 0; ">
+                  <hr class="tick fill"/>
+                  <hr class="tick fill"/>
+                  <hr class="tick fill"/>
+                  <hr class="tick fill"/>
+                  <hr class="tick fill"/>
+                </div>
+              </div>
+              <div style="position: relative;">
+                <h2>Anglais</h2>
+                <div style="text-align: right; margin-top: -10px; padding: 0; ">
+                  <hr class="tick fill"/>
+                  <hr class="tick fill"/>
+                  <hr class="tick fill"/>
+                  <hr class="tick"/>
+                  <hr class="tick"/>
+                </div>
+              </div>
+            </div>
+            <h1>Centres d'intérêt</h1>
+            <hr/>
+            <div style="padding-left: 10px; padding-right: 10px; padding-top: 10px;">
+              <h2>Course à pied</h2>
+              <h2>&Eacute;lectronique</h2>
+              <h2>Contributeur Open Source: <a href="https://github.com/xavArtley" style="display: inline-block; margin-left: 10px; width:30px; height:30px; position: absolute; background-image: url('github.png'); background-position: 50% 50%; background-size: cover; transform: translateY(-25%);"></a></h2>
+              <ul>
+                <li style="padding-left: 5px;">Bokeh: <a href="https://bokeh.org/" style="display: inline-block; width:30px; height:30px; background-image: url('bokeh.png'); background-position: 50% 50%; background-size: cover; transform: translateY(25%);"></a></li>
+                <li style="padding-left: 5px;">Panel: <a href="https://panel.holoviz.org/" style="display: inline-block; width:65px; height:30px; background-image: url('panel.png'); background-position: 0% 50%; background-size: cover; transform: translateY(25%);"></a></li>
+                <li style="padding-left: 5px;">VTK.js: <a href="https://kitware.github.io/vtk-js/index.html" style="display: inline-block; width:35px; height:30px; background-image: url('vtkjs.svg'); background-size: cover; background-size: 95%; transform: translateY(25%);"></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<style>
+  body {
+    margin: 10px;
+    padding: 10px;
+    font-family: "Computer Modern Sans", serif;
+    text-align: justify;
+    color: #171718;
+    background-color: #e7e7f7;
+  }
+  hr {
+    padding: 0;
+    margin: 0;
+  }
+  h1 {
+    margin-bottom: 0;
+    margin-top: 5px;
+    font-size: x-large;
+    font-weight: bold;
+    font-variant: small-caps;
+  }
+  h2 {
+    margin-bottom: 0;
+    margin-top: 5px;
+    font-size: large;
+    font-weight: bold;
+    font-variant: small-caps;
+  }
+  p {
+    font-size: 12pt;
+    margin-top: 0px;
+    margin-bottom: 2px;
+  }
+  .cv_header {
+    height: 150px;
+  }
+  .cv_main {
+    padding-top: 20px;
+    padding-bottom: 0px;
+    padding-left: 50px;
+    padding-right: 30px;
+    background-color: #f0f0f3;
+  }
+  .sidebar p {
+    margin: 0;
+  }
+  .smcaps {
+    font-variant: small-caps;
+  }
+  .date {
+    font-weight: bold;
+  }
+  .tick {
+    display: inline-block; 
+    width: 30px; 
+    height:3px; 
+    margin-right: 2px;
+    background-color: rgb(161, 164, 180);
+  }
+  .tick.fill {
+    background-color: black;
+  }
+  ul {
+    padding-left: 13px; /* size of the triangle bullet*/
+    margin-bottom: 2px;
+  }
+  li {
+    list-style: "\2BC8";
+    padding-left: 5px;
+  }
+  .inline-list {
+    text-align: start;
+  }
+  .inline-list li::before {
+    content: "\25B7";
+  }
+  .inline-list li {
+    white-space: nowrap;
+    display: inline;
+    padding-right: 25px;
+  }
+  li span {
+    position: relative;
+    left: 2px;
+    font-style: italic;
+  }
+  @media (max-width: 600px) {
+    .body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .cv_header p{
+      line-height: 1;
+    }
+    .container-fluid {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .photo {
+      display: none;
+    }
+    .cv_header {
+      padding: 0;
+    }
+    .cv_header .col:last-child {
+      padding: 0;
+    }
+    .cv_main {
+      padding: 10px;
+    }
+    .inline-list li {
+      white-space: unset;
+    }
+    
+  }
+  @media print {
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      background-color: unset;
+    }
+    .container-fluid {
+      height: 100vh;
+    }
+    .sidebar {
+      height: 90.5vh;
+    }
+    .cv_main {
+      background-color: unset;
+      margin: auto;
+    }
+    ul,
+    ol,
+    .row {
+      page-break-inside: avoid; /* pas de coupure dans ces élements */
+    }
+    h1,
+    h2,
+    h3,
+    caption {
+      page-break-after: avoid; /* pas de saut après ces éléments */
+    }
+    a {
+      text-decoration: none !important;
+    }
+  }
+</style>
+<script>
+  function myPrintFunction() {
+    const elem = document.getElementById("print-button");
+    elem.style.visibility = "hidden";
+    window.print();
+    elem.style.visibility = "visible";
+  }
+  function computeAge(birth) {
+    const dob = new Date(birth);
+    const month_diff = Date.now() - dob.getTime();
+    const age_dt = new Date(month_diff);
+    const age = age_dt.getUTCFullYear() - 1970;
+    return age;
+  }
+  function replaceOnDocument(pattern, string, { target = document.body } = {}) {
+    [
+    target,
+    ...target.querySelectorAll("*:not(script):not(noscript):not(style)"),
+    ].forEach(({ childNodes: [...nodes] }) =>
+    nodes
+    .filter(({ nodeType }) => nodeType === document.TEXT_NODE)
+    .forEach((textNode) => (textNode.textContent = textNode.textContent.replace(pattern, string)))
+    );
+  }
+  replaceOnDocument("${age}", `${computeAge("09/28/1984")}`);
+</script>
+</html>
+  
