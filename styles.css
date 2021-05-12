@@ -42,9 +42,12 @@ nav > ul > li > a {
   font-weight: bold;
 }
 
+nav > ul:last-child {
+  right: 10px;
+}
+
 nav > ul > li:last-child {
   float: right;
-  right: 10px;
 }
 
 nav li a:hover, .dropdown:hover .dropbtn {
