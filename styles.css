@@ -44,6 +44,7 @@ nav > ul > li > a {
 
 nav > ul > li:last-child {
   float: right;
+  right: 10px;
 }
 
 nav li a:hover, .dropdown:hover .dropbtn {
