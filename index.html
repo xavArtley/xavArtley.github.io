@@ -54,8 +54,14 @@
   },
   {
     title: "CV",
-    href: "#cv/cv_fr_restyle",
-    action: () => load_page("cv/cv_fr_restyle.html", content)
+    action: null,
+    subelems: [
+    {
+      title: "French",
+      href: "#cv/cv_fr_restyle.html",
+      action: () => load_page("cv/cv_fr_restyle.html", content)
+    }
+    ],
   },
   ]
   const myMenu = new Menu(document.getElementById('menu'), menuItems)
