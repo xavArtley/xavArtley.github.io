@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,61 +17,73 @@
 <script>
   var content = document.getElementById("content")
   var menuItems = [
-  {
-    title: "home",
-    href: "#home.html",
-    action: () => load_page("home.html", content)
-  },
-  {
-    title: "examples",
-    action: null,
-    subelems: [
     {
-      title: "Panel VTKjs example",
-      href: "#panel/vtk_examples/Gallery_VTK.html",
-      action: () => load_page("panel/vtk_examples/Gallery_VTK.html", content)
+      title: "home",
+      href: "#home.html",
+      action: () => load_page("home.html", content)
     },
     {
-      title: "VTKjs Axes example",
-      href: "#panel/vtk_examples/vtkAxes.html",
-      action: () => load_page("panel/vtk_examples/vtkAxes.html", content)
+      title: "Panel/VTKjs examples",
+      action: null,
+      subelems: [
+        {
+          title: "St-Helene",
+          href: "#panel/vtk_examples/Gallery_VTK.html",
+          action: () => load_page("panel/vtk_examples/Gallery_VTK.html", content)
+        },
+        {
+          title: "Axes",
+          href: "#panel/vtk_examples/vtkAxes.html",
+          action: () => load_page("panel/vtk_examples/vtkAxes.html", content)
+        },
+        {
+          title: "Volume Slicer",
+          href: "#panel/vtk_examples/vtkSlicer.html",
+          action: () => load_page("panel/vtk_examples/vtkSlicer.html", content)
+        },
+        {
+          title: "Volume Viewer",
+          href: "#panel/vtk_examples/vtkVolumeViewer.html",
+          action: () => load_page("panel/vtk_examples/vtkVolumeViewer.html", content)
+        },
+        {
+          title: "3D temporal data",
+          href: "#panel/vtk_examples/vtkTemporalData.html",
+          action: () => load_page("panel/vtk_examples/vtkTemporalData.html", content)
+        }
+      ],
     },
     {
-      title: "Panel VTKjs Slicer example",
-      href: "#panel/vtk_examples/vtkSlicer.html",
-      action: () => load_page("panel/vtk_examples/vtkSlicer.html", content)
+      title: "Bokeh Extensions",
+      action: null,
+      subelems: [
+        {
+          title: "Parallel Plot",
+          href: "#bokeh/parallel_plot_v2.html",
+          action: () => load_page("bokeh/parallel_plot_v2.html", content)
+        },
+      ]
     },
     {
-      title: "Panel VTKjs volume viewer",
-      href: "#panel/vtk_examples/vtkVolumeViewer.html",
-      action: () => load_page("panel/vtk_examples/vtkVolumeViewer.html", content)
+      title: "About",
+      action: null,
+      subelems: [
+        {
+          title: "Curriculum Vitae (FR)",
+          href: "#about/cv_fr_restyle.html",
+          action: () => load_page("about/cv_fr_restyle.html", content)
+        },
+        {
+          title: "Publications",
+          href: "#about/publications.html",
+          action: () => load_page("about/publications.html", content)
+        }
+      ],
     },
-    {
-      title: "Panel VTK temporal data",
-      href: "#panel/vtk_examples/vtkTemporalData.html",
-      action: () => load_page("panel/vtk_examples/vtkTemporalData.html", content)
-    }
-    ],
-  },
-  {
-    title: "About",
-    action: null,
-    subelems: [
-    {
-      title: "Curriculum Vitae (FR)",
-      href: "#cv/cv_fr_restyle.html",
-      action: () => load_page("cv/cv_fr_restyle.html", content)
-    },
-     {
-      title: "Publications",
-      href: "#cv/bibliography.html",
-      action: () => load_page("cv/bibliography.html", content)
-    }
-    ],
-  },
   ]
   const myMenu = new Menu(document.getElementById('menu'), menuItems)
-  const page_to_load = document.URL.split('#').length==2 ? document.URL.split('#')[1] : "home.html"
+  const page_to_load = document.URL.split('#').length == 2 ? document.URL.split('#')[1] : "home.html"
   load_page(page_to_load, content)
 </script>
+
 </html>
