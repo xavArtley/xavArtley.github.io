@@ -1,13 +1,28 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Guess the weekday</title>
+    <title>Guess the Weekday</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
+            margin-top: 20px;
+        }
+        nav {
+            margin-bottom: 20px;
+        }
+        nav button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+        }
+        nav button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
         }
         select, button {
             margin: 10px;
@@ -20,44 +35,95 @@
         }
         #date {
             margin-top: 20px;
+            font-size: 1.2em;
             font-weight: bold;
+        }
+        /* Style for the statistics view */
+        #stats-view {
+            display: none; /* Hidden by default */
+            margin: 20px auto;
+            max-width: 600px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
-    <h1>What day of the week is?</h1>
-    <p id="date"></p>
 
-    <select id="day">
-        <option value="1">Monday</option>
-        <option value="2">Tuesday</option>
-        <option value="3">Wednesday</option>
-        <option value="4">Thursday</option>
-        <option value="5">Friday</option>
-        <option value="6">Saturday</option>
-        <option value="0">Sunday</option>
-    </select>
+    <nav>
+        <button id="btn-game" class="active" onclick="showView('game-view')">Game</button>
+        <button id="btn-stats" onclick="showView('stats-view')">Statistics</button>
+    </nav>
 
-    <br>
-    <button onclick="verify()">Validate</button>
-    <button onclick="newDate()">New Date</button>
+    <div id="game-view">
+        <h1>What day of the week is?</h1>
+        <p id="date"></p>
 
-    <p id="resultat"></p>
+        <select id="day">
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6">Saturday</option>
+            <option value="0">Sunday</option>
+        </select>
+        <br>
+        <button onclick="verify()" id="validate">Validate</button>
+        <button onclick="newDate()" id="new-date">New Date</button>
+        <p id="resultat"></p>
+    </div>
+
+    <div id="stats-view">
+        <h2>Statistics</h2>
+        <button onclick="clearStats()">Clear Statistics</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Correct Day</th>
+                    <th>Attempts</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="stats-table-body">
+                </tbody>
+        </table>
+    </div>
 
     <script>
         let dateCourante;
         let tic;
         let toc;
+        let attemptCount = 1;
+
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
         function newDate() {
+            attemptCount = 1; // Reset attempt counter
             tic = Date.now();
-            const year = 1600 + Math.floor(Math.random() * 501); // between 1600 et 2100
+
+            const year = 1600 + Math.floor(Math.random() * 501); // between 1600 and 2100
             const month = Math.floor(Math.random() * 12);
-            const maxDay = new Date(year, month, 0).getDate();
+            // Correct way to get the number of days in the current month
+            const maxDay = new Date(year, month + 1, 0).getDate();
             const day = Math.floor(Math.random() * maxDay) + 1;
 
             dateCourante = new Date(year, month, day);
             document.getElementById("date").textContent = dateCourante.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById("resultat").textContent = "";
+            document.getElementById("validate").disabled = false;
         }
 
         function verify() {
@@ -66,12 +132,83 @@
 
             if (parseInt(selectedDay) === realDay) {
                 toc = Date.now();
-                document.getElementById("resultat").innerHTML  = `✅ Correct !<br> Solution found in ${formatElapsedTime(toc-tic)}`;
+                const elapsedTime = toc - tic;
+                document.getElementById("resultat").innerHTML  = `✅ Correct !<br> Solution found in ${formatElapsedTime(elapsedTime)} and ${attemptCount} attempts.`;
                 document.getElementById("resultat").style.color = "green";
+                document.getElementById("validate").disabled = true;
+
+
+                // Save the statistics
+                saveStat(elapsedTime);
             } else {
-                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                document.getElementById("resultat").textContent = "❌ Wrong. It was " + days[realDay] + ".";
+                document.getElementById("resultat").innerHTML = `❌ Wrong !<br> ${attemptCount} attempts.`;
                 document.getElementById("resultat").style.color = "red";
+                attemptCount++; // Increment the number of attempts
+            }
+        }
+
+        function saveStat(time) {
+            // 1. Get existing stats from localStorage
+            let stats = JSON.parse(localStorage.getItem('weekdayGameStats')) || [];
+
+            // 2. Create the new entry
+            const newStat = {
+                recordDate: Date.now(),
+                date: dateCourante.toISOString(), // Standard format for the date
+                attempts: attemptCount,
+                time: time
+            };
+
+            // 3. Add the new entry and save
+            stats.push(newStat);
+            localStorage.setItem('weekdayGameStats', JSON.stringify(stats));
+        }
+
+        function showStats() {
+            const stats = JSON.parse(localStorage.getItem('weekdayGameStats')) || [];
+            const tableBody = document.getElementById('stats-table-body');
+            tableBody.innerHTML = ''; // Clear the table
+
+            if (stats.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="4">No statistics yet.</td></tr>';
+                return;
+            }
+
+            // Reverse the array to show the most recent stats first
+            stats.reverse().forEach(stat => {
+                const date = new Date(stat.date);
+                const row = `
+                    <tr>
+                        <td>${date.toLocaleDateString("en-US")}</td>
+                        <td>${days[date.getDay()]}</td>
+                        <td>${stat.attempts}</td>
+                        <td>${formatElapsedTime(stat.time)}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function clearStats() {
+            if (confirm("Are you sure you want to clear all statistics?")) {
+                localStorage.removeItem('weekdayGameStats');
+                showStats(); // Update the display
+            }
+        }
+
+        function showView(viewId) {
+            document.getElementById('game-view').style.display = 'none';
+            document.getElementById('stats-view').style.display = 'none';
+            document.getElementById(viewId).style.display = 'block';
+
+            document.getElementById('btn-game').classList.remove('active');
+            document.getElementById('btn-stats').classList.remove('active');
+
+            if (viewId === 'game-view') {
+                document.getElementById('btn-game').classList.add('active');
+            } else {
+                document.getElementById('btn-stats').classList.add('active');
+                showStats(); // Refresh stats when switching to the tab
             }
         }
 
@@ -81,17 +218,19 @@
             const minutes = Math.floor((totalSeconds % 3600) / 60);
             const seconds = totalSeconds % 60;
 
-            if (hours > 0) {
-                // format HH:MM:SS
-                return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`;
-            } else {
-                // format MM:SS
-                return `${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`;
-            }
+            return `${(hours>0) ? hours.toString().padStart(2, "0") + "h:" : ""}${(minutes>0) ? minutes.toString().padStart(2, "0") + "min:" : ""}${seconds.toString().padStart(2, "0") + "s"}`
+            // if (hours > 0) {
+            //     return `${hours.toString().padStart(2, "0")}h:${minutes.toString().padStart(2,"0")}m:${seconds.toString().padStart(2,"0")}s`;
+            // } else {
+            //     return `${minutes.toString().padStart(2,"0")}m:${seconds.toString().padStart(2,"0")}s`;
+            // }
         }
 
-        // Generate first date at loading
-        window.onload = newDate;
+        // Initial setup on page load
+        window.onload = function() {
+            showView('game-view');
+            newDate();
+        };
     </script>
 </body>
 </html>
