@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Guess the weekday</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        select, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #resultat {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        #date {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>What day of the week is?</h1>
+    <p id="date"></p>
+
+    <select id="day">
+        <option value="1">Monday</option>
+        <option value="2">Tuesday</option>
+        <option value="3">Wednesday</option>
+        <option value="4">Thursday</option>
+        <option value="5">Friday</option>
+        <option value="6">Saturday</option>
+        <option value="0">Sunday</option>
+    </select>
+
+    <br>
+    <button onclick="verify()">Validate</button>
+    <button onclick="newDate()">New Date</button>
+
+    <p id="resultat"></p>
+
+    <script>
+        let dateCourante;
+        let tic;
+        let toc;
+        function newDate() {
+            tic = Date.now();
+            const year = 1600 + Math.floor(Math.random() * 501); // between 1600 et 2100
+            const month = Math.floor(Math.random() * 12);
+            const maxDay = new Date(year, month, 0).getDate();
+            const day = Math.floor(Math.random() * maxDay) + 1;
+
+            dateCourante = new Date(year, month, day);
+            document.getElementById("date").textContent = dateCourante.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById("resultat").textContent = "";
+        }
+
+        function verify() {
+            const selectedDay = document.getElementById("day").value;
+            const realDay = dateCourante.getDay();
+
+            if (parseInt(selectedDay) === realDay) {
+                toc = Date.now();
+                document.getElementById("resultat").innerHTML  = `✅ Correct !<br> Solution found in ${formatElapsedTime(toc-tic)}`;
+                document.getElementById("resultat").style.color = "green";
+            } else {
+                const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                document.getElementById("resultat").textContent = "❌ Wrong. It was " + days[realDay] + ".";
+                document.getElementById("resultat").style.color = "red";
+            }
+        }
+
+        function formatElapsedTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            if (hours > 0) {
+                // format HH:MM:SS
+                return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`;
+            } else {
+                // format MM:SS
+                return `${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`;
+            }
+        }
+
+        // Generate first date at loading
+        window.onload = newDate;
+    </script>
+</body>
+</html>
