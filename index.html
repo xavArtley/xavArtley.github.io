@@ -1,58 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Xavier Artusi Website</title>
+    <script src="./mylib.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="styles.css">
-  <title>Xavier Artusi Website</title>
-  <script src="./mylib.js"></script>
-</head>
-
-<body>
-  <nav class="topnav" id="menu"></nav>
-  <article id="content"></article>
-</body>
-<script>
-  var content = document.getElementById("content")
-  var menuItems = [
-    {
-      title: "home",
-      href: "#home.html",
-      action: () => load_page("home.html", content)
-    },
-    {
-      title: "MISC",
-      action: null,
-      subelems: [
-        {
-          title: "Guess The Weekday",
-          href: "#misc/guess_the_weekday.html",
-          action: () => load_page("misc/guess_the_weekday.html", content)
-        }
-      ]
-    },
-    {
-      title: "About",
-      action: null,
-      subelems: [
-        {
-          title: "Curriculum Vitae (FR)",
-          href: "#about/cv_fr_restyle.html",
-          action: () => load_page("about/cv_fr_restyle.html", content)
-        },
-        {
-          title: "Publications",
-          href: "#about/publications.html",
-          action: () => load_page("about/publications.html", content)
-        }
-      ],
-    },
-  ]
-  const myMenu = new Menu(document.getElementById('menu'), menuItems)
-  const page_to_load = document.URL.split('#').length == 2 ? document.URL.split('#')[1] : "home.html"
-  load_page(page_to_load, content)
-</script>
-
+  <body>
+    <nav class="topnav" id="menu"></nav>
+    <article id="content"></article>
+  </body>
+  <script>
+    var content = document.getElementById("content");
+    var menuItems = [
+      {
+        title: "home",
+        href: "#home.html",
+        action: () => load_page("home.html", content),
+      },
+      {
+        title: "MISC",
+        action: null,
+        subelems: [
+          {
+            title: "Guess The Weekday",
+            href: "#misc/guess_the_weekday.html",
+            action: () => load_page("misc/guess_the_weekday.html", content),
+          },
+        ],
+      },
+      {
+        title: "About",
+        action: null,
+        subelems: [
+          {
+            title: "Curriculum Vitae (FR)",
+            href: "#about/cv_fr_restyle.html",
+            action: () => load_page("about/cv_fr_restyle.html", content),
+          },
+          {
+            title: "Publications",
+            href: "#about/publications.html",
+            action: () => load_page("about/publications.html", content),
+          },
+        ],
+      },
+    ];
+    const myMenu = new Menu(document.getElementById("menu"), menuItems);
+    const page_to_load = document.URL.split("#").length == 2 ? document.URL.split("#")[1] : "home.html";
+    load_page(page_to_load, content);
+  </script>
 </html>
