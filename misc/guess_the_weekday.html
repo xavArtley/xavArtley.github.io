@@ -32,7 +32,7 @@
         padding: 10px;
         font-size: 16px;
       }
-      #speaker button{
+      #speaker > button{
         margin: 0;
         padding-top: 7px;
       }
@@ -205,7 +205,7 @@
     <nav>
       <button id="btn-game" class="active" onclick="showView('game-view')">Game</button>
       <button id="btn-stats" onclick="showView('stats-view')">Statistics</button>
-      <select id="mode">
+      <select id="mode" onchange="newDate()">
         <option value="1">Text</option>
         <option value="2">Audio</option>
       </select>
@@ -214,7 +214,7 @@
     <div id="game-view">
       <h1>What day of the week is?</h1>
       <p id="date"></p>
-      <p id="speaker"><button onclick="sayDate()">🔈</button></div></p>
+      <p id="speaker"><button onclick="sayDate()">🔈</button></p>
 
       <select id="day">
         <option value="1">Monday</option>
@@ -404,6 +404,7 @@
       }
 
       function showHints() {
+        document.getElementById("validate").disabled = true
         const hintsView = document.getElementById("hints-view");
         const day = currentDate.getDate();
         const month = currentDate.getMonth() + 1;
