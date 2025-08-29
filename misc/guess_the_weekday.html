@@ -32,6 +32,11 @@
         padding: 10px;
         font-size: 16px;
       }
+      #speaker button{
+        margin: 0;
+        padding-top: 7px;
+      }
+
       #hints {
         padding-top: 7px;
       }
@@ -200,11 +205,16 @@
     <nav>
       <button id="btn-game" class="active" onclick="showView('game-view')">Game</button>
       <button id="btn-stats" onclick="showView('stats-view')">Statistics</button>
+      <select id="mode">
+        <option value="1">Text</option>
+        <option value="2">Audio</option>
+      </select>
     </nav>
 
     <div id="game-view">
       <h1>What day of the week is?</h1>
       <p id="date"></p>
+      <p id="speaker"><button onclick="sayDate()">🔈</button></div></p>
 
       <select id="day">
         <option value="1">Monday</option>
@@ -231,7 +241,7 @@
           <tr>
             <th>Date</th>
             <th>Correct Day</th>
-            <th>Attempts</th>
+            <th>Success</th>
             <th>Time</th>
           </tr>
         </thead>
@@ -278,8 +288,7 @@
 
       function newDate() {
         attemptCount = 1; // Reset attempt counter
-        tic = Date.now();
-
+        mode = document.getElementById("mode").value;
         const year = 1600 + Math.floor(Math.random() * 501); // between 1600 and 2100
         const month = Math.floor(Math.random() * 12);
         // Correct way to get the number of days in the current month
@@ -287,11 +296,22 @@
         const day = Math.floor(Math.random() * maxDay) + 1;
 
         currentDate = new Date(year, month, day);
-        document.getElementById("date").textContent = currentDate.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
+        if (mode == 1) {
+          //text
+          document.getElementById("date").hidden = false;
+          document.getElementById("speaker").hidden = true;
+          document.getElementById("date").textContent = currentDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+          tic = Date.now();
+        } else if (mode == 2) {
+          document.getElementById("date").hidden = true;
+          document.getElementById("speaker").hidden = false;
+        } else {
+          console.error(`Unknown Mode ${mode}`);
+        }
         document.getElementById("result-view").textContent = "";
         document.getElementById("hints-view").textContent = "";
         document.getElementById("validate").disabled = false;
@@ -300,26 +320,25 @@
       function verify() {
         const selectedDay = document.getElementById("day").value;
         const realDay = currentDate.getDay();
-
+        toc = Date.now();
+        const elapsedTime = toc - tic;
         if (parseInt(selectedDay) === realDay) {
-          toc = Date.now();
-          const elapsedTime = toc - tic;
           document.getElementById("result-view").innerHTML = `✅ Correct !<br> Solution found in ${formatElapsedTime(
             elapsedTime
-          )} and ${attemptCount} attempts.`;
+          )}.`;
           document.getElementById("result-view").style.color = "green";
-          document.getElementById("validate").disabled = true;
-
-          // Save the statistics
-          saveStat(elapsedTime);
+          saveStat(elapsedTime, true);
         } else {
-          document.getElementById("result-view").innerHTML = `❌ Wrong !<br> ${attemptCount} attempts.`;
+          document.getElementById("result-view").innerHTML = `❌ Wrong !<br> in ${formatElapsedTime(
+            elapsedTime
+          )}.`;
           document.getElementById("result-view").style.color = "red";
-          attemptCount++; // Increment the number of attempts
+          saveStat(elapsedTime, false);
         }
+        document.getElementById("validate").disabled = true;
       }
 
-      function saveStat(time) {
+      function saveStat(time, correct) {
         // 1. Get existing stats from localStorage
         let stats = JSON.parse(localStorage.getItem("weekdayGameStats")) || [];
 
@@ -327,7 +346,7 @@
         const newStat = {
           recordDate: Date.now(),
           date: currentDate.toISOString(), // Standard format for the date
-          attempts: attemptCount,
+          correct: correct,
           time: time,
         };
 
@@ -353,7 +372,7 @@
                     <tr>
                         <td>${date.toLocaleDateString("en-US")}</td>
                         <td>${weekDays[date.getDay()]}</td>
-                        <td>${stat.attempts}</td>
+                        <td>${(stat.correct) ? "✅" : "❌"}</td>
                         <td>${formatElapsedTime(stat.time)}</td>
                     </tr>
                 `;
@@ -412,6 +431,7 @@
         hintsView.innerHTML = `
 <div class="hint-container">
   <div class="hint-step">
+    <h3>Date: ${currentDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</h3>
     <h4><span class="step-number">1</span>Century Anchor → ${anchor}</h4>
     <div class="step-content">Century <code>c = ${c}</code>; compute <code>k = c mod 4 = ${k}</code>.</div>
     <div class="step-content">
@@ -499,6 +519,21 @@
         return `${hours > 0 ? hours.toString().padStart(2, "0") + "h:" : ""}${
           minutes > 0 ? minutes.toString().padStart(2, "0") + "min:" : ""
         }${seconds.toString().padStart(2, "0") + "s"}`;
+      }
+
+      function sayDate() {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        const dateToSay = currentDate.toLocaleDateString("en-US", options);
+
+        // Vérifie si l'API de synthèse vocale est supportée par le navigateur
+        if ("speechSynthesis" in window) {
+          const utterance = new SpeechSynthesisUtterance(dateToSay);
+          utterance.onend = () => (tic = Date.now());
+          utterance.lang = "en-US"; // Définit la langue pour une prononciation correcte
+          speechSynthesis.speak(utterance);
+        } else {
+          console.error("L'API de synthèse vocale n'est pas supportée par ce navigateur.");
+        }
       }
 
       // Initial setup on page load
