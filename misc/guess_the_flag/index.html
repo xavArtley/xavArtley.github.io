@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Drapeaux</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="jaro-winkler.js"></script>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Devinez le Pays !</h1>
+        <div id="flag-display-area">
+            <img id="flag-image" src="" alt="Drapeau à deviner">
+        </div>
+
+        <div id="score-info">
+            <p>Score : <span id="score">0</span> | Vues : <span id="view-count">0</span> | Diff. Moyenne : <span id="avg-difficulty">1.00</span></p>
+        </div>
+
+        <input type="text" id="guess-input" placeholder="Entrez le nom du pays (FR ou EN)">
+        <button id="submit-guess">Valider</button>
+
+        <div id="message-area" class="message-default"></div>
+
+        <button id="next-question" style="display: none;">Drapeau Suivant</button>
+        <button id="reset-game" class="reset-button">Réinitialiser le jeu</button>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
