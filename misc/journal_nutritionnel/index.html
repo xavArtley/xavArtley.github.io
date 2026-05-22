@@ -104,6 +104,14 @@
             align-items: center;
         }
 
+        .tab-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
         button {
             cursor: pointer;
             padding: 8px 16px;
@@ -224,14 +232,14 @@
         /* Dashboard Overview */
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
             margin-bottom: 30px;
         }
 
         .stat-card {
             background: var(--card-bg);
-            padding: 15px;
+            padding: 12px 15px;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             border-left: 4px solid var(--primary);
@@ -250,12 +258,24 @@
             border-left-color: #ecc94b;
         }
 
+        .stat-card.sucre {
+            border-left-color: #f6ad55;
+        }
+
         .stat-card.lip {
             border-left-color: var(--red);
         }
 
+        .stat-card.sat {
+            border-left-color: #fc8181;
+        }
+
         .stat-card.fib {
             border-left-color: var(--success);
+        }
+
+        .stat-card.sel {
+            border-left-color: #a0aec0;
         }
 
         .stat-value {
@@ -401,11 +421,48 @@
 
         .chart-container {
             background: var(--card-bg);
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border);
             margin-bottom: 30px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 260px;
+        }
+
+        .chart-wrapper canvas {
+            display: block;
+            width: 100% !important;
+        }
+
+        .history-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 15px;
+            background: var(--card-bg);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .history-controls label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .history-controls input[type="date"] {
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text-main);
         }
 
         @media (max-width: 768px) {
@@ -432,6 +489,111 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .data-table th, .data-table td {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .meal-items-table th, .meal-items-table td {
+                font-size: 12px;
+                padding: 8px 4px;
+            }
+
+            .meal-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .history-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .tab-actions {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Scrollable tables on small screens */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* ── Collapsible Cards ─────────────────── */
+        .coll-section {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.06);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .coll-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            background: #f7fafc;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+            gap: 10px;
+        }
+
+        .coll-header:hover { background: #edf2f7; }
+
+        .coll-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .coll-meta {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        .coll-chevron {
+            font-size: 11px;
+            color: var(--text-muted);
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .coll-section.collapsed .coll-chevron {
+            transform: rotate(-90deg);
+        }
+
+        .coll-body {
+            max-height: 3000px;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.2s ease;
+        }
+
+        .coll-section.collapsed .coll-body {
+            max-height: 0;
+        }
+
+        /* Override meal-container to use coll-section styles */
+        .meal-container {
+            background: transparent;
+            box-shadow: none;
+            border: none;
+            margin-bottom: 0;
+            overflow: visible;
         }
     </style>
 </head>
@@ -443,9 +605,6 @@
             <h1>Mon Journal Nutritionnel</h1>
             <div class="global-actions">
                 <button id="auth-btn" class="btn-primary" onclick="toggleAuth()">Connexion Google</button>
-
-                <button class="btn-success" onclick="openFoodModal()">+ Créer un aliment</button>
-                <button class="btn-primary" onclick="exportDailyMenu()">Exporter ce jour (TXT)</button>
             </div>
         </header>
 
@@ -462,29 +621,53 @@
                     <span style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Date :</span>
                     <input type="date" id="date-selector" onchange="changeDate()">
                 </div>
-                <button class="btn-danger" onclick="clearCurrentDay()">Réinitialiser ce jour</button>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button class="btn-success" onclick="exportDailyMenu()">📤 Exporter ce jour (TXT)</button>
+                    <button class="btn-danger" onclick="clearCurrentDay()">Réinitialiser ce jour</button>
+                </div>
             </div>
 
-            <div class="dashboard">
-                <div class="stat-card kcal">
-                    <div class="stat-label">Énergie</div>
-                    <div class="stat-value" id="total-kcal">0 kcal</div>
+            <!-- Dashboard collapsible -->
+            <div class="coll-section" id="coll-dashboard">
+                <div class="coll-header" onclick="toggleCard('coll-dashboard')">
+                    <span class="coll-title">📊 Résumé du jour</span>
+                    <span class="coll-chevron">▼</span>
                 </div>
-                <div class="stat-card prot">
-                    <div class="stat-label">Protéines</div>
-                    <div class="stat-value" id="total-prot">0 g</div>
-                </div>
-                <div class="stat-card glu">
-                    <div class="stat-label">Glucides</div>
-                    <div class="stat-value" id="total-glu">0 g</div>
-                </div>
-                <div class="stat-card lip">
-                    <div class="stat-label">Lipides</div>
-                    <div class="stat-value" id="total-lip">0 g</div>
-                </div>
-                <div class="stat-card fib">
-                    <div class="stat-label">Fibres</div>
-                    <div class="stat-value" id="total-fib">0 g</div>
+                <div class="coll-body">
+                    <div class="dashboard" style="padding:15px;">
+                        <div class="stat-card kcal">
+                            <div class="stat-label">Énergie</div>
+                            <div class="stat-value" id="total-kcal">0 kcal</div>
+                        </div>
+                        <div class="stat-card prot">
+                            <div class="stat-label">Protéines</div>
+                            <div class="stat-value" id="total-prot">0 g</div>
+                        </div>
+                        <div class="stat-card glu">
+                            <div class="stat-label">Glucides</div>
+                            <div class="stat-value" id="total-glu">0 g</div>
+                        </div>
+                        <div class="stat-card sucre">
+                            <div class="stat-label">dont Sucres</div>
+                            <div class="stat-value" id="total-sucre">0 g</div>
+                        </div>
+                        <div class="stat-card lip">
+                            <div class="stat-label">Lipides</div>
+                            <div class="stat-value" id="total-lip">0 g</div>
+                        </div>
+                        <div class="stat-card sat">
+                            <div class="stat-label">dont Saturés</div>
+                            <div class="stat-value" id="total-sat">0 g</div>
+                        </div>
+                        <div class="stat-card fib">
+                            <div class="stat-label">Fibres</div>
+                            <div class="stat-value" id="total-fib">0 g</div>
+                        </div>
+                        <div class="stat-card sel">
+                            <div class="stat-label">Sel</div>
+                            <div class="stat-value" id="total-sel">0 g</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -492,38 +675,84 @@
         </div>
 
         <div id="tab-history" class="tab-content">
-            <h2 style="margin-bottom: 15px; color: var(--text-main);">Visuels des 14 derniers jours enregistrés</h2>
-            <div class="chart-container">
-                <canvas id="historyChart" height="100"></canvas>
+
+            <!-- Filtres periode collapsible -->
+            <div class="coll-section" id="coll-hist-filters">
+                <div class="coll-header" onclick="toggleCard('coll-hist-filters')">
+                    <span class="coll-title">🗓️ Période &amp; Export</span>
+                    <span class="coll-chevron">▼</span>
+                </div>
+                <div class="coll-body">
+                    <div class="history-controls" style="border:none; border-radius:0; margin-bottom:0;">
+                        <label>Du :</label>
+                        <input type="date" id="hist-date-from" onchange="renderHistory()">
+                        <label>au :</label>
+                        <input type="date" id="hist-date-to" onchange="renderHistory()">
+                        <button class="btn-outline" onclick="resetHistoryDates()">14 derniers jours</button>
+                        <button class="btn-success" style="margin-left:auto;" onclick="exportHistoryCSV()">📥 Exporter (CSV)</button>
+                    </div>
+                </div>
             </div>
 
-            <h2 style="margin-bottom: 15px; color: var(--text-main);">Historique des jours</h2>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Calories</th>
-                        <th>Protéines</th>
-                        <th>Glucides</th>
-                        <th>Lipides</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="history-table-body"></tbody>
-            </table>
+            <!-- Graphique collapsible -->
+            <div class="coll-section" id="coll-hist-chart">
+                <div class="coll-header" onclick="toggleCard('coll-hist-chart')">
+                    <span class="coll-title">📈 Graphique de la période</span>
+                    <span class="coll-chevron">▼</span>
+                </div>
+                <div class="coll-body">
+                    <div style="padding:15px;">
+                        <div class="chart-wrapper" style="height: 280px;">
+                            <canvas id="historyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tableau historique collapsible -->
+            <div class="coll-section" id="coll-hist-table">
+                <div class="coll-header" onclick="toggleCard('coll-hist-table')">
+                    <span class="coll-title">📋 Historique des jours</span>
+                    <span class="coll-chevron">▼</span>
+                </div>
+                <div class="coll-body">
+                    <div class="table-responsive" style="padding:0;">
+                        <table class="data-table" style="margin-bottom:0;">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Calories</th>
+                                    <th>Protéines</th>
+                                    <th>Glucides</th>
+                                    <th>dont Sucres</th>
+                                    <th>Lipides</th>
+                                    <th>dont Saturés</th>
+                                    <th>Fibres</th>
+                                    <th>Sel</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div id="tab-database" class="tab-content">
             <div
                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                 <h2 style="color: var(--text-main); margin: 0;">Base de données des aliments</h2>
-                <div style="display: flex; gap: 10px;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn-success" onclick="openFoodModal()">+ Créer un aliment</button>
                     <button class="btn-success" onclick="triggerCSVImport()">Importer une base (CSV)</button>
                     <button class="btn-primary" onclick="exportDatabaseCSV()">Exporter la base (CSV)</button>
                     <input type="file" id="csv-file-input" accept=".csv" style="display: none;"
                         onchange="importDatabaseCSV(event)">
                 </div>
             </div>
+            <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
@@ -539,6 +768,7 @@
                 </thead>
                 <tbody id="db-table-body"></tbody>
             </table>
+            </div>
         </div>
     </div>
 
@@ -1002,19 +1232,22 @@
 
         function calculateDayTotals(dateStr) {
             const meals = appHistory[dateStr];
-            let totals = { kcal: 0, prot: 0, carbs: 0, fat: 0, fiber: 0, isEmpty: true };
+            let totals = { kcal: 0, prot: 0, carbs: 0, sucre: 0, fat: 0, sat: 0, fiber: 0, sel: 0, isEmpty: true };
             if (!meals) return totals;
 
             mealNames.forEach(meal => {
                 if (meals[meal] && meals[meal].length > 0) totals.isEmpty = false;
                 (meals[meal] || []).forEach(item => {
-                    const info = combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, lipides: 0, fibres: 0 };
+                    const info = combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, sucre: 0, lipides: 0, sat: 0, fibres: 0, sel: 0 };
                     const factor = item.weight / 100;
                     totals.kcal += Math.round(info.kcal * factor);
                     totals.prot += info.proteines * factor;
                     totals.carbs += info.glucides * factor;
+                    totals.sucre += (info.sucre || 0) * factor;
                     totals.fat += info.lipides * factor;
+                    totals.sat += (info.sat || 0) * factor;
                     totals.fiber += (info.fibres || 0) * factor;
+                    totals.sel += (info.sel || 0) * factor;
                 });
             });
             return totals;
@@ -1025,35 +1258,67 @@
             return `${d}/${m}/${y}`;
         }
 
+        // Track collapsed state for meal cards (persists across re-renders)
+        const mealCollapseState = {};
+
+        function toggleCard(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.classList.toggle('collapsed');
+            // If it's a chart card, force Chart.js to resize after animation
+            if (id === 'coll-hist-chart' && myChart) {
+                setTimeout(() => myChart.resize(), 360);
+            }
+            // Persist state
+            try { sessionStorage.setItem('coll:' + id, el.classList.contains('collapsed') ? '1' : '0'); } catch(e) {}
+        }
+
+        function restoreCollapsedState(id) {
+            try {
+                const val = sessionStorage.getItem('coll:' + id);
+                if (val === '1') {
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('collapsed');
+                }
+            } catch(e) {}
+        }
+
         function renderMeals() {
             const container = document.getElementById('meals-container');
             if (!container) return;
             container.innerHTML = '';
 
-            const dayMeals = appHistory[currentDate] || { "Petit-déjeuner": [], "Déjeuner": [], "Collation": [], "Dîner": [] };
-            let globalTotals = { kcal: 0, prot: 0, carbs: 0, fat: 0, fiber: 0 };
+            const dayMeals = appHistory[currentDate] || { "Petit-d\u00e9jeuner": [], "D\u00e9jeuner": [], "Collation": [], "D\u00eener": [] };
+            let globalTotals = { kcal: 0, prot: 0, carbs: 0, sucre: 0, fat: 0, sat: 0, fiber: 0, sel: 0 };
+
+            const mealIcons = { "Petit-d\u00e9jeuner": "\u2600\uFE0F", "D\u00e9jeuner": "\uD83C\uDF7D\uFE0F", "Collation": "\uD83C\uDF4E", "D\u00eener": "\uD83C\uDF19" };
 
             mealNames.forEach(meal => {
+                const cardId = 'coll-meal-' + meal.replace(/[^a-zA-Z]/g, '');
                 const items = dayMeals[meal] || [];
                 let mealKcal = 0, mealProt = 0, mealCarbs = 0, mealFat = 0;
                 let itemsHtml = '';
 
                 items.forEach((item, index) => {
-                    const info = combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, lipides: 0, fibres: 0 };
+                    const info = combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, sucre: 0, lipides: 0, sat: 0, fibres: 0, sel: 0 };
                     const factor = item.weight / 100;
 
                     const calcKcal = Math.round(info.kcal * factor);
                     const calcProt = (info.proteines * factor).toFixed(1);
                     const calcCarbs = (info.glucides * factor).toFixed(1);
+                    const calcSucre = ((info.sucre || 0) * factor).toFixed(1);
                     const calcFat = (info.lipides * factor).toFixed(1);
+                    const calcSat = ((info.sat || 0) * factor).toFixed(1);
                     const calcFiber = ((info.fibres || 0) * factor).toFixed(1);
+                    const calcSel = ((info.sel || 0) * factor).toFixed(1);
 
                     mealKcal += calcKcal; mealProt += parseFloat(calcProt);
                     mealCarbs += parseFloat(calcCarbs); mealFat += parseFloat(calcFat);
 
                     globalTotals.kcal += calcKcal; globalTotals.prot += parseFloat(calcProt);
-                    globalTotals.carbs += parseFloat(calcCarbs); globalTotals.fat += parseFloat(calcFat);
-                    globalTotals.fiber += parseFloat(calcFiber);
+                    globalTotals.carbs += parseFloat(calcCarbs); globalTotals.sucre += parseFloat(calcSucre);
+                    globalTotals.fat += parseFloat(calcFat); globalTotals.sat += parseFloat(calcSat);
+                    globalTotals.fiber += parseFloat(calcFiber); globalTotals.sel += parseFloat(calcSel);
 
                     let displayWeight = `${item.weight}g`;
                     if (item.qty && item.unitWeight && item.qty !== 1) {
@@ -1065,34 +1330,50 @@
                         <td><strong>${item.name}</strong></td>
                         <td>${displayWeight}</td>
                         <td>${calcKcal} kcal</td>
-                        <td>P: ${calcProt}g | G: ${calcCarbs}g | L: ${calcFat}g</td>
-                        <td style="text-align: right;"><button class="remove-btn" onclick="removeItem('${meal}', ${index})">&times;</button></td>
-                    </tr>
-                `;
+                        <td>P:${calcProt}g G:${calcCarbs}g<small style="color:var(--text-muted)">(s:${calcSucre})</small> L:${calcFat}g<small style="color:var(--text-muted)">(sat:${calcSat})</small> Sel:${calcSel}g</td>
+                        <td style="text-align:right;"><button class="remove-btn" onclick="removeItem('${meal}', ${index})">&times;</button></td>
+                    </tr>`;
                 });
 
-                let catOptionsHtml = '<option value="all">Toutes les catégories</option>';
+                let catOptionsHtml = '<option value="all">Toutes les cat\u00e9gories</option>';
                 categoryList.forEach(cat => { catOptionsHtml += `<option value="${cat}">${cat}</option>`; });
 
+                const icon = mealIcons[meal] || '\uD83C\uDF74';
+                const subtotal = mealKcal > 0
+                    ? `${mealKcal} kcal &mdash; P:${mealProt.toFixed(1)}g G:${mealCarbs.toFixed(1)}g L:${mealFat.toFixed(1)}g`
+                    : 'Vide';
+
                 const mealCard = document.createElement('div');
-                mealCard.className = 'meal-container';
+                mealCard.className = 'coll-section';
+                mealCard.id = cardId;
+                // Restore previous collapsed state
+                let wasCollapsed = false;
+                try { wasCollapsed = sessionStorage.getItem('coll:' + cardId) === '1'; } catch(e) {}
+                if (wasCollapsed) mealCard.classList.add('collapsed');
+
                 mealCard.innerHTML = `
-                <div class="meal-header">
-                    <span>${meal}</span>
-                    <span class="meal-subtotal">${mealKcal} kcal | P: ${mealProt.toFixed(1)}g | G: ${mealCarbs.toFixed(1)}g | L: ${mealFat.toFixed(1)}g</span>
+                <div class="coll-header" onclick="toggleCard('${cardId}')">
+                    <span class="coll-title">${icon} ${meal}</span>
+                    <span class="coll-meta">${subtotal}</span>
+                    <span class="coll-chevron">\u25BC</span>
                 </div>
-                <div class="meal-body">
-                    ${items.length > 0 ? `<table class="meal-items-table"><thead><tr><th>Aliment</th><th>Quantité</th><th>Calories</th><th>Macros</th><th></th></tr></thead><tbody>${itemsHtml}</tbody></table>` : '<p style="color: var(--text-muted); font-size: 14px; font-style: italic; margin-bottom: 15px;">Aucun aliment ajouté</p>'}
-                    <div class="add-item-form" id="form-${meal}">
-                        <select class="form-select" id="cat-${meal}" onchange="filterFoods('${meal}')" style="min-width: 140px;" title="Filtrer par catégorie">${catOptionsHtml}</select>
-                        <select class="form-select" id="select-${meal}" onchange="updateDefaultWeight('${meal}')" style="min-width: 150px;"></select>
-                        <input type="number" class="form-input" id="qty-${meal}" value="1" min="0.1" step="0.1" style="width: 60px;" title="Portions">
-                        <span style="color: var(--text-muted); font-size: 14px;">x</span>
-                        <input type="number" class="form-input" id="weight-${meal}" placeholder="Poids/u (g)" min="1" style="width: 80px;">
-                        <button class="btn-add" onclick="addItem('${meal}')">Ajouter</button>
+                <div class="coll-body">
+                    <div class="meal-body">
+                        ${items.length > 0
+                            ? `<div class="table-responsive"><table class="meal-items-table"><thead><tr><th>Aliment</th><th>Qté</th><th>Calories</th><th>Macros</th><th></th></tr></thead><tbody>${itemsHtml}</tbody></table></div>`
+                            : '<p style="color:var(--text-muted);font-size:14px;font-style:italic;margin-bottom:15px;">Aucun aliment ajout\u00e9</p>'
+                        }
+                        <div class="add-item-form" id="form-${meal}">
+                            <select class="form-select" id="cat-${meal}" onchange="filterFoods('${meal}')" style="min-width:140px;" title="Filtrer par cat\u00e9gorie">${catOptionsHtml}</select>
+                            <select class="form-select" id="select-${meal}" onchange="updateDefaultWeight('${meal}')" style="min-width:150px;"></select>
+                            <input type="number" class="form-input" id="qty-${meal}" value="1" min="0.1" step="0.1" style="width:60px;" title="Portions">
+                            <span style="color:var(--text-muted);font-size:14px;">x</span>
+                            <input type="number" class="form-input" id="weight-${meal}" placeholder="Poids/u (g)" min="1" style="width:80px;">
+                            <button class="btn-add" onclick="addItem('${meal}')">Ajouter</button>
+                        </div>
                     </div>
-                </div>
-            `;
+                </div>`;
+
                 container.appendChild(mealCard);
                 populateFoodSelect(meal, 'all');
             });
@@ -1100,8 +1381,11 @@
             document.getElementById('total-kcal').innerText = `${globalTotals.kcal} kcal`;
             document.getElementById('total-prot').innerText = `${globalTotals.prot.toFixed(1)} g`;
             document.getElementById('total-glu').innerText = `${globalTotals.carbs.toFixed(1)} g`;
+            document.getElementById('total-sucre').innerText = `${globalTotals.sucre.toFixed(1)} g`;
             document.getElementById('total-lip').innerText = `${globalTotals.fat.toFixed(1)} g`;
+            document.getElementById('total-sat').innerText = `${globalTotals.sat.toFixed(1)} g`;
             document.getElementById('total-fib').innerText = `${globalTotals.fiber.toFixed(1)} g`;
+            document.getElementById('total-sel').innerText = `${globalTotals.sel.toFixed(1)} g`;
         }
 
         function populateFoodSelect(meal, filterCat) {
@@ -1170,29 +1454,65 @@
             renderMeals();
         }
 
+        function initHistoryDates() {
+            const toInput = document.getElementById('hist-date-to');
+            const fromInput = document.getElementById('hist-date-from');
+            if (!toInput || !fromInput) return;
+            const today = new Date();
+            const from = new Date(today);
+            from.setDate(today.getDate() - 13);
+            toInput.value = today.toISOString().split('T')[0];
+            fromInput.value = from.toISOString().split('T')[0];
+        }
+
+        function resetHistoryDates() {
+            initHistoryDates();
+            renderHistory();
+        }
+
         function renderHistory() {
             const tbody = document.getElementById('history-table-body');
             if (!tbody) return;
             tbody.innerHTML = '';
 
+            const fromInput = document.getElementById('hist-date-from');
+            const toInput = document.getElementById('hist-date-to');
+            const filterFrom = fromInput ? fromInput.value : null;
+            const filterTo = toInput ? toInput.value : null;
+
             const validDates = Object.keys(appHistory).filter(d => !calculateDayTotals(d).isEmpty);
             validDates.sort((a, b) => b.localeCompare(a));
 
+            // Chart: only show dates within selected range
             const chartDates = [], chartKcal = [], chartProt = [], chartCarbs = [], chartFat = [];
+            const chartFiltered = validDates.filter(d => {
+                if (filterFrom && d < filterFrom) return false;
+                if (filterTo && d > filterTo) return false;
+                return true;
+            }).reverse(); // ascending for chart
 
-            validDates.forEach((dateStr, index) => {
+            chartFiltered.forEach(dateStr => {
                 const totals = calculateDayTotals(dateStr);
-                if (index < 14) {
-                    chartDates.unshift(formatDateFR(dateStr)); chartKcal.unshift(totals.kcal);
-                    chartProt.unshift(totals.prot.toFixed(1)); chartCarbs.unshift(totals.carbs.toFixed(1));
-                    chartFat.unshift(totals.fat.toFixed(1));
-                }
+                chartDates.push(formatDateFR(dateStr));
+                chartKcal.push(totals.kcal);
+                chartProt.push(totals.prot.toFixed(1));
+                chartCarbs.push(totals.carbs.toFixed(1));
+                chartFat.push(totals.fat.toFixed(1));
+            });
 
+            validDates.forEach((dateStr) => {
+                const totals = calculateDayTotals(dateStr);
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                 <td><strong>${formatDateFR(dateStr)}</strong></td>
                 <td><span style="color:var(--amber); font-weight:600;">${totals.kcal}</span> kcal</td>
-                <td>${totals.prot.toFixed(1)} g</td><td>${totals.carbs.toFixed(1)} g</td><td>${totals.fat.toFixed(1)} g</td>
+                <td>${totals.prot.toFixed(1)} g</td>
+                <td>${totals.carbs.toFixed(1)} g</td>
+                <td style="color:#dd6b20">${totals.sucre.toFixed(1)} g</td>
+                <td>${totals.fat.toFixed(1)} g</td>
+                <td style="color:#e53e3e">${totals.sat.toFixed(1)} g</td>
+                <td style="color:var(--success)">${totals.fiber.toFixed(1)} g</td>
+                <td style="color:var(--text-muted)">${totals.sel.toFixed(1)} g</td>
                 <td>
                     <button class="btn-outline" style="padding:4px 8px; font-size:12px;" onclick="editPastDate('${dateStr}')">Éditer</button>
                     <button class="remove-btn" style="font-size: 14px; margin-left:10px;" onclick="deletePastDate('${dateStr}')" title="Supprimer">🗑️</button>
@@ -1202,9 +1522,38 @@
             });
 
             if (validDates.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">Aucun historique pour le moment.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; color:var(--text-muted);">Aucun historique pour le moment.</td></tr>';
             }
             renderChart(chartDates, chartKcal, chartProt, chartCarbs, chartFat);
+        }
+
+        function exportHistoryCSV() {
+            const fromInput = document.getElementById('hist-date-from');
+            const toInput = document.getElementById('hist-date-to');
+            const filterFrom = fromInput ? fromInput.value : null;
+            const filterTo = toInput ? toInput.value : null;
+
+            const validDates = Object.keys(appHistory)
+                .filter(d => {
+                    if (calculateDayTotals(d).isEmpty) return false;
+                    if (filterFrom && d < filterFrom) return false;
+                    if (filterTo && d > filterTo) return false;
+                    return true;
+                })
+                .sort((a, b) => a.localeCompare(b));
+
+            let csv = "Date;Calories(kcal);Proteines(g);Glucides(g);dont_Sucres(g);Lipides(g);dont_Satures(g);Fibres(g);Sel(g)\n";
+            validDates.forEach(dateStr => {
+                const t = calculateDayTotals(dateStr);
+                csv += `${formatDateFR(dateStr)};${t.kcal};${t.prot.toFixed(1)};${t.carbs.toFixed(1)};${t.sucre.toFixed(1)};${t.fat.toFixed(1)};${t.sat.toFixed(1)};${t.fiber.toFixed(1)};${t.sel.toFixed(1)}\n`;
+            });
+
+            const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            const suffix = (filterFrom && filterTo) ? `${filterFrom}_to_${filterTo}` : new Date().toISOString().split('T')[0];
+            link.download = `historique_nutritionnel_${suffix}.csv`;
+            link.click();
         }
 
         function renderChart(labels, kcal, prot, carbs, fat) {
@@ -1212,23 +1561,119 @@
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             if (myChart) myChart.destroy();
+
+            const isMobile = window.innerWidth < 600;
+
             myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'Énergie (kcal)', data: kcal, backgroundColor: 'rgba(221, 107, 32, 0.7)', borderColor: '#dd6b20', borderWidth: 1, yAxisID: 'yKcal' },
-                        { label: 'Protéines (g)', data: prot, type: 'line', borderColor: '#3182ce', backgroundColor: '#3182ce', borderWidth: 2, yAxisID: 'yMacros', tension: 0.3 },
-                        { label: 'Glucides (g)', data: carbs, type: 'line', borderColor: '#ecc94b', backgroundColor: '#ecc94b', borderWidth: 2, yAxisID: 'yMacros', tension: 0.3 },
-                        { label: 'Lipides (g)', data: fat, type: 'line', borderColor: '#e53e3e', backgroundColor: '#e53e3e', borderWidth: 2, yAxisID: 'yMacros', tension: 0.3 }
+                        {
+                            label: isMobile ? 'kcal' : 'Énergie (kcal)',
+                            data: kcal,
+                            backgroundColor: 'rgba(221, 107, 32, 0.75)',
+                            borderColor: '#dd6b20',
+                            borderWidth: 1,
+                            yAxisID: 'yKcal'
+                        },
+                        {
+                            label: isMobile ? 'Prot.' : 'Protéines (g)',
+                            data: prot,
+                            type: 'line',
+                            borderColor: '#3182ce',
+                            backgroundColor: 'rgba(49,130,206,0.15)',
+                            borderWidth: 2,
+                            pointRadius: isMobile ? 3 : 4,
+                            fill: false,
+                            yAxisID: 'yMacros',
+                            tension: 0.3
+                        },
+                        {
+                            label: isMobile ? 'Gluc.' : 'Glucides (g)',
+                            data: carbs,
+                            type: 'line',
+                            borderColor: '#d69e2e',
+                            backgroundColor: 'rgba(214,158,46,0.15)',
+                            borderWidth: 2,
+                            pointRadius: isMobile ? 3 : 4,
+                            fill: false,
+                            yAxisID: 'yMacros',
+                            tension: 0.3
+                        },
+                        {
+                            label: isMobile ? 'Lip.' : 'Lipides (g)',
+                            data: fat,
+                            type: 'line',
+                            borderColor: '#e53e3e',
+                            backgroundColor: 'rgba(229,62,62,0.15)',
+                            borderWidth: 2,
+                            pointRadius: isMobile ? 3 : 4,
+                            fill: false,
+                            yAxisID: 'yMacros',
+                            tension: 0.3
+                        }
                     ]
                 },
                 options: {
-                    responsive: true, interaction: { mode: 'index', intersect: false },
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: {
+                            position: isMobile ? 'bottom' : 'top',
+                            align: 'start',
+                            labels: {
+                                font: { size: isMobile ? 10 : 12 },
+                                boxWidth: isMobile ? 10 : 14,
+                                padding: isMobile ? 8 : 12
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}`
+                            }
+                        }
+                    },
                     scales: {
-                        x: { grid: { display: false } },
-                        yKcal: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Calories' } },
-                        yMacros: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'Grammes (Macros)' }, grid: { drawOnChartArea: false } }
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: isMobile ? 9 : 11 },
+                                maxRotation: isMobile ? 45 : 0,
+                                autoSkip: true,
+                                maxTicksLimit: isMobile ? 5 : 14
+                            }
+                        },
+                        yKcal: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: !isMobile,
+                                text: 'Calories',
+                                font: { size: 11 }
+                            },
+                            ticks: {
+                                font: { size: isMobile ? 9 : 11 },
+                                maxTicksLimit: 6
+                            }
+                        },
+                        yMacros: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: !isMobile,
+                                text: 'g (Macros)',
+                                font: { size: 11 }
+                            },
+                            ticks: {
+                                font: { size: isMobile ? 9 : 11 },
+                                maxTicksLimit: 6
+                            },
+                            grid: { drawOnChartArea: false }
+                        }
                     }
                 }
             });
@@ -1285,7 +1730,8 @@
         function exportDailyMenu() {
             let text = `=== MENU DU ${formatDateFR(currentDate)} ===\n\n`;
             const dayMeals = appHistory[currentDate];
-            let globalKcal = 0, globalProt = 0, globalCarbs = 0, globalFat = 0;
+            let globalKcal = 0, globalProt = 0, globalCarbs = 0, globalSucre = 0;
+            let globalFat = 0, globalSat = 0, globalFiber = 0, globalSel = 0;
 
             mealNames.forEach(meal => {
                 text += `[${meal.toUpperCase()}]\n`;
@@ -1294,22 +1740,31 @@
                     text += "  Aucun aliment\n";
                 } else {
                     items.forEach(item => {
-                        const info = combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, lipides: 0 };
+                        const info = combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, sucre: 0, lipides: 0, sat: 0, fibres: 0, sel: 0 };
                         const factor = item.weight / 100;
                         const kcal = Math.round(info.kcal * factor);
-                        const p = (info.proteines * factor).toFixed(1);
-                        const g = (info.glucides * factor).toFixed(1);
-                        const l = (info.lipides * factor).toFixed(1);
+                        const p    = (info.proteines * factor).toFixed(1);
+                        const g    = (info.glucides  * factor).toFixed(1);
+                        const s    = ((info.sucre  || 0) * factor).toFixed(1);
+                        const l    = (info.lipides  * factor).toFixed(1);
+                        const sat  = ((info.sat    || 0) * factor).toFixed(1);
+                        const fib  = ((info.fibres || 0) * factor).toFixed(1);
+                        const sel  = ((info.sel    || 0) * factor).toFixed(1);
 
                         let displayWeightText = `${item.weight}g`;
                         if (item.qty && item.unitWeight && item.qty !== 1) {
                             displayWeightText = `${item.qty} x ${item.unitWeight}g (${item.weight}g)`;
                         }
 
-                        text += `  - ${item.name} : ${displayWeightText} (${kcal} kcal | P: ${p}g, G: ${g}g, L: ${l}g)\n`;
+                        text += `  - ${item.name} : ${displayWeightText}\n`;
+                        text += `      Calories : ${kcal} kcal\n`;
+                        text += `      Protéines: ${p}g | Glucides: ${g}g (dont sucres: ${s}g)\n`;
+                        text += `      Lipides  : ${l}g (dont saturés: ${sat}g) | Fibres: ${fib}g | Sel: ${sel}g\n`;
 
-                        globalKcal += kcal; globalProt += parseFloat(p);
-                        globalCarbs += parseFloat(g); globalFat += parseFloat(l);
+                        globalKcal  += kcal;   globalProt  += parseFloat(p);
+                        globalCarbs += parseFloat(g);  globalSucre += parseFloat(s);
+                        globalFat   += parseFloat(l);  globalSat   += parseFloat(sat);
+                        globalFiber += parseFloat(fib); globalSel  += parseFloat(sel);
                     });
                 }
                 text += "\n";
@@ -1317,10 +1772,14 @@
 
             text += "=====================\n";
             text += `TOTAL JOURNALIER :\n`;
-            text += `Calories   : ${globalKcal} kcal\n`;
-            text += `Protéines  : ${globalProt.toFixed(1)} g\n`;
-            text += `Glucides   : ${globalCarbs.toFixed(1)} g\n`;
-            text += `Lipides    : ${globalFat.toFixed(1)} g\n`;
+            text += `Calories        : ${globalKcal} kcal\n`;
+            text += `Protéines       : ${globalProt.toFixed(1)} g\n`;
+            text += `Glucides        : ${globalCarbs.toFixed(1)} g\n`;
+            text += `  dont Sucres   : ${globalSucre.toFixed(1)} g\n`;
+            text += `Lipides         : ${globalFat.toFixed(1)} g\n`;
+            text += `  dont Saturés  : ${globalSat.toFixed(1)} g\n`;
+            text += `Fibres          : ${globalFiber.toFixed(1)} g\n`;
+            text += `Sel             : ${globalSel.toFixed(1)} g\n`;
 
             const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
             const link = document.createElement('a');
@@ -1425,13 +1884,21 @@
         window.removeItem = removeItem;
         window.exportDatabaseCSV = exportDatabaseCSV;
         window.exportDailyMenu = exportDailyMenu;
+        window.exportHistoryCSV = exportHistoryCSV;
         window.triggerCSVImport = triggerCSVImport;
         window.importDatabaseCSV = importDatabaseCSV;
+        window.resetHistoryDates = resetHistoryDates;
+        window.renderHistory = renderHistory;
+        window.restoreCollapsedState = restoreCollapsedState;
+        window.toggleCard = toggleCard;
 
         document.addEventListener("DOMContentLoaded", () => {
             loadDataFromLocalStorage();
             initDate();
+            initHistoryDates();
             renderMeals();
+            // Restore collapse state for static cards
+            ['coll-dashboard','coll-hist-filters','coll-hist-chart','coll-hist-table'].forEach(restoreCollapsedState);
         });
     </script>
 </body>
