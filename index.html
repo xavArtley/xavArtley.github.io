@@ -1,66 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description" content="Site personnel de Xavier Artusi — Ingénieur-Chercheur au CEA, spécialisé en traitement du signal, apprentissage automatique et développement scientifique." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
-    <title>Xavier Artusi Website</title>
+    <title>Xavier Artusi — Ingénieur-Chercheur</title>
     <script src="./mylib.js"></script>
   </head>
 
   <body>
-    <nav class="topnav" id="menu"></nav>
-    <article id="content"></article>
+    <nav class="topnav" id="menu">
+      <a class="nav-brand" onclick="load_page('home.html', document.getElementById('content'))">
+        <span class="nav-avatar">XA</span>
+        Xavier Artusi
+      </a>
+      <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div id="content"></div>
+
+    <script>
+      var content = document.getElementById('content');
+      var menuItems = [
+        {
+          title: 'Accueil',
+          href: '#home.html',
+          action: () => load_page('home.html', content),
+        },
+        {
+          title: 'Applications',
+          action: null,
+          subelems: [
+            {
+              title: '📅  Deviner le Jour',
+              href: '#misc/guess_the_weekday.html',
+              action: () => load_page('misc/guess_the_weekday.html', content),
+            },
+            {
+              title: '🏳  Deviner le Drapeau',
+              href: '#misc/guess_the_flag/index.html',
+              action: () => load_page('misc/guess_the_flag/index.html', content),
+            },
+            {
+              title: '🥗  Journal Nutritionnel',
+              href: '#misc/journal_nutritionnel/index.html',
+              action: () => load_page('misc/journal_nutritionnel/index.html', content),
+            },
+          ],
+        },
+        {
+          title: 'À propos',
+          action: null,
+          subelems: [
+            {
+              title: '📄  Curriculum Vitae',
+              href: '#about/cv_fr_restyle.html',
+              action: () => load_page('about/cv_fr_restyle.html', content),
+            },
+            {
+              title: '📚  Publications',
+              href: '#about/publications.html',
+              action: () => load_page('about/publications.html', content),
+            },
+          ],
+        },
+      ];
+      const myMenu = new Menu(document.getElementById('menu'), menuItems);
+      const page_to_load = document.URL.split('#').length === 2 ? document.URL.split('#')[1] : 'home.html';
+      load_page(page_to_load, content);
+    </script>
   </body>
-  <script>
-    var content = document.getElementById("content");
-    var menuItems = [
-      {
-        title: "home",
-        href: "#home.html",
-        action: () => load_page("home.html", content),
-      },
-      {
-        title: "MISC",
-        action: null,
-        subelems: [
-          {
-            title: "Guess The Weekday",
-            href: "#misc/guess_the_weekday.html",
-            action: () => load_page("misc/guess_the_weekday.html", content),
-          },
-          {
-            title: "Guess The Flag",
-            href: "#misc/guess_the_flag.html",
-            action: () => load_page("misc/guess_the_flag/index.html", content),
-          },
-          {
-            title: "Journal Nutritionnel",
-            href: "#misc/journal_nutritionnel.html",
-            action: () => load_page("misc/journal_nutritionnel/index.html", content),
-          }
-        ],
-      },
-      {
-        title: "About",
-        action: null,
-        subelems: [
-          {
-            title: "Curriculum Vitae (FR)",
-            href: "#about/cv_fr_restyle.html",
-            action: () => load_page("about/cv_fr_restyle.html", content),
-          },
-          {
-            title: "Publications",
-            href: "#about/publications.html",
-            action: () => load_page("about/publications.html", content),
-          },
-        ],
-      },
-    ];
-    const myMenu = new Menu(document.getElementById("menu"), menuItems);
-    const page_to_load = document.URL.split("#").length == 2 ? document.URL.split("#")[1] : "home.html";
-    load_page(page_to_load, content);
-  </script>
 </html>
