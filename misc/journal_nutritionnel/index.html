@@ -689,7 +689,10 @@
                         <label>au :</label>
                         <input type="date" id="hist-date-to" onchange="renderHistory()">
                         <button class="btn-outline" onclick="resetHistoryDates()">14 derniers jours</button>
-                        <button class="btn-success" style="margin-left:auto;" onclick="exportHistoryCSV()">📥 Exporter (CSV)</button>
+                        <div style="margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="btn-success" onclick="exportHistoryCSV()">📥 Totaux (CSV)</button>
+                            <button class="btn-primary" onclick="exportHistoryDetailCSV()">📋 Détail complet (CSV)</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1556,6 +1559,94 @@
             link.click();
         }
 
+        function exportHistoryDetailCSV() {
+            const fromInput = document.getElementById('hist-date-from');
+            const toInput = document.getElementById('hist-date-to');
+            const filterFrom = fromInput ? fromInput.value : null;
+            const filterTo = toInput ? toInput.value : null;
+
+            const validDates = Object.keys(appHistory)
+                .filter(d => {
+                    if (calculateDayTotals(d).isEmpty) return false;
+                    if (filterFrom && d < filterFrom) return false;
+                    if (filterTo && d > filterTo) return false;
+                    return true;
+                })
+                .sort((a, b) => a.localeCompare(b));
+
+            const SEP = ';';
+            const header = [
+                'Date', 'Repas', 'Aliment', 'Poids(g)',
+                'Calories(kcal)', 'Proteines(g)', 'Glucides(g)', 'dont_Sucres(g)',
+                'Lipides(g)', 'dont_Satures(g)', 'Fibres(g)', 'Sel(g)', 'Type'
+            ].join(SEP);
+
+            let csv = header + '\n';
+
+            validDates.forEach(dateStr => {
+                const dayMeals = appHistory[dateStr];
+                let dayKcal = 0, dayProt = 0, dayCarbs = 0, daySucre = 0;
+                let dayFat = 0, daySat = 0, dayFiber = 0, daySel = 0;
+
+                mealNames.forEach(meal => {
+                    const items = (dayMeals && dayMeals[meal]) || [];
+                    let mKcal = 0, mProt = 0, mCarbs = 0, mSucre = 0;
+                    let mFat = 0, mSat = 0, mFiber = 0, mSel = 0;
+
+                    items.forEach(item => {
+                        const info = combinedDatabase[item.name] || {};
+                        const f = item.weight / 100;
+                        const kcal  = Math.round((info.kcal || 0) * f);
+                        const prot  = +((info.proteines || 0) * f).toFixed(1);
+                        const carbs = +((info.glucides  || 0) * f).toFixed(1);
+                        const sucre = +((info.sucre     || 0) * f).toFixed(1);
+                        const fat   = +((info.lipides   || 0) * f).toFixed(1);
+                        const sat   = +((info.sat       || 0) * f).toFixed(1);
+                        const fiber = +((info.fibres    || 0) * f).toFixed(1);
+                        const sel   = +((info.sel       || 0) * f).toFixed(1);
+
+                        // Aliment row
+                        const cleanName = item.name.replace(/"/g, '""');
+                        csv += [
+                            formatDateFR(dateStr), meal, `"${cleanName}"`, item.weight,
+                            kcal, prot, carbs, sucre, fat, sat, fiber, sel, 'aliment'
+                        ].join(SEP) + '\n';
+
+                        mKcal += kcal; mProt += prot; mCarbs += carbs; mSucre += sucre;
+                        mFat  += fat;  mSat  += sat;  mFiber += fiber; mSel   += sel;
+                    });
+
+                    if (items.length > 0) {
+                        // Meal subtotal row
+                        csv += [
+                            formatDateFR(dateStr), meal, `"[Total ${meal}]"`, '',
+                            mKcal, mProt.toFixed(1), mCarbs.toFixed(1), mSucre.toFixed(1),
+                            mFat.toFixed(1), mSat.toFixed(1), mFiber.toFixed(1), mSel.toFixed(1), 'sous-total repas'
+                        ].join(SEP) + '\n';
+
+                        dayKcal += mKcal; dayProt += mProt; dayCarbs += mCarbs; daySucre += mSucre;
+                        dayFat  += mFat;  daySat  += mSat;  dayFiber += mFiber; daySel   += mSel;
+                    }
+                });
+
+                // Daily total row
+                csv += [
+                    formatDateFR(dateStr), '', `"[TOTAL JOURNEE]"`, '',
+                    dayKcal, dayProt.toFixed(1), dayCarbs.toFixed(1), daySucre.toFixed(1),
+                    dayFat.toFixed(1), daySat.toFixed(1), dayFiber.toFixed(1), daySel.toFixed(1), 'total jour'
+                ].join(SEP) + '\n';
+
+                csv += SEP.repeat(12) + '\n'; // empty separator line between days
+            });
+
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            const suffix = (filterFrom && filterTo) ? `${filterFrom}_to_${filterTo}` : new Date().toISOString().split('T')[0];
+            link.download = `historique_detail_${suffix}.csv`;
+            link.click();
+        }
+
         function renderChart(labels, kcal, prot, carbs, fat) {
             const canvas = document.getElementById('historyChart');
             if (!canvas) return;
@@ -1890,6 +1981,7 @@
         window.resetHistoryDates = resetHistoryDates;
         window.renderHistory = renderHistory;
         window.restoreCollapsedState = restoreCollapsedState;
+        window.exportHistoryDetailCSV = exportHistoryDetailCSV;
         window.toggleCard = toggleCard;
 
         document.addEventListener("DOMContentLoaded", () => {
