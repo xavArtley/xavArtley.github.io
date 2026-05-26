@@ -15,7 +15,7 @@
 
   <body>
     <nav class="topnav" id="menu">
-      <a class="nav-brand" onclick="load_page('home.html', document.getElementById('content'))">
+      <a class="nav-brand" onclick="navigateTo('home.html')">
         <span class="nav-avatar">XA</span>
         Xavier Artusi
       </a>
@@ -32,49 +32,42 @@
         {
           title: 'Accueil',
           href: '#home.html',
-          action: () => load_page('home.html', content),
         },
         {
           title: 'Applications',
-          action: null,
           subelems: [
             {
               title: '📅  Deviner le Jour',
               href: '#misc/guess_the_weekday.html',
-              action: () => load_page('misc/guess_the_weekday.html', content),
             },
             {
               title: '🏳  Deviner le Drapeau',
               href: '#misc/guess_the_flag/index.html',
-              action: () => load_page('misc/guess_the_flag/index.html', content),
             },
             {
               title: '🥗  Journal Nutritionnel',
               href: '#misc/journal_nutritionnel/index.html',
-              action: () => load_page('misc/journal_nutritionnel/index.html', content),
             },
           ],
         },
         {
           title: 'À propos',
-          action: null,
           subelems: [
             {
               title: '📄  Curriculum Vitae',
               href: '#about/cv_fr_restyle.html',
-              action: () => load_page('about/cv_fr_restyle.html', content),
             },
             {
               title: '📚  Publications',
               href: '#about/publications.html',
-              action: () => load_page('about/publications.html', content),
             },
           ],
         },
       ];
       const myMenu = new Menu(document.getElementById('menu'), menuItems);
-      const page_to_load = document.URL.split('#').length === 2 ? document.URL.split('#')[1] : 'home.html';
-      load_page(page_to_load, content);
+      // Initial load from hash or default to home
+      const hash = window.location.hash.replace('#', '');
+      navigateTo(hash || 'home.html');
     </script>
   </body>
 </html>

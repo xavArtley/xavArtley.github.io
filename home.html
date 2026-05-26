@@ -329,10 +329,9 @@
 
   <script>
     function navigate(page, hash) {
-      if (window.parent && window.parent.load_page) {
-        // Change hash so nav active state updates
-        window.parent.location.hash = hash;
-        // load_page is triggered by hashchange in parent
+      if (window.parent && window.parent.navigateTo) {
+        // Use the centralized navigation from the parent shell
+        window.parent.navigateTo(hash.replace('#', ''));
       } else {
         window.location.href = hash;
       }
