@@ -278,6 +278,29 @@
             border-left-color: #a0aec0;
         }
 
+        .stat-card.poids {
+            border-left: 4px solid #805ad5;
+        }
+        .weight-input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            flex-wrap: wrap;
+        }
+        .weight-input-row input {
+            width: 100px;
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .weight-input-row .weight-display {
+            font-size: 15px;
+            font-weight: 600;
+            color: #805ad5;
+        }
+
         .stat-value {
             font-size: 22px;
             font-weight: 700;
@@ -671,6 +694,25 @@
                 </div>
             </div>
 
+            <!-- Poids du jour collapsible -->
+            <div class="coll-section" id="coll-weight">
+                <div class="coll-header" onclick="toggleCard('coll-weight')">
+                    <span class="coll-title">⚖️ Poids du jour</span>
+                    <span class="coll-meta" id="weight-meta"></span>
+                    <span class="coll-chevron">▼</span>
+                </div>
+                <div class="coll-body">
+                    <div class="weight-input-row">
+                        <label style="font-weight:600; color:var(--text-muted); font-size:14px;">Poids :</label>
+                        <input type="number" id="weight-input" step="0.1" min="20" max="300" placeholder="kg">
+                        <span style="color:var(--text-muted); font-size:14px;">kg</span>
+                        <button class="btn-success" style="padding:5px 14px; font-size:13px;" onclick="saveWeight()">Enregistrer</button>
+                        <button class="btn-danger" style="padding:5px 10px; font-size:13px;" onclick="deleteWeight()" title="Supprimer le poids du jour">✕</button>
+                        <span class="weight-display" id="weight-current"></span>
+                    </div>
+                </div>
+            </div>
+
             <div id="meals-container"></div>
         </div>
 
@@ -732,6 +774,7 @@
                                     <th>dont Saturés</th>
                                     <th>Fibres</th>
                                     <th>Sel</th>
+                                    <th>Poids</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -939,6 +982,7 @@
         const mealNames = ["Petit-déjeuner", "Déjeuner", "Collation", "Dîner"];
         let currentDate = "";
         let myChart = null;
+        let weightHistory = {};
         let editingOriginalName = null;
 
         // ==========================================
@@ -984,8 +1028,10 @@
                 const userDocSnap = await getDoc(userDocRef);
                 if (userDocSnap.exists()) {
                     appHistory = userDocSnap.data().appHistory || {};
+                    weightHistory = userDocSnap.data().weightHistory || {};
                 } else {
                     appHistory = JSON.parse(localStorage.getItem('appHistory')) || {};
+                    weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || {};
                     await saveMenu();
                 }
 
@@ -1016,16 +1062,19 @@
                 combinedDatabase = { ...defaultFoodDatabase };
             }
             appHistory = JSON.parse(localStorage.getItem('appHistory')) || {};
+            weightHistory = JSON.parse(localStorage.getItem('weightHistory')) || {};
         }
 
         // Sauvegarde exclusive des menus privés de l'utilisateur + Cache local BDD
         async function saveMenu() {
             localStorage.setItem('appHistory', JSON.stringify(appHistory));
+            localStorage.setItem('weightHistory', JSON.stringify(weightHistory));
             localStorage.setItem('combinedDatabase', JSON.stringify(combinedDatabase));
             if (auth.currentUser) {
                 try {
                     await setDoc(doc(db, "users", auth.currentUser.uid), {
                         appHistory: appHistory,
+                        weightHistory: weightHistory,
                         lastUpdated: new Date()
                     });
                 } catch (error) {
@@ -1073,7 +1122,8 @@
 
         async function deletePastDate(dateStr) {
             if (confirm(`Voulez-vous vraiment supprimer les données du ${formatDateFR(dateStr)} ?`)) {
-                delete appHistory[dateStr];
+                if (appHistory[dateStr]) delete appHistory[dateStr];
+                if (weightHistory[dateStr] !== undefined) delete weightHistory[dateStr];
                 await saveMenu();
                 renderHistory();
             }
@@ -1261,9 +1311,6 @@
             return `${d}/${m}/${y}`;
         }
 
-        // Track collapsed state for meal cards (persists across re-renders)
-        const mealCollapseState = {};
-
         function toggleCard(id) {
             const el = document.getElementById(id);
             if (!el) return;
@@ -1389,6 +1436,7 @@
             document.getElementById('total-sat').innerText = `${globalTotals.sat.toFixed(1)} g`;
             document.getElementById('total-fib').innerText = `${globalTotals.fiber.toFixed(1)} g`;
             document.getElementById('total-sel').innerText = `${globalTotals.sel.toFixed(1)} g`;
+            updateWeightDisplay();
         }
 
         function populateFoodSelect(meal, filterCat) {
@@ -1457,6 +1505,42 @@
             renderMeals();
         }
 
+        async function saveWeight() {
+            const input = document.getElementById('weight-input');
+            const val = parseFloat(input.value);
+            if (isNaN(val) || val <= 0) {
+                alert('Veuillez entrer un poids valide.');
+                return;
+            }
+            weightHistory[currentDate] = val;
+            await saveMenu();
+            updateWeightDisplay();
+        }
+
+        async function deleteWeight() {
+            if (weightHistory[currentDate] !== undefined) {
+                delete weightHistory[currentDate];
+                await saveMenu();
+                updateWeightDisplay();
+            }
+        }
+
+        function updateWeightDisplay() {
+            const input = document.getElementById('weight-input');
+            const display = document.getElementById('weight-current');
+            const meta = document.getElementById('weight-meta');
+            const w = weightHistory[currentDate];
+            if (w !== undefined) {
+                if (input) input.value = w;
+                if (display) display.textContent = w.toFixed(1) + ' kg';
+                if (meta) meta.textContent = w.toFixed(1) + ' kg';
+            } else {
+                if (input) input.value = '';
+                if (display) display.textContent = '';
+                if (meta) meta.textContent = 'Non renseigné';
+            }
+        }
+
         function initHistoryDates() {
             const toInput = document.getElementById('hist-date-to');
             const fromInput = document.getElementById('hist-date-from');
@@ -1483,16 +1567,22 @@
             const filterFrom = fromInput ? fromInput.value : null;
             const filterTo = toInput ? toInput.value : null;
 
-            const validDates = Object.keys(appHistory).filter(d => !calculateDayTotals(d).isEmpty);
+            // Combine les dates des deux dictionnaires pour n'oublier aucun jour loggé
+            const allDates = Array.from(new Set([...Object.keys(appHistory), ...Object.keys(weightHistory)]));
+            const validDates = allDates.filter(d => {
+                const hasMeals = appHistory[d] && !calculateDayTotals(d).isEmpty;
+                const hasWeight = weightHistory[d] !== undefined;
+                return hasMeals || hasWeight;
+            });
             validDates.sort((a, b) => b.localeCompare(a));
 
-            // Chart: only show dates within selected range
-            const chartDates = [], chartKcal = [], chartProt = [], chartCarbs = [], chartFat = [];
+            // Chart: setup data filtering
+            const chartDates = [], chartKcal = [], chartProt = [], chartCarbs = [], chartFat = [], chartWeight = [];
             const chartFiltered = validDates.filter(d => {
                 if (filterFrom && d < filterFrom) return false;
                 if (filterTo && d > filterTo) return false;
                 return true;
-            }).reverse(); // ascending for chart
+            }).reverse();
 
             chartFiltered.forEach(dateStr => {
                 const totals = calculateDayTotals(dateStr);
@@ -1501,6 +1591,7 @@
                 chartProt.push(totals.prot.toFixed(1));
                 chartCarbs.push(totals.carbs.toFixed(1));
                 chartFat.push(totals.fat.toFixed(1));
+                chartWeight.push(weightHistory[dateStr] !== undefined ? weightHistory[dateStr] : null);
             });
 
             validDates.forEach((dateStr) => {
@@ -1516,6 +1607,7 @@
                 <td style="color:#e53e3e">${totals.sat.toFixed(1)} g</td>
                 <td style="color:var(--success)">${totals.fiber.toFixed(1)} g</td>
                 <td style="color:var(--text-muted)">${totals.sel.toFixed(1)} g</td>
+                <td style="color:#805ad5; font-weight:600;">${weightHistory[dateStr] !== undefined ? weightHistory[dateStr].toFixed(1) + ' kg' : '—'}</td>
                 <td>
                     <button class="btn-outline" style="padding:4px 8px; font-size:12px;" onclick="editPastDate('${dateStr}')">Éditer</button>
                     <button class="remove-btn" style="font-size: 14px; margin-left:10px;" onclick="deletePastDate('${dateStr}')" title="Supprimer">🗑️</button>
@@ -1525,9 +1617,9 @@
             });
 
             if (validDates.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; color:var(--text-muted);">Aucun historique pour le moment.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="11" style="text-align:center; color:var(--text-muted);">Aucun historique pour le moment.</td></tr>';
             }
-            renderChart(chartDates, chartKcal, chartProt, chartCarbs, chartFat);
+            renderChart(chartDates, chartKcal, chartProt, chartCarbs, chartFat, chartWeight);
         }
 
         function exportHistoryCSV() {
@@ -1536,19 +1628,23 @@
             const filterFrom = fromInput ? fromInput.value : null;
             const filterTo = toInput ? toInput.value : null;
 
-            const validDates = Object.keys(appHistory)
+            const allDates = Array.from(new Set([...Object.keys(appHistory), ...Object.keys(weightHistory)]));
+            const validDates = allDates
                 .filter(d => {
-                    if (calculateDayTotals(d).isEmpty) return false;
+                    const hasMeals = appHistory[d] && !calculateDayTotals(d).isEmpty;
+                    const hasWeight = weightHistory[d] !== undefined;
+                    if (!hasMeals && !hasWeight) return false;
                     if (filterFrom && d < filterFrom) return false;
                     if (filterTo && d > filterTo) return false;
                     return true;
                 })
                 .sort((a, b) => a.localeCompare(b));
 
-            let csv = "Date;Calories(kcal);Proteines(g);Glucides(g);dont_Sucres(g);Lipides(g);dont_Satures(g);Fibres(g);Sel(g)\n";
+            let csv = "Date;Calories(kcal);Proteines(g);Glucides(g);dont_Sucres(g);Lipides(g);dont_Satures(g);Fibres(g);Sel(g);Poids(kg)\n";
             validDates.forEach(dateStr => {
                 const t = calculateDayTotals(dateStr);
-                csv += `${formatDateFR(dateStr)};${t.kcal};${t.prot.toFixed(1)};${t.carbs.toFixed(1)};${t.sucre.toFixed(1)};${t.fat.toFixed(1)};${t.sat.toFixed(1)};${t.fiber.toFixed(1)};${t.sel.toFixed(1)}\n`;
+                const w = weightHistory[dateStr];
+                csv += `${formatDateFR(dateStr)};${t.kcal};${t.prot.toFixed(1)};${t.carbs.toFixed(1)};${t.sucre.toFixed(1)};${t.fat.toFixed(1)};${t.sat.toFixed(1)};${t.fiber.toFixed(1)};${t.sel.toFixed(1)};${w !== undefined ? w.toFixed(1) : ''}\n`;
             });
 
             const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
@@ -1565,9 +1661,12 @@
             const filterFrom = fromInput ? fromInput.value : null;
             const filterTo = toInput ? toInput.value : null;
 
-            const validDates = Object.keys(appHistory)
+            const allDates = Array.from(new Set([...Object.keys(appHistory), ...Object.keys(weightHistory)]));
+            const validDates = allDates
                 .filter(d => {
-                    if (calculateDayTotals(d).isEmpty) return false;
+                    const hasMeals = appHistory[d] && !calculateDayTotals(d).isEmpty;
+                    const hasWeight = weightHistory[d] !== undefined;
+                    if (!hasMeals && !hasWeight) return false;
                     if (filterFrom && d < filterFrom) return false;
                     if (filterTo && d > filterTo) return false;
                     return true;
@@ -1578,13 +1677,14 @@
             const header = [
                 'Date', 'Repas', 'Aliment', 'Poids(g)',
                 'Calories(kcal)', 'Proteines(g)', 'Glucides(g)', 'dont_Sucres(g)',
-                'Lipides(g)', 'dont_Satures(g)', 'Fibres(g)', 'Sel(g)', 'Type'
+                'Lipides(g)', 'dont_Satures(g)', 'Fibres(g)', 'Sel(g)', 'Poids_Corporel(kg)', 'Type'
             ].join(SEP);
 
             let csv = header + '\n';
 
             validDates.forEach(dateStr => {
                 const dayMeals = appHistory[dateStr];
+                const currentWeight = weightHistory[dateStr] !== undefined ? weightHistory[dateStr].toFixed(1) : '';
                 let dayKcal = 0, dayProt = 0, dayCarbs = 0, daySucre = 0;
                 let dayFat = 0, daySat = 0, dayFiber = 0, daySel = 0;
 
@@ -1605,11 +1705,9 @@
                         const fiber = +((info.fibres    || 0) * f).toFixed(1);
                         const sel   = +((info.sel       || 0) * f).toFixed(1);
 
-                        // Aliment row
-                        const cleanName = item.name.replace(/"/g, '""');
                         csv += [
-                            formatDateFR(dateStr), meal, `"${cleanName}"`, item.weight,
-                            kcal, prot, carbs, sucre, fat, sat, fiber, sel, 'aliment'
+                            formatDateFR(dateStr), meal, `"${item.name.replace(/"/g, '""')}"`, item.weight,
+                            kcal, prot, carbs, sucre, fat, sat, fiber, sel, '', 'aliment'
                         ].join(SEP) + '\n';
 
                         mKcal += kcal; mProt += prot; mCarbs += carbs; mSucre += sucre;
@@ -1617,11 +1715,10 @@
                     });
 
                     if (items.length > 0) {
-                        // Meal subtotal row
                         csv += [
                             formatDateFR(dateStr), meal, `"[Total ${meal}]"`, '',
                             mKcal, mProt.toFixed(1), mCarbs.toFixed(1), mSucre.toFixed(1),
-                            mFat.toFixed(1), mSat.toFixed(1), mFiber.toFixed(1), mSel.toFixed(1), 'sous-total repas'
+                            mFat.toFixed(1), mSat.toFixed(1), mFiber.toFixed(1), mSel.toFixed(1), '', 'sous-total repas'
                         ].join(SEP) + '\n';
 
                         dayKcal += mKcal; dayProt += mProt; dayCarbs += mCarbs; daySucre += mSucre;
@@ -1629,14 +1726,13 @@
                     }
                 });
 
-                // Daily total row
                 csv += [
                     formatDateFR(dateStr), '', `"[TOTAL JOURNEE]"`, '',
                     dayKcal, dayProt.toFixed(1), dayCarbs.toFixed(1), daySucre.toFixed(1),
-                    dayFat.toFixed(1), daySat.toFixed(1), dayFiber.toFixed(1), daySel.toFixed(1), 'total jour'
+                    dayFat.toFixed(1), daySat.toFixed(1), dayFiber.toFixed(1), daySel.toFixed(1), currentWeight, 'total jour'
                 ].join(SEP) + '\n';
 
-                csv += SEP.repeat(12) + '\n'; // empty separator line between days
+                csv += SEP.repeat(13) + '\n';
             });
 
             const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -1647,13 +1743,22 @@
             link.click();
         }
 
-        function renderChart(labels, kcal, prot, carbs, fat) {
+        function renderChart(labels, kcal, prot, carbs, fat, weight) {
             const canvas = document.getElementById('historyChart');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
             if (myChart) myChart.destroy();
 
             const isMobile = window.innerWidth < 600;
+            const validWeights = (weight || []).filter(v => typeof v === 'number' && v !== null);
+
+            let weightMin = 0;
+            let weightMax = 100;
+
+            if (validWeights.length > 0) {
+                weightMin = Math.floor(Math.min(...validWeights)) - 1;
+                weightMax = Math.ceil(Math.max(...validWeights)) + 1;
+            }
 
             myChart = new Chart(ctx, {
                 type: 'bar',
@@ -1703,6 +1808,21 @@
                             fill: false,
                             yAxisID: 'yMacros',
                             tension: 0.3
+                        },
+                        {
+                            label: isMobile ? 'Poids' : 'Poids (kg)',
+                            data: weight || [],
+                            type: 'line',
+                            borderColor: '#805ad5',
+                            backgroundColor: 'rgba(128,90,213,0.1)',
+                            borderWidth: 2.5,
+                            borderDash: [6, 3],
+                            pointRadius: isMobile ? 4 : 5,
+                            pointBackgroundColor: '#805ad5',
+                            fill: false,
+                            yAxisID: 'yWeight',
+                            tension: 0.3,
+                            spanGaps: true
                         }
                     ]
                 },
@@ -1764,6 +1884,25 @@
                                 maxTicksLimit: 6
                             },
                             grid: { drawOnChartArea: false }
+                        },
+                        yWeight: {
+                            type: 'linear',
+                            display: (weight || []).some(v => v !== null),
+                            position: 'right',
+                            min: weightMin,
+                            max: weightMax,
+                            title: {
+                                display: !isMobile,
+                                text: 'Poids (kg)',
+                                font: { size: 11 },
+                                color: '#805ad5'
+                            },
+                            ticks: {
+                                font: { size: isMobile ? 9 : 11 },
+                                maxTicksLimit: 5,
+                                color: '#805ad5'
+                            },
+                            grid: { drawOnChartArea: false }
                         }
                     }
                 }
@@ -1777,8 +1916,6 @@
 
             Object.keys(combinedDatabase).sort((a, b) => a.localeCompare(b)).forEach(name => {
                 const f = combinedDatabase[name];
-
-                // Absolument tous les aliments ont désormais les boutons d'édition et de suppression
                 const actionHtml = `
                     <button class="btn-outline" style="padding:4px 8px; font-size:12px;" onclick="openFoodModal('${name.replace(/'/g, "\\'")}')">Éditer</button>
                     <button class="remove-btn" style="font-size: 16px; margin-left:5px;" onclick="deleteCustomFood('${name.replace(/'/g, "\\'")}')">🗑️</button>
@@ -1871,6 +2008,11 @@
             text += `  dont Saturés  : ${globalSat.toFixed(1)} g\n`;
             text += `Fibres          : ${globalFiber.toFixed(1)} g\n`;
             text += `Sel             : ${globalSel.toFixed(1)} g\n`;
+
+            const dayWeight = weightHistory[currentDate];
+            if (dayWeight !== undefined) {
+                text += `Poids           : ${dayWeight.toFixed(1)} kg\n`;
+            }
 
             const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
             const link = document.createElement('a');
@@ -1983,6 +2125,8 @@
         window.restoreCollapsedState = restoreCollapsedState;
         window.exportHistoryDetailCSV = exportHistoryDetailCSV;
         window.toggleCard = toggleCard;
+        window.saveWeight = saveWeight;
+        window.deleteWeight = deleteWeight;
 
         document.addEventListener("DOMContentLoaded", () => {
             loadDataFromLocalStorage();
@@ -1990,7 +2134,7 @@
             initHistoryDates();
             renderMeals();
             // Restore collapse state for static cards
-            ['coll-dashboard','coll-hist-filters','coll-hist-chart','coll-hist-table'].forEach(restoreCollapsedState);
+            ['coll-dashboard','coll-weight','coll-hist-filters','coll-hist-chart','coll-hist-table'].forEach(restoreCollapsedState);
         });
     </script>
 </body>
