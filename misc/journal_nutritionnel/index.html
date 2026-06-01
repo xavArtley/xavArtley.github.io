@@ -543,6 +543,79 @@
             }
         }
 
+        /* ── Quick Meal Form ──────────────────── */
+        .quick-meal-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #805ad5;
+            background: #f5f0ff;
+            border: 1px solid #d6bcfa;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-left: 6px;
+        }
+        .quick-meal-toggle:hover {
+            background: #ede9fe;
+            border-color: #b794f4;
+        }
+        .quick-meal-form {
+            display: none;
+            background: #faf5ff;
+            border: 1px solid #e9d8fd;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-top: 10px;
+        }
+        .quick-meal-form.open { display: block; }
+        .quick-meal-form .qm-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .quick-meal-form .qm-row:last-child { margin-bottom: 0; }
+        .quick-meal-form label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b46c1;
+            min-width: 55px;
+        }
+        .quick-meal-form input {
+            padding: 5px 8px;
+            border: 1px solid #d6bcfa;
+            border-radius: 5px;
+            font-size: 13px;
+            width: 80px;
+            background: white;
+        }
+        .quick-meal-form input.qm-name {
+            width: 200px;
+            flex: 1;
+            min-width: 140px;
+        }
+        .quick-meal-form .qm-label-sm {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .btn-quick-add {
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            background: #805ad5;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-quick-add:hover { background: #6b46c1; }
+
         /* Scrollable tables on small screens */
         .table-responsive {
             overflow-x: auto;
@@ -1283,6 +1356,15 @@
             }
         }
 
+        // Centralise la résolution nutritionnelle : items custom ou base de données
+        function getItemInfo(item) {
+            if (item.custom && item.customMacros) {
+                const m = item.customMacros;
+                return { kcal: m.kcal || 0, proteines: m.proteines || 0, glucides: m.glucides || 0, sucre: m.sucre || 0, lipides: m.lipides || 0, sat: m.sat || 0, fibres: m.fibres || 0, sel: m.sel || 0 };
+            }
+            return combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, sucre: 0, lipides: 0, sat: 0, fibres: 0, sel: 0 };
+        }
+
         function calculateDayTotals(dateStr) {
             const meals = appHistory[dateStr];
             let totals = { kcal: 0, prot: 0, carbs: 0, sucre: 0, fat: 0, sat: 0, fiber: 0, sel: 0, isEmpty: true };
@@ -1291,7 +1373,7 @@
             mealNames.forEach(meal => {
                 if (meals[meal] && meals[meal].length > 0) totals.isEmpty = false;
                 (meals[meal] || []).forEach(item => {
-                    const info = combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, sucre: 0, lipides: 0, sat: 0, fibres: 0, sel: 0 };
+                    const info = getItemInfo(item);
                     const factor = item.weight / 100;
                     totals.kcal += Math.round(info.kcal * factor);
                     totals.prot += info.proteines * factor;
@@ -1350,7 +1432,7 @@
                 let itemsHtml = '';
 
                 items.forEach((item, index) => {
-                    const info = combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, sucre: 0, lipides: 0, sat: 0, fibres: 0, sel: 0 };
+                    const info = getItemInfo(item);
                     const factor = item.weight / 100;
 
                     const calcKcal = Math.round(info.kcal * factor);
@@ -1370,14 +1452,16 @@
                     globalTotals.fat += parseFloat(calcFat); globalTotals.sat += parseFloat(calcSat);
                     globalTotals.fiber += parseFloat(calcFiber); globalTotals.sel += parseFloat(calcSel);
 
-                    let displayWeight = `${item.weight}g`;
-                    if (item.qty && item.unitWeight && item.qty !== 1) {
+                    const isCustom = item.custom;
+                    let displayWeight = isCustom ? '<span style="color:#805ad5;font-size:11px;">rapide</span>' : `${item.weight}g`;
+                    if (!isCustom && item.qty && item.unitWeight && item.qty !== 1) {
                         displayWeight = `${item.qty} &times; ${item.unitWeight}g (${item.weight}g)`;
                     }
+                    const nameStyle = isCustom ? 'color:#805ad5;' : '';
 
                     itemsHtml += `
                     <tr>
-                        <td><strong>${item.name}</strong></td>
+                        <td><strong style="${nameStyle}">${isCustom ? '⚡ ' : ''}${item.name}</strong></td>
                         <td>${displayWeight}</td>
                         <td>${calcKcal} kcal</td>
                         <td>P:${calcProt}g G:${calcCarbs}g<small style="color:var(--text-muted)">(s:${calcSucre})</small> L:${calcFat}g<small style="color:var(--text-muted)">(sat:${calcSat})</small> Sel:${calcSel}g</td>
@@ -1420,6 +1504,48 @@
                             <span style="color:var(--text-muted);font-size:14px;">x</span>
                             <input type="number" class="form-input" id="weight-${meal}" placeholder="Poids/u (g)" min="1" style="width:80px;">
                             <button class="btn-add" onclick="addItem('${meal}')">Ajouter</button>
+                            <button class="quick-meal-toggle" type="button" onclick="toggleQuickMealForm('${meal}')" title="Saisie rapide d'un repas complet">⚡ Repas rapide</button>
+                        </div>
+                        <div class="quick-meal-form" id="qm-form-${meal}">
+                            <div class="qm-row">
+                                <label>Nom :</label>
+                                <input type="text" class="qm-name" id="qm-name-${meal}" placeholder="ex: Plateau cantine">
+                            </div>
+                            <div class="qm-row">
+                                <label>Calories :</label>
+                                <input type="number" id="qm-kcal-${meal}" placeholder="kcal" min="0">
+                                <span class="qm-label-sm">kcal</span>
+                            </div>
+                            <div class="qm-row">
+                                <label>Protéines :</label>
+                                <input type="number" id="qm-prot-${meal}" placeholder="0" min="0" step="0.1">
+                                <span class="qm-label-sm">g</span>
+                                <label style="margin-left:8px;">Glucides :</label>
+                                <input type="number" id="qm-carbs-${meal}" placeholder="0" min="0" step="0.1">
+                                <span class="qm-label-sm">g</span>
+                            </div>
+                            <div class="qm-row">
+                                <label>Lipides :</label>
+                                <input type="number" id="qm-fat-${meal}" placeholder="0" min="0" step="0.1">
+                                <span class="qm-label-sm">g</span>
+                                <label style="margin-left:8px;">Sucres :</label>
+                                <input type="number" id="qm-sucre-${meal}" placeholder="0" min="0" step="0.1">
+                                <span class="qm-label-sm">g</span>
+                            </div>
+                            <div class="qm-row">
+                                <label>Saturés :</label>
+                                <input type="number" id="qm-sat-${meal}" placeholder="0" min="0" step="0.1">
+                                <span class="qm-label-sm">g</span>
+                                <label style="margin-left:8px;">Fibres :</label>
+                                <input type="number" id="qm-fiber-${meal}" placeholder="0" min="0" step="0.1">
+                                <span class="qm-label-sm">g</span>
+                                <label style="margin-left:8px;">Sel :</label>
+                                <input type="number" id="qm-sel-${meal}" placeholder="0" min="0" step="0.01">
+                                <span class="qm-label-sm">g</span>
+                            </div>
+                            <div class="qm-row">
+                                <button class="btn-quick-add" onclick="addQuickMeal('${meal}')">⚡ Ajouter ce repas rapide</button>
+                            </div>
                         </div>
                     </div>
                 </div>`;
@@ -1501,6 +1627,56 @@
 
         async function removeItem(meal, index) {
             appHistory[currentDate][meal].splice(index, 1);
+            await saveMenu();
+            renderMeals();
+        }
+
+        function toggleQuickMealForm(meal) {
+            const form = document.getElementById(`qm-form-${meal}`);
+            if (form) form.classList.toggle('open');
+        }
+
+        async function addQuickMeal(meal) {
+            const nameInput = document.getElementById(`qm-name-${meal}`);
+            const kcalInput = document.getElementById(`qm-kcal-${meal}`);
+            let name = (nameInput.value || '').trim();
+            const kcal = parseFloat(kcalInput.value);
+
+            if (!name) { alert('Veuillez donner un nom au repas.'); return; }
+            if (isNaN(kcal) || kcal < 0) { alert('Veuillez renseigner les calories.'); return; }
+
+            // Assurer l'unicité du nom dans toute la journée
+            const allDayItems = [];
+            const dayData = appHistory[currentDate] || {};
+            mealNames.forEach(m => (dayData[m] || []).forEach(it => allDayItems.push(it.name)));
+            let baseName = name;
+            let suffix = 1;
+            while (allDayItems.includes(name)) {
+                suffix++;
+                name = `${baseName} (${suffix})`;
+            }
+
+            if (!appHistory[currentDate]) appHistory[currentDate] = {};
+            if (!appHistory[currentDate][meal]) appHistory[currentDate][meal] = [];
+
+            appHistory[currentDate][meal].push({
+                name: name,
+                weight: 100, // factor = 1, les macros sont en valeurs absolues
+                qty: 1,
+                unitWeight: 100,
+                custom: true,
+                customMacros: {
+                    kcal: kcal,
+                    proteines: parseFloat(document.getElementById(`qm-prot-${meal}`).value) || 0,
+                    glucides: parseFloat(document.getElementById(`qm-carbs-${meal}`).value) || 0,
+                    sucre: parseFloat(document.getElementById(`qm-sucre-${meal}`).value) || 0,
+                    lipides: parseFloat(document.getElementById(`qm-fat-${meal}`).value) || 0,
+                    sat: parseFloat(document.getElementById(`qm-sat-${meal}`).value) || 0,
+                    fibres: parseFloat(document.getElementById(`qm-fiber-${meal}`).value) || 0,
+                    sel: parseFloat(document.getElementById(`qm-sel-${meal}`).value) || 0
+                }
+            });
+
             await saveMenu();
             renderMeals();
         }
@@ -1694,7 +1870,7 @@
                     let mFat = 0, mSat = 0, mFiber = 0, mSel = 0;
 
                     items.forEach(item => {
-                        const info = combinedDatabase[item.name] || {};
+                        const info = getItemInfo(item);
                         const f = item.weight / 100;
                         const kcal  = Math.round((info.kcal || 0) * f);
                         const prot  = +((info.proteines || 0) * f).toFixed(1);
@@ -1968,7 +2144,7 @@
                     text += "  Aucun aliment\n";
                 } else {
                     items.forEach(item => {
-                        const info = combinedDatabase[item.name] || { kcal: 0, proteines: 0, glucides: 0, sucre: 0, lipides: 0, sat: 0, fibres: 0, sel: 0 };
+                        const info = getItemInfo(item);
                         const factor = item.weight / 100;
                         const kcal = Math.round(info.kcal * factor);
                         const p    = (info.proteines * factor).toFixed(1);
@@ -2127,6 +2303,8 @@
         window.toggleCard = toggleCard;
         window.saveWeight = saveWeight;
         window.deleteWeight = deleteWeight;
+        window.toggleQuickMealForm = toggleQuickMealForm;
+        window.addQuickMeal = addQuickMeal;
 
         document.addEventListener("DOMContentLoaded", () => {
             loadDataFromLocalStorage();
