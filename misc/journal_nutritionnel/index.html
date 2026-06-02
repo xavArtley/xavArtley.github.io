@@ -616,6 +616,41 @@
         }
         .btn-quick-add:hover { background: #6b46c1; }
 
+        /* ── Copy / Paste Meal ────────────────── */
+        .meal-actions {
+            display: flex;
+            gap: 4px;
+            margin-left: auto;
+        }
+        .btn-copy, .btn-paste {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.15s;
+            background: white;
+            color: var(--text-muted);
+        }
+        .btn-copy:hover {
+            background: #ebf8ff;
+            border-color: #90cdf4;
+            color: #2b6cb0;
+        }
+        .btn-paste {
+            background: #f0fff4;
+            border-color: #9ae6b4;
+            color: #276749;
+        }
+        .btn-paste:hover {
+            background: #c6f6d5;
+            border-color: #68d391;
+        }
+
         /* Scrollable tables on small screens */
         .table-responsive {
             overflow-x: auto;
@@ -1057,6 +1092,7 @@
         let myChart = null;
         let weightHistory = {};
         let editingOriginalName = null;
+        let mealClipboard = null; // { mealName: 'Déjeuner', date: '2026-06-01', items: [...] }
 
         // ==========================================
         // LOGIQUE DE SYNCHRONISATION
@@ -1485,10 +1521,17 @@
                 try { wasCollapsed = sessionStorage.getItem('coll:' + cardId) === '1'; } catch(e) {}
                 if (wasCollapsed) mealCard.classList.add('collapsed');
 
+                const hasCB = mealClipboard && mealClipboard.items.length > 0;
+                const cbLabel = hasCB ? `📋 Coller (${mealClipboard.mealName} du ${formatDateFR(mealClipboard.date)})` : '';
+
                 mealCard.innerHTML = `
                 <div class="coll-header" onclick="toggleCard('${cardId}')">
                     <span class="coll-title">${icon} ${meal}</span>
                     <span class="coll-meta">${subtotal}</span>
+                    <span class="meal-actions">
+                        ${items.length > 0 ? `<button class="btn-copy" onclick="event.stopPropagation(); copyMeal('${meal}')" title="Copier ce repas">📋 Copier</button>` : ''}
+                        ${hasCB ? `<button class="btn-paste" onclick="event.stopPropagation(); pasteMeal('${meal}')" title="${cbLabel}">📥 Coller</button>` : ''}
+                    </span>
                     <span class="coll-chevron">\u25BC</span>
                 </div>
                 <div class="coll-body">
@@ -1676,6 +1719,32 @@
                     sel: parseFloat(document.getElementById(`qm-sel-${meal}`).value) || 0
                 }
             });
+
+            await saveMenu();
+            renderMeals();
+        }
+
+        function copyMeal(meal) {
+            const items = (appHistory[currentDate] && appHistory[currentDate][meal]) || [];
+            if (items.length === 0) return;
+            mealClipboard = {
+                mealName: meal,
+                date: currentDate,
+                items: JSON.parse(JSON.stringify(items))
+            };
+            renderMeals();
+        }
+
+        async function pasteMeal(meal) {
+            if (!mealClipboard || mealClipboard.items.length === 0) return;
+            const src = `${mealClipboard.mealName} du ${formatDateFR(mealClipboard.date)}`;
+            if (!confirm(`Coller le contenu de \u00ab ${src} \u00bb dans ${meal} du ${formatDateFR(currentDate)} ?`)) return;
+
+            if (!appHistory[currentDate]) appHistory[currentDate] = {};
+            if (!appHistory[currentDate][meal]) appHistory[currentDate][meal] = [];
+
+            const clonedItems = JSON.parse(JSON.stringify(mealClipboard.items));
+            appHistory[currentDate][meal].push(...clonedItems);
 
             await saveMenu();
             renderMeals();
@@ -2305,6 +2374,8 @@
         window.deleteWeight = deleteWeight;
         window.toggleQuickMealForm = toggleQuickMealForm;
         window.addQuickMeal = addQuickMeal;
+        window.copyMeal = copyMeal;
+        window.pasteMeal = pasteMeal;
 
         document.addEventListener("DOMContentLoaded", () => {
             loadDataFromLocalStorage();
