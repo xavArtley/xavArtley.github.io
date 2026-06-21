@@ -114,6 +114,18 @@ function formatDateISO(timestamp) {
   return `${y}-${m}-${d}`;
 }
 
+// Helper: Get color based on sensor name to match chart series
+function getSensorColor(sensorName) {
+  if (sensorName === "Météo Extérieure" || sensorName === "Extérieur (Météo)") {
+    return palette[sensors.length % palette.length];
+  }
+  const idx = sensors.indexOf(sensorName);
+  if (idx !== -1) {
+    return palette[idx % palette.length];
+  }
+  return "#333";
+}
+
 // 3. Fetch Current Mesures (Temps Réel)
 async function loadCurrentData() {
   const loader = document.getElementById("loading-current");
@@ -177,6 +189,7 @@ async function loadCurrentData() {
       const { sensor, data, isWeatherApi } = result;
       
       const displayName = isWeatherApi ? "Extérieur (Météo)" : sensor;
+      const sensorColor = getSensorColor(isWeatherApi ? "Météo Extérieure" : sensor);
       
       const card = document.createElement("div");
       card.className = "sensor-widget-card";
@@ -186,7 +199,7 @@ async function loadCurrentData() {
       const timeStr = formatTimestamp(data.timestamp);
 
       card.innerHTML = `
-        <div class="sensor-title ${isWeatherApi ? 'outside' : ''}">${displayName}</div>
+        <div class="sensor-title ${isWeatherApi ? 'outside' : ''}" style="color: ${sensorColor}">${displayName}</div>
         <div class="sensor-values-row">
           <div class="value-col">
             <div class="value-icon">${thermometerIcon}</div>

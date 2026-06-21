@@ -211,6 +211,7 @@ nav .dropdown-content {
   z-index: 200;
   padding: 6px;
   flex-direction: column;
+  align-items: stretch;
   animation: dropIn 0.15s ease;
 }
 
