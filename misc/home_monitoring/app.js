@@ -114,6 +114,22 @@ function formatDateISO(timestamp) {
   return `${y}-${m}-${d}`;
 }
 
+// Helper: Downsample data to keep a maximum number of points for rendering performance
+function downsampleData(data, maxPoints = 800) {
+  if (data.length <= maxPoints) return data;
+  
+  const step = Math.ceil(data.length / maxPoints);
+  const sampled = [];
+  for (let i = 0; i < data.length; i += step) {
+    sampled.push(data[i]);
+  }
+  // Ensure the last reading is always included for accuracy
+  if ((data.length - 1) % step !== 0) {
+    sampled.push(data[data.length - 1]);
+  }
+  return sampled;
+}
+
 // Helper: Get color based on sensor name to match chart series
 function getSensorColor(sensorName) {
   if (sensorName === "Météo Extérieure" || sensorName === "Extérieur (Météo)") {
@@ -261,15 +277,15 @@ async function loadHistoryData() {
 
     // Step 4b: Query each sensor for the selected date range in Firebase
     const fetches = sensors.map(async (sensor) => {
-      const url = `${DB_URL}/dht_readings/${sensor}.json?orderBy=%22$key%22&startAt=%22${startTs}%22&endAt=%22${endTs}%22`;
+      const url = `${DB_URL}/dht_readings/${encodeURIComponent(sensor)}.json?orderBy=%22$key%22&startAt=%22${startTs}%22&endAt=%22${endTs}%22`;
       const res = await fetch(url);
       if (!res.ok) return { sensor, data: [] };
       const val = await res.json();
       if (!val) return { sensor, data: [] };
 
-      const items = Object.values(val)
-        .map(d => ({
-          timestamp: parseInt(d.timestamp),
+      const items = Object.entries(val)
+        .map(([key, d]) => ({
+          timestamp: parseInt(d.timestamp || key),
           temperature: parseFloat(d.temperature),
           humidity: parseFloat(d.humidity)
         }))
@@ -315,7 +331,10 @@ async function loadHistoryData() {
       const tempData = [];
       const humData = [];
 
-      data.forEach(item => {
+      // Downsample to a maximum of 800 points to keep ApexCharts responsive
+      const sampledData = downsampleData(data, 800);
+
+      sampledData.forEach(item => {
         const ms = item.timestamp * 1000;
         if (!isNaN(item.temperature)) tempData.push([ms, item.temperature]);
         if (!isNaN(item.humidity)) humData.push([ms, item.humidity]);
@@ -338,19 +357,27 @@ async function loadHistoryData() {
       const tempData = [];
       const humData = [];
 
+      // Filter raw weather points in selected range first
+      const rawWeather = [];
       for (let i = 0; i < hourly.time.length; i++) {
         const ms = new Date(hourly.time[i]).getTime();
-        // Only include weather data within the selected time window to align charts
         const tsSec = ms / 1000;
         if (tsSec >= startTs && tsSec <= endTs) {
-          if (hourly.temperature_2m && hourly.temperature_2m[i] !== undefined) {
-            tempData.push([ms, hourly.temperature_2m[i]]);
-          }
-          if (hourly.relative_humidity_2m && hourly.relative_humidity_2m[i] !== undefined) {
-            humData.push([ms, hourly.relative_humidity_2m[i]]);
-          }
+          rawWeather.push({
+            ms,
+            temperature: hourly.temperature_2m && hourly.temperature_2m[i] !== undefined ? hourly.temperature_2m[i] : undefined,
+            humidity: hourly.relative_humidity_2m && hourly.relative_humidity_2m[i] !== undefined ? hourly.relative_humidity_2m[i] : undefined
+          });
         }
       }
+
+      // Downsample weather points to a maximum of 800
+      const sampledWeather = downsampleData(rawWeather, 800);
+
+      sampledWeather.forEach(item => {
+        if (item.temperature !== undefined && !isNaN(item.temperature)) tempData.push([item.ms, item.temperature]);
+        if (item.humidity !== undefined && !isNaN(item.humidity)) humData.push([item.ms, item.humidity]);
+      });
 
       tempSeries.push({
         name: "Extérieur (Météo)",
@@ -364,7 +391,7 @@ async function loadHistoryData() {
     }
 
     // Step 4e: Draw or Update Charts
-    updateCharts(tempSeries, humiditySeries);
+    updateCharts(tempSeries, humiditySeries, startTs, endTs);
 
   } catch (error) {
     console.error("Error loading historical data:", error);
@@ -373,9 +400,10 @@ async function loadHistoryData() {
 }
 
 // 5. Render/Update ApexCharts
-function updateCharts(tempSeries, humiditySeries) {
+function updateCharts(tempSeries, humiditySeries, startTs, endTs) {
   const chartOptions = {
     chart: {
+      group: 'home-monitoring', // Synchronizes zoom, pan, and hover cursor across charts in this group
       type: 'line',
       height: 350,
       zoom: {
@@ -400,11 +428,15 @@ function updateCharts(tempSeries, humiditySeries) {
     },
     xaxis: {
       type: 'datetime',
+      min: startTs * 1000,
+      max: endTs * 1000,
       labels: {
         datetimeUTC: false, // Show in local time
       }
     },
     tooltip: {
+      shared: true, // Display all series in one tooltip
+      intersect: false, // Trigger hover when cursor is near the vertical line, not just on the point
       x: {
         format: 'dd MMM yyyy HH:mm:ss'
       }
@@ -417,10 +449,20 @@ function updateCharts(tempSeries, humiditySeries) {
 
   // Temperature Chart
   if (tempChart) {
-    tempChart.updateSeries(tempSeries);
+    tempChart.updateOptions({
+      series: tempSeries,
+      xaxis: {
+        min: startTs * 1000,
+        max: endTs * 1000
+      }
+    });
   } else {
     const tempOptions = {
       ...chartOptions,
+      chart: {
+        ...chartOptions.chart,
+        id: 'temp-chart-el' // Unique ID for temperature chart
+      },
       series: tempSeries,
       yaxis: {
         title: { text: 'Température (°C)' }
@@ -432,10 +474,20 @@ function updateCharts(tempSeries, humiditySeries) {
 
   // Humidity Chart
   if (humidityChart) {
-    humidityChart.updateSeries(humiditySeries);
+    humidityChart.updateOptions({
+      series: humiditySeries,
+      xaxis: {
+        min: startTs * 1000,
+        max: endTs * 1000
+      }
+    });
   } else {
     const humidityOptions = {
       ...chartOptions,
+      chart: {
+        ...chartOptions.chart,
+        id: 'humidity-chart-el' // Unique ID for humidity chart
+      },
       series: humiditySeries,
       yaxis: {
         title: { text: 'Humidité (%)' }
