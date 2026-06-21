@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suivi Température & Humidité</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- ApexCharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="header-title">
+        <h1>Suivi Température & Humidité</h1>
+        <p class="subtitle">Tableau de bord de l'appartement</p>
+      </div>
+      
+      <!-- Tab Controls -->
+      <div class="tab-controls">
+        <button class="tab-btn active" data-tab="current">Temps Réel</button>
+        <button class="tab-btn" data-tab="history">Historique</button>
+      </div>
+    </header>
+
+    <!-- Content Sections -->
+    <main class="dashboard-content">
+      <!-- Section 1: Current Values -->
+      <section id="tab-current" class="tab-pane active">
+        <div id="loading-current" class="loader-container">
+          <div class="spinner"></div>
+          <p>Chargement des dernières mesures...</p>
+        </div>
+        <div id="sensor-cards-grid" class="sensor-grid"></div>
+      </section>
+
+      <!-- Section 2: Historical Charts -->
+      <section id="tab-history" class="tab-pane">
+        <!-- Date Selector & Filters -->
+        <div class="history-filters">
+          <div class="filter-group">
+            <label for="history-range-select">Période :</label>
+            <select id="history-range-select">
+              <option value="1">Dernières 24 heures</option>
+              <option value="2" selected>Derniers 2 jours</option>
+              <option value="7">Dernière semaine</option>
+              <option value="30">Dernier mois</option>
+              <option value="custom">Période personnalisée</option>
+            </select>
+          </div>
+          
+          <div id="custom-date-inputs" class="filter-group custom-dates hidden">
+            <div class="date-input-container">
+              <label for="start-date">Début :</label>
+              <input type="datetime-local" id="start-date">
+            </div>
+            <div class="date-input-container">
+              <label for="end-date">Fin :</label>
+              <input type="datetime-local" id="end-date">
+            </div>
+            <button id="apply-custom-dates" class="btn-primary">Appliquer</button>
+          </div>
+        </div>
+
+        <div id="loading-history" class="loader-container hidden">
+          <div class="spinner"></div>
+          <p>Chargement de l'historique...</p>
+        </div>
+
+        <!-- Charts Container -->
+        <div class="charts-wrapper">
+          <div class="chart-card">
+            <h2>Température (°C)</h2>
+            <div id="temp-chart" class="chart-element"></div>
+          </div>
+          <div class="chart-card">
+            <h2>Humidité (%)</h2>
+            <div id="humidity-chart" class="chart-element"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Javascript -->
+  <script src="app.js"></script>
+</body>
+</html>
