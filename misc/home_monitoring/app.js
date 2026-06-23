@@ -204,6 +204,15 @@ async function loadCurrentData() {
       if (!result || !result.data) return;
       const { sensor, data, isWeatherApi } = result;
       
+      // Filter out sensors that haven't sent data in the last 24 hours (86400 seconds)
+      if (!isWeatherApi) {
+        const nowSec = Math.floor(Date.now() / 1000);
+        const ageSec = nowSec - data.timestamp;
+        if (ageSec > 24 * 60 * 60) {
+          return; // Skip rendering this card
+        }
+      }
+
       const displayName = isWeatherApi ? "Extérieur (Météo)" : sensor;
       const sensorColor = getSensorColor(isWeatherApi ? "Météo Extérieure" : sensor);
       
@@ -335,7 +344,8 @@ async function loadHistoryData() {
       const sampledData = downsampleData(data, 800);
 
       sampledData.forEach(item => {
-        const ms = item.timestamp * 1000;
+        // Round to nearest 5 minutes (300 seconds) to align timestamps across series
+        const ms = Math.round(item.timestamp / 300) * 300 * 1000;
         if (!isNaN(item.temperature)) tempData.push([ms, item.temperature]);
         if (!isNaN(item.humidity)) humData.push([ms, item.humidity]);
       });
@@ -375,8 +385,10 @@ async function loadHistoryData() {
       const sampledWeather = downsampleData(rawWeather, 800);
 
       sampledWeather.forEach(item => {
-        if (item.temperature !== undefined && !isNaN(item.temperature)) tempData.push([item.ms, item.temperature]);
-        if (item.humidity !== undefined && !isNaN(item.humidity)) humData.push([item.ms, item.humidity]);
+        // Round weather timestamps to nearest 5 minutes as well
+        const ms = Math.round(item.ms / 1000 / 300) * 300 * 1000;
+        if (item.temperature !== undefined && !isNaN(item.temperature)) tempData.push([ms, item.temperature]);
+        if (item.humidity !== undefined && !isNaN(item.humidity)) humData.push([ms, item.humidity]);
       });
 
       tempSeries.push({
@@ -416,6 +428,31 @@ function updateCharts(tempSeries, humiditySeries, startTs, endTs) {
       },
       animations: {
         enabled: false // Disable animation for performance with larger datasets
+      },
+      events: {
+        // Manually synchronize the zoom events if they get out of sync
+        zoomed: function(chartContext, { xaxis }) {
+          const otherChart = chartContext.opts.chart.id === 'temp-chart-el' ? humidityChart : tempChart;
+          if (otherChart && xaxis) {
+            const currentMin = otherChart.w.globals.minX;
+            const currentMax = otherChart.w.globals.maxX;
+            // Prevent infinite loop by checking if the other chart is already close to the target range
+            if (Math.abs(currentMin - xaxis.min) > 1000 || Math.abs(currentMax - xaxis.max) > 1000) {
+              setTimeout(() => {
+                otherChart.zoomX(xaxis.min, xaxis.max);
+              }, 50);
+            }
+          }
+        },
+        // Manually synchronize the reset zoom action
+        beforeResetZoom: function(chartContext) {
+          const otherChart = chartContext.opts.chart.id === 'temp-chart-el' ? humidityChart : tempChart;
+          if (otherChart) {
+            setTimeout(() => {
+              otherChart.resetSeries(true, true);
+            }, 50);
+          }
+        }
       }
     },
     colors: palette,
