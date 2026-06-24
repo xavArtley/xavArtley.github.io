@@ -511,13 +511,7 @@ function updateCharts(tempSeries, humiditySeries, startTs, endTs) {
 
   // Humidity Chart
   if (humidityChart) {
-    humidityChart.updateOptions({
-      series: humiditySeries,
-      xaxis: {
-        min: startTs * 1000,
-        max: endTs * 1000
-      }
-    });
+    humidityChart.updateSeries(humiditySeries);
   } else {
     const humidityOptions = {
       ...chartOptions,
