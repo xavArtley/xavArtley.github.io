@@ -542,7 +542,7 @@ function updateCharts(tempSeries, humiditySeries, startTs, endTs) {
       height: 350,
       zoom: {
         type: 'x',
-        enabled: !isMobile, // Disable zoom on mobile to allow easy page scrolling
+        enabled: true, // Enable zoom/pinch on all devices
         autoScaleYaxis: true
       },
       toolbar: {

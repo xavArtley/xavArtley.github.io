@@ -344,3 +344,8 @@ body {
     align-items: flex-start;
   }
 }
+
+/* Permit page scrolling on mobile while allowing pinch-to-zoom */
+.apexcharts-canvas {
+  touch-action: pan-y;
+}
