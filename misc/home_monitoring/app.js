@@ -115,19 +115,158 @@ function formatDateISO(timestamp) {
 }
 
 // Helper: Downsample data to keep a maximum number of points for rendering performance
-function downsampleData(data, maxPoints = 800) {
-  if (data.length <= maxPoints) return data;
+// Helper: Aggregate and align data into time buckets, using forward-fill for missing points, so all series have identical timestamps
+function aggregateAndAlignData(seriesList, startTs, endTs, bucketSize) {
+  const startBucket = Math.floor(startTs / bucketSize) * bucketSize;
+  const endBucket = Math.floor(endTs / bucketSize) * bucketSize;
   
-  const step = Math.ceil(data.length / maxPoints);
-  const sampled = [];
-  for (let i = 0; i < data.length; i += step) {
-    sampled.push(data[i]);
+  // Extend calculations by 2 hours (7200 seconds) at the end to capture the next hourly weather points
+  // for smooth cubic spline Hermite interpolation at the boundary.
+  const calcEndBucket = endBucket + 7200;
+  
+  // Generate all bucket timestamps in the range plus buffer
+  const allBuckets = [];
+  for (let t = startBucket; t <= calcEndBucket; t += bucketSize) {
+    allBuckets.push(t);
   }
-  // Ensure the last reading is always included for accuracy
-  if ((data.length - 1) % step !== 0) {
-    sampled.push(data[data.length - 1]);
-  }
-  return sampled;
+
+  const tempSeriesList = [];
+  const humiditySeriesList = [];
+
+  seriesList.forEach(({ name, data }) => {
+    // 1. Group raw data into buckets (allowing buffer points)
+    const buckets = {};
+    data.forEach(item => {
+      const ts = item.timestamp;
+      if (ts === undefined || ts < startTs || ts > calcEndBucket) return;
+      const bucketTs = Math.floor(ts / bucketSize) * bucketSize;
+      if (!buckets[bucketTs]) {
+        buckets[bucketTs] = {
+          tempSum: 0,
+          tempCount: 0,
+          humSum: 0,
+          humCount: 0
+        };
+      }
+      if (item.temperature !== undefined && !isNaN(item.temperature)) {
+        buckets[bucketTs].tempSum += item.temperature;
+        buckets[bucketTs].tempCount++;
+      }
+      if (item.humidity !== undefined && !isNaN(item.humidity)) {
+        buckets[bucketTs].humSum += item.humidity;
+        buckets[bucketTs].humCount++;
+      }
+    });
+
+    // 2. Build aligned arrays by walking through allBuckets and gathering raw values/nulls
+    const rawTemps = [];
+    const rawHums = [];
+
+    allBuckets.forEach(t => {
+      const b = buckets[t];
+      if (b) {
+        rawTemps.push(b.tempCount > 0 ? b.tempSum / b.tempCount : null);
+        rawHums.push(b.humCount > 0 ? b.humSum / b.humCount : null);
+      } else {
+        rawTemps.push(null);
+        rawHums.push(null);
+      }
+    });
+
+    // 3. Interpolate nulls using Hermite cubic spline interpolation for smooth curve transitions
+    const interpolateCubic = (arr) => {
+      const n = arr.length;
+      const points = [];
+      for (let i = 0; i < n; i++) {
+        if (arr[i] !== null) {
+          points.push({ x: i, y: arr[i] });
+        }
+      }
+
+      if (points.length < 2) {
+        for (let i = 0; i < n; i++) {
+          if (arr[i] === null && points.length === 1) {
+            arr[i] = points[0].y;
+          }
+        }
+        return;
+      }
+
+      // Calculate tangents at known points
+      const tangents = new Array(points.length).fill(0);
+      const numPoints = points.length;
+
+      for (let i = 0; i < numPoints; i++) {
+        if (i === 0) {
+          tangents[i] = (points[1].y - points[0].y) / (points[1].x - points[0].x);
+        } else if (i === numPoints - 1) {
+          tangents[i] = (points[numPoints - 1].y - points[numPoints - 2].y) / (points[numPoints - 1].x - points[numPoints - 2].x);
+        } else {
+          const hL = points[i].x - points[i - 1].x;
+          const hR = points[i + 1].x - points[i].x;
+          const slopeL = (points[i].y - points[i - 1].y) / hL;
+          const slopeR = (points[i + 1].y - points[i].y) / hR;
+          tangents[i] = (slopeL * hR + slopeR * hL) / (hL + hR);
+        }
+      }
+
+      // Perform Hermite spline interpolation for null elements
+      let pointIdx = 0;
+      for (let i = 0; i < n; i++) {
+        if (arr[i] === null) {
+          while (pointIdx < numPoints - 1 && points[pointIdx + 1].x < i) {
+            pointIdx++;
+          }
+
+          if (i > points[pointIdx].x && pointIdx < numPoints - 1) {
+            const p0 = points[pointIdx];
+            const p1 = points[pointIdx + 1];
+            const dx = p1.x - p0.x;
+            const t = (i - p0.x) / dx;
+
+            // Hermite basis functions
+            const h00 = 2 * Math.pow(t, 3) - 3 * Math.pow(t, 2) + 1;
+            const h10 = Math.pow(t, 3) - 2 * Math.pow(t, 2) + t;
+            const h01 = -2 * Math.pow(t, 3) + 3 * Math.pow(t, 2);
+            const h11 = Math.pow(t, 3) - Math.pow(t, 2);
+
+            arr[i] = h00 * p0.y + h10 * dx * tangents[pointIdx] + h01 * p1.y + h11 * dx * tangents[pointIdx + 1];
+          } else if (i > points[numPoints - 1].x) {
+            arr[i] = points[numPoints - 1].y;
+          }
+        }
+      }
+    };
+
+    interpolateCubic(rawTemps);
+    interpolateCubic(rawHums);
+
+    // 4. Construct final datasets with 1 decimal precision, keeping only values in visible range
+    const tempData = [];
+    const humData = [];
+    allBuckets.forEach((t, idx) => {
+      if (t > endBucket) return; // Crop out the extra buffer points from visible dataset
+      
+      const tempVal = rawTemps[idx];
+      const humVal = rawHums[idx];
+      const ms = t * 1000;
+      
+      tempData.push([ms, tempVal !== null ? parseFloat(tempVal.toFixed(1)) : null]);
+      humData.push([ms, humVal !== null ? parseFloat(humVal.toFixed(1)) : null]);
+    });
+
+    tempSeriesList.push({
+      name,
+      data: tempData
+    });
+
+    humiditySeriesList.push({
+      name,
+      data: humData
+    });
+  });
+
+  return { tempSeries: tempSeriesList, humiditySeries: humiditySeriesList };
 }
 
 // Helper: Get color based on sensor name to match chart series
@@ -332,75 +471,56 @@ async function loadHistoryData() {
     loader.classList.add("hidden");
 
     // Step 4d: Prepare Series for ApexCharts
-    const tempSeries = [];
-    const humiditySeries = [];
+    const allRawData = results.map(r => ({
+      name: r.sensor,
+      data: r.data
+    }));
 
-    // Add sensor data
-    results.forEach(({ sensor, data }) => {
-      const tempData = [];
-      const humData = [];
-
-      // Downsample to a maximum of 800 points to keep ApexCharts responsive
-      const sampledData = downsampleData(data, 800);
-
-      sampledData.forEach(item => {
-        // Round to nearest 5 minutes (300 seconds) to align timestamps across series
-        const ms = Math.round(item.timestamp / 300) * 300 * 1000;
-        if (!isNaN(item.temperature)) tempData.push([ms, item.temperature]);
-        if (!isNaN(item.humidity)) humData.push([ms, item.humidity]);
-      });
-
-      tempSeries.push({
-        name: sensor,
-        data: tempData
-      });
-
-      humiditySeries.push({
-        name: sensor,
-        data: humData
-      });
-    });
-
-    // Add Open-Meteo comparison data
     if (weatherData && weatherData.hourly) {
       const hourly = weatherData.hourly;
-      const tempData = [];
-      const humData = [];
-
-      // Filter raw weather points in selected range first
       const rawWeather = [];
       for (let i = 0; i < hourly.time.length; i++) {
         const ms = new Date(hourly.time[i]).getTime();
         const tsSec = ms / 1000;
-        if (tsSec >= startTs && tsSec <= endTs) {
+        if (tsSec >= startTs && tsSec <= endTs + 7200) {
           rawWeather.push({
-            ms,
+            timestamp: tsSec,
             temperature: hourly.temperature_2m && hourly.temperature_2m[i] !== undefined ? hourly.temperature_2m[i] : undefined,
             humidity: hourly.relative_humidity_2m && hourly.relative_humidity_2m[i] !== undefined ? hourly.relative_humidity_2m[i] : undefined
           });
         }
       }
-
-      // Downsample weather points to a maximum of 800
-      const sampledWeather = downsampleData(rawWeather, 800);
-
-      sampledWeather.forEach(item => {
-        // Round weather timestamps to nearest 5 minutes as well
-        const ms = Math.round(item.ms / 1000 / 300) * 300 * 1000;
-        if (item.temperature !== undefined && !isNaN(item.temperature)) tempData.push([ms, item.temperature]);
-        if (item.humidity !== undefined && !isNaN(item.humidity)) humData.push([ms, item.humidity]);
-      });
-
-      tempSeries.push({
+      allRawData.push({
         name: "Extérieur (Météo)",
-        data: tempData
-      });
-
-      humiditySeries.push({
-        name: "Extérieur (Météo)",
-        data: humData
+        data: rawWeather
       });
     }
+
+    // Calculate suitable bucket size based on total duration to keep max ~800 points
+    const duration = endTs - startTs;
+    const rawBucketSize = duration / 800;
+    let bucketSize = 300; // default to 5 minutes
+    if (rawBucketSize <= 300) {
+      bucketSize = 300;
+    } else if (rawBucketSize <= 900) {
+      bucketSize = 900;
+    } else if (rawBucketSize <= 1800) {
+      bucketSize = 1800;
+    } else if (rawBucketSize <= 3600) {
+      bucketSize = 3600;
+    } else if (rawBucketSize <= 7200) {
+      bucketSize = 7200;
+    } else if (rawBucketSize <= 14400) {
+      bucketSize = 14400;
+    } else if (rawBucketSize <= 28800) {
+      bucketSize = 28800;
+    } else if (rawBucketSize <= 86400) {
+      bucketSize = 86400;
+    } else {
+      bucketSize = Math.ceil(rawBucketSize / 86400) * 86400;
+    }
+
+    const { tempSeries, humiditySeries } = aggregateAndAlignData(allRawData, startTs, endTs, bucketSize);
 
     // Step 4e: Draw or Update Charts
     updateCharts(tempSeries, humiditySeries, startTs, endTs);
@@ -413,6 +533,8 @@ async function loadHistoryData() {
 
 // 5. Render/Update ApexCharts
 function updateCharts(tempSeries, humiditySeries, startTs, endTs) {
+  const isMobile = window.innerWidth <= 768;
+
   const chartOptions = {
     chart: {
       group: 'home-monitoring', // Synchronizes zoom, pan, and hover cursor across charts in this group
@@ -420,10 +542,11 @@ function updateCharts(tempSeries, humiditySeries, startTs, endTs) {
       height: 350,
       zoom: {
         type: 'x',
-        enabled: true,
+        enabled: !isMobile, // Disable zoom on mobile to allow easy page scrolling
         autoScaleYaxis: true
       },
       toolbar: {
+        show: !isMobile, // Hide toolbar on mobile to avoid small button misclicks
         autoSelected: 'zoom'
       },
       animations: {
@@ -461,7 +584,8 @@ function updateCharts(tempSeries, humiditySeries, startTs, endTs) {
     },
     stroke: {
       curve: 'smooth',
-      width: 2.5
+      width: 2.5,
+      connectNulls: true
     },
     xaxis: {
       type: 'datetime',
