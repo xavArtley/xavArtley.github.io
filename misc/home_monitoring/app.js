@@ -546,7 +546,7 @@ function updateCharts(tempSeries, humiditySeries, startTs, endTs) {
         autoScaleYaxis: true
       },
       toolbar: {
-        show: !isMobile, // Hide toolbar on mobile to avoid small button misclicks
+        show: true, // Enable toolbar on all devices (mobile and desktop)
         autoSelected: 'zoom'
       },
       animations: {
