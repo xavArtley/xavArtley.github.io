@@ -1,7 +1,11 @@
-const API_URL = 'https://restcountries.com/v3.1/independent?fields=cca2,name,flags,translations,status=true';
-const THRESHOLD = 0.85; // Seuil de similarité Jaro-Winkler
-const DIFFICULTY_INCREMENT = 0.5; // Augmentation du score de difficulté lors d'une erreur
-const MAX_DIFFICULTY = 100; // Cap pour le score de difficulté d'un pays
+// --- CONFIGURATION API v5 ---
+const API_KEY = 'rc_live_fc9df64303734f9d84092a75e36067cc';
+const BASE_URL = 'https://api.restcountries.com/countries/v5';
+const FIELDS = 'codes.alpha_2,names.common,names.translations,flag.url_svg';
+
+const THRESHOLD = 0.85;
+const DIFFICULTY_INCREMENT = 0.5;
+const MAX_DIFFICULTY = 100;
 
 // État du jeu
 let countriesData = [];
@@ -21,35 +25,26 @@ const avgDifficultyDisplay = document.getElementById('avg-difficulty');
 const resetButton = document.getElementById('reset-game');
 
 
-// --- LOGIQUE DE PERSISTANCE (LocalStorage) ---
+// --- LOGIQUE DE PERSISTANCE ---
 
-/**
- * Charge les données de l'historique de jeu ou initialise avec les données par défaut.
- * @param {Array<Object>} initialData La liste des pays bruts chargés de l'API.
- * @returns {Array<Object>} Les données de pays avec les métriques de jeu (difficulty, views, etc.).
- */
 function loadGameData(initialData) {
     const storedData = localStorage.getItem('flagGameData');
     if (storedData) {
-        // Fusionner les données stockées avec les données de l'API au cas où la liste des pays change
         const storedMap = JSON.parse(storedData).reduce((map, item) => {
             map[item.code] = item;
             return map;
         }, {});
 
-        // Créer le tableau final
         return initialData.map(country => {
-            const code = country.cca2;
+            const code = country.codes?.alpha_2;
             if (storedMap[code]) {
-                // Utiliser les données stockées pour les métriques de jeu
                 return {
                     ...country,
-                    difficulty: storedMap[code].difficulty || 1, // Garantir un minimum de 1
+                    difficulty: storedMap[code].difficulty || 1,
                     views: storedMap[code].views || 0,
                     correct: storedMap[code].correct || 0
                 };
             } else {
-                // Nouveau pays
                 return {
                     ...country,
                     difficulty: 1,
@@ -60,19 +55,17 @@ function loadGameData(initialData) {
         });
     }
 
-    // Première exécution : initialisation de base
     return initialData.map(country => ({
         ...country,
-        difficulty: 1, // Le score de difficulté est la probabilité de base (au moins 1)
+        difficulty: 1,
         views: 0,
         correct: 0
     }));
 }
 
 function saveGameData() {
-    // Sauvegarder uniquement les champs de jeu pertinents pour alléger le LocalStorage
     const dataToStore = countriesData.map(country => ({
-        code: country.cca2,
+        code: country.codes?.alpha_2,
         difficulty: country.difficulty,
         views: country.views,
         correct: country.correct
@@ -93,17 +86,10 @@ function updateScoreboard() {
 
 function resetGame() {
     if (confirm("Êtes-vous sûr de vouloir réinitialiser le jeu ? Votre score et la difficulté des pays seront perdus.")) {
-
-        // 1. Supprimer l'historique de LocalStorage
         localStorage.removeItem('flagGameData');
-
-        // 2. Réinitialiser le score actuel
         score = 0;
         totalViews = 0;
-
-        // 3. Recharger les données des pays (ce qui réinitialisera la difficulté à 1 pour tous)
         initGame();
-
         messageArea.textContent = 'Jeu réinitialisé ! Nouvelle partie lancée.';
         messageArea.className = 'message-default';
     }
@@ -112,34 +98,22 @@ function resetGame() {
 
 // --- LOGIQUE DE SÉLECTION PONDÉRÉE ---
 
-/**
- * Sélectionne un pays aléatoirement en utilisant le score de difficulté comme poids.
- * @returns {Object} Le pays sélectionné.
- */
 function selectRandomCountry() {
-    // 1. Calculer le poids total (somme de toutes les difficultés)
     const totalWeight = countriesData.reduce((sum, country) => sum + country.difficulty, 0);
-
-    // 2. Tirer un nombre aléatoire entre 0 et totalWeight
     let randomValue = Math.random() * totalWeight;
 
-    // 3. Trouver le pays correspondant
     for (const country of countriesData) {
         randomValue -= country.difficulty;
         if (randomValue <= 0) {
             return country;
         }
     }
-    // Fallback au cas où
     return countriesData[Math.floor(Math.random() * countriesData.length)];
 }
 
 
 // --- LOGIQUE DE VÉRIFICATION ---
 
-/**
- * Vérifie si la réponse du joueur est assez proche. (Utilise Jaro-Winkler de jaro-winkler.js)
- */
 function checkCountryGuess(guess, correctName_en, correctName_fr, threshold = THRESHOLD) {
     const normalizedGuess = normalizeString(guess);
     const normalizedEn = normalizeString(correctName_en);
@@ -147,7 +121,6 @@ function checkCountryGuess(guess, correctName_en, correctName_fr, threshold = TH
 
     if (normalizedGuess.length === 0) return false;
 
-    // Le joueur gagne s'il est proche du nom EN OU du nom FR
     const scoreEn = jaroWinklerSimilarity(normalizedGuess, normalizedEn);
     const scoreFr = jaroWinklerSimilarity(normalizedGuess, normalizedFr);
 
@@ -159,15 +132,12 @@ function checkCountryGuess(guess, correctName_en, correctName_fr, threshold = TH
 
 function displayNewQuestion() {
     currentCountry = selectRandomCountry();
-
-    // Mettre à jour les métriques pour le pays sélectionné
     currentCountry.views++;
 
-    // Afficher le drapeau et le mettre à jour
-    flagImage.src = currentCountry.flags.svg;
-    flagImage.alt = currentCountry.name_en;
+    // v5: Accès via les nouvelles propriétés renvoyées par response_fields
+    flagImage.src = currentCountry.flag?.url_svg;
+    flagImage.alt = currentCountry.names?.common || 'Drapeau à deviner';
 
-    // Réinitialiser l'interface
     guessInput.value = '';
     guessInput.disabled = false;
     submitButton.disabled = false;
@@ -182,31 +152,23 @@ function handleGuess() {
     if (!currentCountry) return;
 
     const userGuess = guessInput.value;
-    const nameEn = currentCountry.name.common;
-    // Gérer l'absence potentielle de traduction (fra.common peut être undefined)
-    const nameFr = currentCountry.translations?.fra?.common || nameEn;
+    const nameEn = currentCountry.names?.common;
+    const nameFr = currentCountry.translations?.fra?.common
+        || currentCountry.names?.translations?.fra?.common
+        || nameEn;
 
     if (checkCountryGuess(userGuess, nameEn, nameFr)) {
-        // Bonne réponse
         score++;
         currentCountry.correct++;
-
-        // Diminuer la probabilité (difficulté) pour ce pays (minimum 1)
         currentCountry.difficulty = Math.max(1, currentCountry.difficulty - DIFFICULTY_INCREMENT);
-
         messageArea.textContent = `Correct ! Le pays est ${nameFr} (${nameEn}).`;
         messageArea.className = 'message-success';
     } else {
-        // Mauvaise réponse
-
-        // Augmenter la probabilité (difficulté) pour ce pays (maximum MAX_DIFFICULTY)
         currentCountry.difficulty = Math.min(MAX_DIFFICULTY, currentCountry.difficulty + DIFFICULTY_INCREMENT);
-
         messageArea.textContent = `Faux. Le pays était ${nameFr} (${nameEn}). Essayez de le retenir !`;
         messageArea.className = 'message-error';
     }
 
-    // Bloquer l'interaction et afficher le bouton Suivant
     guessInput.disabled = true;
     submitButton.disabled = true;
     nextButton.style.display = 'block';
@@ -214,38 +176,66 @@ function handleGuess() {
     updateScoreboard();
 }
 
-// --- INITIALISATION ---
+// --- INITIALISATION AVEC GESTION DE LA PAGINATION v5 ---
 async function initGame() {
     try {
-        const response = await fetch(API_URL);
-        if (!response.ok) {
-            throw new Error('Erreur de chargement des données de pays');
+        let allCountries = [];
+        let offset = 0;
+        let hasMore = true;
+        const limit = 100; // Limite maximale autorisée par page sur le plan gratuit
+
+        while (hasMore) {
+            const url = `${BASE_URL}?limit=${limit}&offset=${offset}&response_fields=${FIELDS}`;
+
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${API_KEY}` // Authentification recommandée
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur de chargement des données de pays');
+            }
+
+            const result = await response.json();
+            const objects = result.data?.objects || [];
+            allCountries = allCountries.concat(objects);
+
+            // Arrêter la boucle si on a récupéré moins d'objets que la limite ou si on a tout lu
+            if (objects.length < limit || allCountries.length >= (result.data?.meta?.total || 250)) {
+                hasMore = false;
+            } else {
+                offset += limit;
+            }
         }
 
-        const rawCountries = await response.json();
+        if (allCountries.length === 0) {
+            throw new Error('Aucun pays trouvé.');
+        }
 
-        // Charger les données de l'historique et initialiser 'countriesData'
-        countriesData = loadGameData(rawCountries);
+        countriesData = loadGameData(allCountries);
 
-        // Attacher les événements
+        // Attacher les événements (une seule fois à l'initialisation globale)
+        submitButton.removeEventListener('click', handleGuess);
         submitButton.addEventListener('click', handleGuess);
-        nextButton.addEventListener('click', displayNewQuestion);
-        guessInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !submitButton.disabled) {
-                handleGuess();
-            }
-        });
 
-        resetButton.addEventListener('click', resetGame);
+        nextButton.removeEventListener('click', displayNewQuestion);
+        nextButton.addEventListener('click', displayNewQuestion);
+
+        // Éviter les doublons d'écouteurs si initGame est rappelé par resetGame
+        resetButton.replaceWith(resetButton.cloneNode(true));
+        document.getElementById('reset-game').addEventListener('click', resetGame);
 
         // Démarrer le jeu
         displayNewQuestion();
 
     } catch (error) {
         console.error("Initialisation du jeu échouée:", error);
-        messageArea.textContent = "Erreur: Impossible de charger les données du jeu. Vérifiez l'accès à l'API.";
+        messageArea.textContent = "Erreur: Impossible de charger les données du jeu. Vérifiez votre clé API v5.";
         messageArea.className = 'message-error';
     }
 }
 
+// Note : Assurez-vous que vos fonctions utilitaires (normalizeString, jaroWinklerSimilarity)
+// sont bien déclarées ailleurs dans votre script global.
 initGame();
