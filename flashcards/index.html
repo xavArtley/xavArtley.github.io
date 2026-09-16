@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashcards & Fiches de Révision - Xavier Artusi</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary:       #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --text:          #1e293b;
+      --text-muted:    #64748b;
+      --border:        #e2e8f0;
+      --card-bg:       #ffffff;
+      --bg:            #f8fafc;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .header-section {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 24px 36px;
+      text-align: center;
+    }
+
+    .header-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), #818cf8);
+      color: white;
+      font-size: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(79,70,229,0.22);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .header-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .deck-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px 22px;
+      text-decoration: none;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s;
+    }
+
+    .deck-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), #818cf8);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .deck-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(79,70,229,0.12);
+      border-color: rgba(79,70,229,0.3);
+    }
+
+    .deck-card:hover::before { opacity: 1; }
+
+    .deck-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .deck-icon {
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .deck-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid rgba(79,70,229,0.15);
+    }
+
+    .deck-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .deck-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin: 0;
+      flex: 1;
+    }
+
+    .deck-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .deck-meta {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .deck-cta {
+      color: var(--primary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .deck-card:hover .deck-cta {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header-section">
+    <div class="header-icon">🗂️</div>
+    <h1>Flashcards & Révisions</h1>
+    <p class="header-desc">
+      Jeux de fiches interactives avec formules mathématiques en LaTeX, auto-évaluation et mémorisation active.
+    </p>
+  </header>
+
+  <main class="main">
+    <p class="section-title">Séries disponibles</p>
+    <div class="grid">
+
+      <!-- Deck 1 : Électromagnétisme -->
+      <div class="deck-card" onclick="openDeck('flashcards/electromagnetisme_bobine.html')">
+        <div class="deck-header">
+          <span class="deck-icon">⚡</span>
+          <span class="deck-badge">24 Cartes</span>
+        </div>
+        <h2 class="deck-name">Électromagnétisme de la Bobine</h2>
+        <p class="deck-desc">
+          Maxwell, potentiels retardés, jauge de Lorenz, équation d'onde, équation de Helmholtz, milieux conducteurs et approximation quasi-statique (ARQM).
+        </p>
+        <div class="deck-footer">
+          <span class="deck-meta">🔬 Physique & Ondes</span>
+          <span class="deck-cta">Démarrer →</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function openDeck(page) {
+      if (window.parent && window.parent.navigateTo) {
+        window.parent.navigateTo(page);
+      } else {
+        window.location.href = page.replace('flashcards/', '');
+      }
+    }
+  </script>
+</body>
+</html>

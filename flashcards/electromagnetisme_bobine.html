@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashcards - Champ électromagnétique d'une bobine</title>
+
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              DEFAULT: '#4f46e5',
+              hover: '#4338ca',
+              light: '#eef2ff',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- MathJax CDN pour le rendu LaTeX -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Perspective 3D du flip card */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    
+    /* Défilement fluide uniquement sur les blocs d'équations larges */
+    .math-content {
+      max-width: 100%;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    .math-content mjx-container[jax="CHTML"][display="true"] {
+      overflow-x: auto;
+      overflow-y: hidden;
+      max-width: 100%;
+      padding: 2px 0;
+    }
+    .math-content mjx-container {
+      margin: 0.25em 0 !important;
+    }
+    .card-body-scroll {
+      overflow-y: auto;
+      max-height: 100%;
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
+    }
+    .card-body-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .card-body-scroll::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Entête -->
+  <header class="border-b border-slate-200 bg-white/90 backdrop-blur sticky top-0 z-40 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <button onclick="goBack()" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition" title="Retour aux flashcards">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </button>
+        <span class="p-2 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100">
+          <i data-lucide="zap" class="w-5 h-5"></i>
+        </span>
+        <div>
+          <h1 class="text-base font-bold text-slate-900 leading-tight">Électromagnétisme de la Bobine</h1>
+          <p class="text-xs text-slate-500">Régime complet & Équations de Helmholtz</p>
+        </div>
+      </div>
+
+      <!-- Compteurs rapides -->
+      <div class="flex items-center gap-2.5 text-xs">
+        <span class="px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-medium flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i> <span id="count-mastered">0</span> sues
+        </span>
+        <span class="px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 font-medium flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 text-amber-600"></i> <span id="count-review">0</span> à revoir
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteneur principal -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 flex flex-col items-center justify-between gap-6">
+
+    <!-- Filtres par catégorie -->
+    <div class="w-full flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+      <button onclick="setCategory('all')" id="btn-cat-all" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold transition border border-indigo-600 bg-indigo-600 text-white shadow-sm">
+        Toutes (<span id="count-all">0</span>)
+      </button>
+      <button onclick="setCategory('maxwell')" id="btn-cat-maxwell" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition border border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm">
+        Maxwell & Potentiels
+      </button>
+      <button onclick="setCategory('jauge')" id="btn-cat-jauge" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition border border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm">
+        Jauge & D'Alembert
+      </button>
+      <button onclick="setCategory('helmholtz')" id="btn-cat-helmholtz" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition border border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm">
+        Régime Harmonique
+      </button>
+      <button onclick="setCategory('conducteurs')" id="btn-cat-conducteurs" class="cat-btn px-3.5 py-1.5 rounded-lg text-xs font-medium transition border border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm">
+        Conducteurs & ARQM
+      </button>
+    </div>
+
+    <!-- Barre de Progression & Index -->
+    <div class="w-full max-w-2xl flex flex-col gap-1.5">
+      <div class="flex justify-between items-center text-xs text-slate-500">
+        <span id="card-tag" class="font-semibold text-indigo-700 uppercase tracking-wider text-[11px] px-2.5 py-0.5 rounded-md bg-indigo-50 border border-indigo-200">Maxwell</span>
+        <span id="card-counter" class="font-mono font-medium text-slate-600">1 / 24</span>
+      </div>
+      <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 transition-all duration-300 w-0"></div>
+      </div>
+    </div>
+
+    <!-- Carte Interactive (3D Flip) -->
+    <div class="w-full max-w-2xl min-h-[380px] sm:min-h-[360px] h-[380px] sm:h-[360px] perspective-1000 cursor-pointer select-none group" onclick="toggleFlip()">
+      <div id="card-inner" class="relative w-full h-full duration-500 transform-style-3d transition-transform rounded-2xl shadow-md group-hover:shadow-lg">
+        
+        <!-- Face AVANT (Question) -->
+        <div class="absolute inset-0 w-full h-full backface-hidden bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 flex flex-col justify-between hover:border-indigo-200 transition">
+          <div class="flex items-center justify-between text-xs text-slate-500 flex-shrink-0 mb-2">
+            <span class="flex items-center gap-1.5 font-semibold text-indigo-600">
+              <i data-lucide="help-circle" class="w-4 h-4 text-indigo-500"></i> Question
+            </span>
+            <span class="text-[11px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Cliquez ou [Espace] pour retourner</span>
+          </div>
+
+          <div class="flex-1 flex flex-col items-center justify-center text-center px-2 card-body-scroll my-auto w-full">
+            <div id="card-front-text" class="text-base sm:text-lg font-semibold text-slate-800 math-content leading-relaxed w-full">
+              Chargement...
+            </div>
+            <p id="card-hint" class="mt-3 text-xs text-slate-600 italic bg-amber-50/80 px-3 py-1.5 rounded-lg border border-amber-200/70 hidden"></p>
+          </div>
+
+          <div class="flex justify-between items-center text-xs text-slate-400 pt-2.5 border-t border-slate-100 flex-shrink-0 mt-2">
+            <button id="hint-toggle-btn" onclick="event.stopPropagation(); toggleHint();" class="text-amber-700 hover:text-amber-800 flex items-center gap-1 text-[12px] font-medium bg-amber-50/80 px-2.5 py-1 rounded-md border border-amber-200/60">
+              <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-500"></i> Indice
+            </button>
+            <span class="flex items-center gap-1 text-[11px] text-slate-400 font-medium">
+              <i data-lucide="repeat" class="w-3.5 h-3.5 text-slate-400"></i> Recto
+            </span>
+          </div>
+        </div>
+
+        <!-- Face ARRIÈRE (Réponse) -->
+        <div class="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-gradient-to-b from-white to-slate-50/80 border-2 border-indigo-500/30 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-indigo-500/5">
+          <div class="flex items-center justify-between text-xs text-slate-500 flex-shrink-0 mb-2">
+            <span class="flex items-center gap-1.5 font-semibold text-emerald-600">
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Réponse
+            </span>
+            <span class="text-[11px] text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Cliquez pour revenir</span>
+          </div>
+
+          <div class="flex-1 flex flex-col items-center justify-center text-center px-2 card-body-scroll my-auto">
+            <div id="card-back-text" class="text-sm font-medium text-slate-700 math-content leading-relaxed w-full">
+              Chargement...
+            </div>
+          </div>
+
+          <div class="flex justify-end text-xs text-slate-400 pt-2.5 border-t border-slate-100 flex-shrink-0 mt-2">
+            <span class="flex items-center gap-1 text-[11px] text-slate-400 font-medium">
+              <i data-lucide="repeat" class="w-3.5 h-3.5 text-slate-400"></i> Verso
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Boutons d'auto-évaluation -->
+    <div class="w-full max-w-2xl flex items-center justify-between gap-3">
+      <button onclick="markStatus('review')" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-semibold bg-white hover:bg-amber-50 border border-amber-200 text-amber-700 shadow-sm transition flex items-center justify-center gap-2">
+        <i data-lucide="rotate-ccw" class="w-4 h-4 text-amber-500"></i> À revoir (1)
+      </button>
+      <button onclick="markStatus('mastered')" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-semibold bg-white hover:bg-emerald-50 border border-emerald-200 text-emerald-700 shadow-sm transition flex items-center justify-center gap-2">
+        <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Je maîtrise (2)
+      </button>
+    </div>
+
+    <!-- Commandes de navigation -->
+    <div class="w-full max-w-2xl flex items-center justify-between gap-3 pt-1">
+      <button onclick="prevCard()" class="py-2.5 px-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 shadow-sm transition text-xs font-medium flex items-center gap-1.5">
+        <i data-lucide="chevron-left" class="w-4 h-4"></i> Précédente
+      </button>
+
+      <div class="flex items-center gap-2">
+        <button onclick="shuffleDeck()" title="Mélanger" class="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-900 shadow-sm transition text-xs flex items-center gap-1.5">
+          <i data-lucide="shuffle" class="w-4 h-4"></i>
+        </button>
+
+        <button onclick="resetProgress()" title="Réinitialiser les statuts" class="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-rose-200 text-slate-500 hover:text-rose-600 shadow-sm transition text-xs flex items-center gap-1.5">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <button onclick="nextCard()" class="py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-indigo-600/20">
+        Suivante <i data-lucide="chevron-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Raccourcis clavier & Pied de page -->
+  <footer class="border-t border-slate-200 bg-white py-3 text-center text-[12px] text-slate-500">
+    <div class="flex justify-center items-center gap-4 flex-wrap">
+      <span><kbd class="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-mono text-[11px]">Espace</kbd> Tourner</span>
+      <span><kbd class="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-mono text-[11px]">←</kbd> / <kbd class="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-mono text-[11px]">→</kbd> Naviguer</span>
+      <span><kbd class="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-mono text-[11px]">1</kbd> À revoir</span>
+      <span><kbd class="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-mono text-[11px]">2</kbd> Maîtrisé</span>
+      <span><kbd class="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-mono text-[11px]">H</kbd> Indice</span>
+    </div>
+  </footer>
+
+  <!-- Données et Script logique -->
+  <script>
+    const flashcardsData = [
+      // Maxwell & Potentiels
+      {
+        id: 1,
+        cat: 'maxwell',
+        tag: 'Maxwell & Potentiels',
+        front: "Équation locale de Maxwell-Gauss",
+        hint: "Divergence de E en présence de charges.",
+        back: "$$\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\varepsilon}$$<span class='text-xs text-slate-500 block mt-1'>Relie la divergence du champ électrique à la densité volumique de charge.</span>"
+      },
+      {
+        id: 2,
+        cat: 'maxwell',
+        tag: 'Maxwell & Potentiels',
+        front: "Équation locale de Maxwell-Thomson (conservation du flux)",
+        hint: "Flux conservatif du champ magnétique.",
+        back: "$$\\nabla \\cdot \\mathbf{B} = 0$$<span class='text-xs text-slate-500 block mt-1'>Traduit l'absence de monopôles magnétiques isolés.</span>"
+      },
+      {
+        id: 3,
+        cat: 'maxwell',
+        tag: 'Maxwell & Potentiels',
+        front: "Équation locale de Maxwell-Faraday",
+        hint: "Rotationnel de E relié à la variation temporelle de B.",
+        back: "$$\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}$$<span class='text-xs text-slate-500 block mt-1'>Phénomène d'induction électromagnétique.</span>"
+      },
+      {
+        id: 4,
+        cat: 'maxwell',
+        tag: 'Maxwell & Potentiels',
+        front: "Équation locale de Maxwell-Ampère (régime dynamique)",
+        hint: "Courant de conduction et courant de déplacement.",
+        back: "$$\\nabla \\times \\mathbf{B} = \\mu \\mathbf{J} + \\mu \\varepsilon \\frac{\\partial \\mathbf{E}}{\\partial t} = \\mu \\mathbf{J} + \\frac{1}{c^2}\\frac{\\partial \\mathbf{E}}{\\partial t}$$"
+      },
+      {
+        id: 5,
+        cat: 'maxwell',
+        tag: 'Maxwell & Potentiels',
+        front: "Comment déduire l'équation de continuité de la charge $\\nabla \\cdot \\mathbf{J} + \\frac{\\partial \\rho}{\\partial t} = 0$ des équations de Maxwell ?",
+        hint: "Prendre la divergence de Maxwell-Ampère.",
+        back: "En appliquant la divergence à Maxwell-Ampère (sachant $\\nabla \\cdot (\\nabla \\times \\mathbf{B}) = 0$) :<br>$$\\mu \\nabla \\cdot \\mathbf{J} + \\mu \\varepsilon \\frac{\\partial}{\\partial t}(\\nabla \\cdot \\mathbf{E}) = 0$$Puis en injectant Maxwell-Gauss $\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\varepsilon}$."
+      },
+      {
+        id: 6,
+        cat: 'maxwell',
+        tag: 'Maxwell & Potentiels',
+        front: "Pourquoi et comment définit-on le potentiel vecteur $\\mathbf{A}$ ?",
+        hint: "Pourquoi : simplification & découplage. Comment : Poincaré sur div B = 0.",
+        back: "<div class='text-left space-y-2 text-xs sm:text-[13px]'><p><strong>Pourquoi ?</strong> Simplifie la résolution :<br>• Satisfait d'office 2 équations de Maxwell ($\\nabla \\cdot \\mathbf{B} = 0$ et Faraday).<br>• Découple en équations de d'Alembert / Helmholtz vectorielles.<br>• Aligne les inconnues avec la géométrie des courants $\\mathbf{J}$.</p><p><strong>Comment ?</strong> Puisque $\\nabla \\cdot \\mathbf{B} = 0$, le lemme de Poincaré assure :<br>$$\\mathbf{B} = \\nabla \\times \\mathbf{A}$$</p></div>"
+      },
+      {
+        id: 7,
+        cat: 'maxwell',
+        tag: 'Maxwell & Potentiels',
+        front: "Dérivation de l'expression du champ $\\mathbf{E}$ en fonction des potentiels $(\\mathbf{A}, V)$",
+        hint: "Injecter B = rot A dans Maxwell-Faraday.",
+        back: "$$\\nabla \\times \\left(\\mathbf{E} + \\frac{\\partial \\mathbf{A}}{\\partial t}\\right) = \\mathbf{0}$$Le champ à rotationnel nul dérive d'un potentiel scalaire :<br>$$\\mathbf{E} = -\\nabla V - \\frac{\\partial \\mathbf{A}}{\\partial t}$$"
+      },
+
+      // Jauge & D'Alembert
+      {
+        id: 8,
+        cat: 'jauge',
+        tag: 'Jauge & D\'Alembert',
+        front: "Transformation de jauge laissant le champ $\\mathbf{B}$ invariant",
+        hint: "Gradient d'un champ scalaire.",
+        back: "$$\\mathbf{A}' = \\mathbf{A} + \\nabla \\psi$$<span class='text-xs text-slate-500 block mt-1'>Car $\\nabla \\times (\\nabla \\psi) = \\mathbf{0}$ pour toute fonction $\\psi$ régulière.</span>"
+      },
+      {
+        id: 9,
+        cat: 'jauge',
+        tag: 'Jauge & D\'Alembert',
+        front: "Transformation de jauge sur le potentiel scalaire $V$ pour conserver $\\mathbf{E}$",
+        hint: "Compense la dérivée temporelle de psi.",
+        back: "$$V' = V - \\frac{\\partial \\psi}{\\partial t}$$<span class='text-xs text-slate-500 block mt-1'>Garantit $\\mathbf{E}' = -\\nabla V' - \\frac{\\partial \\mathbf{A}'}{\\partial t} = \\mathbf{E}$.</span>"
+      },
+      {
+        id: 10,
+        cat: 'jauge',
+        tag: 'Jauge & D\'Alembert',
+        front: "Identité vectorielle du double rotationnel pour un vecteur $\\mathbf{A}$",
+        hint: "Grad-div moins Laplacien vectoriel.",
+        back: "$$\\nabla \\times (\\nabla \\times \\mathbf{A}) = \\nabla(\\nabla \\cdot \\mathbf{A}) - \\Delta \\mathbf{A}$$"
+      },
+      {
+        id: 11,
+        cat: 'jauge',
+        tag: 'Jauge & D\'Alembert',
+        front: "Quelle est la condition de jauge de Lorenz ?",
+        hint: "Divergence de A liée à la dérivée temporelle de V.",
+        back: "$$\\nabla \\cdot \\mathbf{A} + \\frac{1}{c^2}\\frac{\\partial V}{\\partial t} = 0$$<span class='text-xs text-slate-500 block mt-1'>Elle permet de découpler les équations d'ondes gouvernant $\\mathbf{A}$ et $V$.</span>"
+      },
+      {
+        id: 12,
+        cat: 'jauge',
+        tag: 'Jauge & D\'Alembert',
+        front: "Équation d'onde pour le potentiel vecteur $\\mathbf{A}$ sous jauge de Lorenz",
+        hint: "Équation de d'Alembert avec terme source.",
+        back: "$$\\Delta \\mathbf{A} - \\frac{1}{c^2}\\frac{\\partial^2 \\mathbf{A}}{\\partial t^2} = -\\mu \\mathbf{J} \\iff \\Box \\mathbf{A} = -\\mu \\mathbf{J}$$"
+      },
+      {
+        id: 13,
+        cat: 'jauge',
+        tag: 'Jauge & D\'Alembert',
+        front: "Équation d'onde pour le potentiel scalaire $V$ sous jauge de Lorenz",
+        hint: "Analogue à celle de A, avec terme source volumique de charge.",
+        back: "$$\\Delta V - \\frac{1}{c^2}\\frac{\\partial^2 V}{\\partial t^2} = -\\frac{\\rho}{\\varepsilon} \\iff \\Box V = -\\frac{\\rho}{\\varepsilon}$$"
+      },
+
+      // Régime Harmonique & Helmholtz
+      {
+        id: 14,
+        cat: 'helmholtz',
+        tag: 'Régime Harmonique',
+        front: "Règle de dérivation temporelle en régime harmonique ($\\mathrm{e}^{i\\omega t}$)",
+        hint: "Multiplication algébrique par i*omega.",
+        back: "$$\\frac{\\partial}{\\partial t} \\longrightarrow i\\omega \\qquad \\text{et} \\qquad \\frac{\\partial^2}{\\partial t^2} \\longrightarrow -\\omega^2$$"
+      },
+      {
+        id: 15,
+        cat: 'helmholtz',
+        tag: 'Régime Harmonique',
+        front: "Passage de l'équation de d'Alembert temporelle à l'équation de Helmholtz en régime harmonique",
+        hint: "Remplacer la dérivée seconde temporelle par -omega^2.",
+        back: "De $\\Delta \\mathbf{A} - \\frac{1}{c^2}\\frac{\\partial^2 \\mathbf{A}}{\\partial t^2} = -\\mu \\mathbf{J}$, on obtient :<br>$$\\Delta \\underline{\\mathbf{A}} + \\frac{\\omega^2}{c^2} \\underline{\\mathbf{A}} = -\\mu \\underline{\\mathbf{J}}$$"
+      },
+      {
+        id: 16,
+        cat: 'helmholtz',
+        tag: 'Régime Harmonique',
+        front: "Forme canonique de l'équation de Helmholtz vectorielle pour $\\mathbf{A}$",
+        hint: "Introduction du nombre d'onde k.",
+        back: "$$\\Delta \\mathbf{A} + k^2 \\mathbf{A} = -\\mu \\mathbf{J}$$"
+      },
+      {
+        id: 17,
+        cat: 'helmholtz',
+        tag: 'Régime Harmonique',
+        front: "Expression du nombre d'onde $k$ dans un diélectrique parfait LHI",
+        hint: "Pulsation sur célérité de phase.",
+        back: "$$k = \\frac{\\omega}{c} = \\omega\\sqrt{\\mu\\varepsilon} = \\frac{2\\pi}{\\lambda}$$"
+      },
+      {
+        id: 18,
+        cat: 'helmholtz',
+        tag: 'Régime Harmonique',
+        front: "Sens physique du terme dynamique $k^2 \\mathbf{A}$",
+        hint: "Effet d'oscillation et de retard par rapport au statique.",
+        back: "Il représente la correction dynamique due au retard de propagation et au déphasage spatial à haute fréquence par rapport à la magnétostatique pure."
+      },
+
+      // Conducteurs & ARQM
+      {
+        id: 19,
+        cat: 'conducteurs',
+        tag: 'Conducteurs & ARQM',
+        front: "Loi d'Ohm locale dans un conducteur ohmique",
+        hint: "Densité de courant de conduction et champ électrique.",
+        back: "$$\\mathbf{J}_{\\text{cond}} = \\sigma \\mathbf{E}$$<span class='text-xs text-slate-500 block mt-1'>avec $\\sigma$ la conductivité électrique en $\\text{S}\\cdot\\text{m}^{-1}$.</span>"
+      },
+      {
+        id: 20,
+        cat: 'conducteurs',
+        tag: 'Conducteurs & ARQM',
+        front: "Expression de la permittivité diélectrique complexe équivalente $\\underline{\\varepsilon}$",
+        hint: "Englobe conduction et déplacement.",
+        back: "$$\\underline{\\varepsilon} = \\varepsilon - i\\frac{\\sigma}{\\omega}$$"
+      },
+      {
+        id: 21,
+        cat: 'conducteurs',
+        tag: 'Conducteurs & ARQM',
+        front: "Paramètre de dispersion généralisé $k^2$ en milieu conducteur",
+        hint: "Composante diélectrique réelle et perte ohmique imaginaire.",
+        back: "$$k^2 = \\omega^2 \\mu \\underline{\\varepsilon} = \\omega^2 \\mu \\varepsilon - i\\omega\\mu\\sigma$$"
+      },
+      {
+        id: 23,
+        cat: 'conducteurs',
+        tag: 'Conducteurs & ARQM',
+        front: "Cas limite : bon conducteur à basse fréquence ($\\sigma \\gg \\omega\\varepsilon$)",
+        hint: "Le terme dissipatif domine le terme diélectrique.",
+        back: "$$k^2 \\approx -i\\omega\\mu\\sigma$$<span class='text-xs text-slate-500 block mt-1'>Régime purement diffusif avec fort amortissement des ondes.</span>"
+      },
+      {
+        id: 24,
+        cat: 'conducteurs',
+        tag: 'Conducteurs & ARQM',
+        front: "Expression de l'épaisseur de peau $\\delta$ dans un bon conducteur",
+        hint: "Distance caractéristique d'atténuation.",
+        back: "$$\\delta = \\sqrt{\\frac{2}{\\omega\\mu\\sigma}}$$"
+      },
+      {
+        id: 25,
+        cat: 'conducteurs',
+        tag: 'Conducteurs & ARQM',
+        front: "Limite quasi-statique (ARQM) de l'équation de Helmholtz",
+        hint: "Taille du domaine très inférieure à la longueur d'onde (k -> 0).",
+        back: "Quand $k \\to 0$ (soit $r \\ll \\lambda$), $k^2 \\mathbf{A} \\to 0$ :<br>$$\\Delta \\mathbf{A} = -\\mu \\mathbf{J}$$<span class='text-xs text-slate-500 block mt-1'>On retrouve rigoureusement l'équation de Poisson de la magnétostatique.</span>"
+      }
+    ];
+
+    // État de l'application
+    let currentCategory = 'all';
+    let filteredCards = [...flashcardsData];
+    let currentIndex = 0;
+    let isFlipped = false;
+    let cardStatuses = JSON.parse(localStorage.getItem('flashcard_statuses_em') || '{}');
+
+    // Initialisation
+    function init() {
+      lucide.createIcons();
+      updateCategoryCounts();
+      updateStatusCounts();
+      renderCard();
+    }
+
+    function updateCategoryCounts() {
+      document.getElementById('count-all').innerText = flashcardsData.length;
+    }
+
+    function updateStatusCounts() {
+      let mastered = 0;
+      let review = 0;
+      Object.values(cardStatuses).forEach(s => {
+        if (s === 'mastered') mastered++;
+        if (s === 'review') review++;
+      });
+      document.getElementById('count-mastered').innerText = mastered;
+      document.getElementById('count-review').innerText = review;
+    }
+
+    function setCategory(cat) {
+      currentCategory = cat;
+      if (cat === 'all') {
+        filteredCards = [...flashcardsData];
+      } else {
+        filteredCards = flashcardsData.filter(c => c.cat === cat);
+      }
+      currentIndex = 0;
+      isFlipped = false;
+      document.getElementById('card-inner').classList.remove('rotate-y-180');
+
+      // Mise à jour de l'UI des boutons de filtre
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600');
+        btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+      });
+      const activeBtn = document.getElementById(`btn-cat-${cat}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+        activeBtn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600');
+      }
+
+      renderCard();
+    }
+
+    function toggleFlip() {
+      isFlipped = !isFlipped;
+      const inner = document.getElementById('card-inner');
+      if (isFlipped) {
+        inner.classList.add('rotate-y-180');
+      } else {
+        inner.classList.remove('rotate-y-180');
+      }
+    }
+
+    function toggleHint() {
+      const hintEl = document.getElementById('card-hint');
+      hintEl.classList.toggle('hidden');
+    }
+
+    function renderCard() {
+      if (filteredCards.length === 0) return;
+      const card = filteredCards[currentIndex];
+
+      // Assurer que la carte est face recto au changement
+      isFlipped = false;
+      document.getElementById('card-inner').classList.remove('rotate-y-180');
+
+      // Masquer l'indice par défaut
+      const hintEl = document.getElementById('card-hint');
+      hintEl.classList.add('hidden');
+      hintEl.innerText = card.hint || "";
+
+      // Met à jour les textes
+      document.getElementById('card-front-text').innerHTML = card.front;
+      document.getElementById('card-back-text').innerHTML = card.back;
+      document.getElementById('card-tag').innerText = card.tag;
+      document.getElementById('card-counter').innerText = `${currentIndex + 1} / ${filteredCards.length}`;
+
+      // Barre de progression
+      const pct = ((currentIndex + 1) / filteredCards.length) * 100;
+      document.getElementById('progress-bar').style.width = `${pct}%`;
+
+      // Rendu MathJax
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        MathJax.typesetPromise([
+          document.getElementById('card-front-text'),
+          document.getElementById('card-back-text')
+        ]).catch(err => console.error(err));
+      }
+    }
+
+    function nextCard() {
+      if (currentIndex < filteredCards.length - 1) {
+        currentIndex++;
+        renderCard();
+      } else {
+        currentIndex = 0;
+        renderCard();
+      }
+    }
+
+    function prevCard() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderCard();
+      } else {
+        currentIndex = filteredCards.length - 1;
+        renderCard();
+      }
+    }
+
+    function shuffleDeck() {
+      for (let i = filteredCards.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filteredCards[i], filteredCards[j]] = [filteredCards[j], filteredCards[i]];
+      }
+      currentIndex = 0;
+      renderCard();
+    }
+
+    function markStatus(status) {
+      const card = filteredCards[currentIndex];
+      cardStatuses[card.id] = status;
+      localStorage.setItem('flashcard_statuses_em', JSON.stringify(cardStatuses));
+      updateStatusCounts();
+      nextCard();
+    }
+
+    function resetProgress() {
+      if (confirm("Voulez-vous réinitialiser le suivi de vos révisions pour cette série ?")) {
+        cardStatuses = {};
+        localStorage.removeItem('flashcard_statuses_em');
+        updateStatusCounts();
+      }
+    }
+
+    // Raccourcis Clavier
+    window.addEventListener('keydown', (e) => {
+      if (['input', 'textarea'].includes(document.activeElement.tagName.toLowerCase())) return;
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        toggleFlip();
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        nextCard();
+      } else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        prevCard();
+      } else if (e.key === '1') {
+        e.preventDefault();
+        markStatus('review');
+      } else if (e.key === '2') {
+        e.preventDefault();
+        markStatus('mastered');
+      } else if (e.key.toLowerCase() === 'h') {
+        e.preventDefault();
+        toggleHint();
+      }
+    });
+
+    function goBack() {
+      if (window.parent && window.parent.navigateTo) {
+        window.parent.navigateTo('flashcards/index.html');
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Démarrage
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
