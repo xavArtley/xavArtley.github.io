@@ -1,0 +1,194 @@
+[
+  {
+    "id": 1,
+    "cat": "concepts",
+    "tag": "Concepts de Base",
+    "question": "Quel est le principe mathématique fondamental de la discrétisation par la méthode de Ritz-Galerkin ?",
+    "indice": "Projection d'un espace de dimension infinie sur un sous-espace de dimension finie.",
+    "reponse": "Restreindre la recherche de la solution exacte $u \\in V$ (dimension infinie) à une solution approchée $u_h \\in V_h \\subset V$ de dimension finie $N$, en projetant l'équation variationnelle sur des fonctions de test pour former le système linéaire $A \\mathbf{x} = \\mathbf{b}$."
+  },
+  {
+    "id": 2,
+    "cat": "concepts",
+    "tag": "Concepts de Base",
+    "question": "Que représentent physiquement et mathématiquement les Degrés de Liberté (DDL / DoF) et les fonctions de forme ?",
+    "indice": "Coefficients de réglage et base d'interpolation locale.",
+    "reponse": "Les fonctions de forme $\\phi_i(\\mathbf{r})$ sont une base locale à support compact. Les degrés de liberté $u_i$ sont les coefficients d'amplitude algébrique dans $u_h(\\mathbf{r}) = \\sum_{i=1}^N u_i \\phi_i(\\mathbf{r})$ (ex. valeurs nodales, circulations ou flux)."
+  },
+  {
+    "id": 3,
+    "cat": "concepts",
+    "tag": "Concepts de Base",
+    "question": "Comment la dimension topologique d'une cellule du maillage (0, 1, 2 ou 3-cellule) dicte-t-elle la continuité physique du champ ?",
+    "indice": "Nœud -> scalaire continu, arête -> tangentiel, face -> normal, volume -> discontinu.",
+    "reponse": "• <strong>0-cellule (Sommet)</strong> : continuité scalaire complète $C^0$ (potentiel $V$, pression $p$)<br>• <strong>1-cellule (Arête)</strong> : continuité tangentielle $\\mathbf{n} \\times \\mathbf{E}$ (circulation)<br>• <strong>2-cellule (Face)</strong> : continuité normale $\\mathbf{v} \\cdot \\mathbf{n}$ (flux)<br>• <strong>3-cellule (Intérieur)</strong> : aucune continuité ($C^{-1}$)."
+  },
+  {
+    "id": 4,
+    "cat": "lagrange",
+    "tag": "Famille Lagrange",
+    "question": "Qu'est-ce qu'un élément scalaire P0 et quel type de continuité assure-t-il entre les mailles ?",
+    "indice": "Fonction indicatrice constante par maille. Continuité C^-1.",
+    "reponse": "Une fonction constante par morceaux $\\phi_i(\\mathbf{r}) = 1$ sur $K_i$ et $0$ ailleurs. C'est un élément <strong>discontinu</strong> ($C^{-1}$), comparable à un escalier ou une mosaïque : il y a des sauts francs aux frontières inter-éléments."
+  },
+  {
+    "id": 5,
+    "cat": "lagrange",
+    "tag": "Famille Lagrange",
+    "question": "Pourquoi l'élément P1 standard est-il continu ($C^0$) et conforme dans l'espace $H^1$ ?",
+    "indice": "Interpolation affine univariée sur l'arête déterminée par 2 sommets communs.",
+    "reponse": "Sur l'arête commune à deux triangles, la restriction de $u_h$ est une droite affine ne dépendant que des valeurs aux deux sommets d'extrémité partagés. Le raccordement est donc continu sans déchirement ($C^0$), garantissant un gradient sans Dirac surfacique."
+  },
+  {
+    "id": 6,
+    "cat": "lagrange",
+    "tag": "Famille Lagrange",
+    "question": "Où sont situés les degrés de liberté d'un élément P2 quadratique triangulaire et quel est son intérêt ?",
+    "indice": "6 DDL par triangle : sommets et milieux d'arêtes. Erreur en O(h^3).",
+    "reponse": "Ils sont situés aux <strong>3 sommets</strong> et aux <strong>milieux des 3 arêtes</strong> (6 DDL). Il capture la courbure locale des champs et confère un ordre de convergence en $\\mathcal{O}(h^3)$ pour la norme $L^2$."
+  },
+  {
+    "id": 7,
+    "cat": "lagrange",
+    "tag": "Famille Lagrange",
+    "question": "Quels sont les domaines d'application physique privilégiés des éléments de Lagrange nodaux continus ?",
+    "indice": "Champs scalaires continus : acoustique, électrostatique, potentiel vecteur 2D.",
+    "reponse": "• <strong>Acoustique</strong> : pression acoustique $p(\\mathbf{r})$ dans un fluide parfait.<br>• <strong>Électrostatique</strong> : potentiel électrique scalaire $V(\\mathbf{r})$ ($-\\nabla \\cdot (\\varepsilon \\nabla V) = \\rho$).<br>• <strong>Magnétostatique 2D</strong> : composante axiale du potentiel vecteur $A_z(x, y)$."
+  },
+  {
+    "id": 8,
+    "cat": "sobolev",
+    "tag": "Espaces de Sobolev",
+    "question": "Pourquoi les formulations variationnelles faibles et les espaces de Sobolev sont-ils indispensables en ingénierie ?",
+    "indice": "Angles vifs, interfaces de matériaux, intégration par parties reportant la dérivée.",
+    "reponse": "Les dérivées classiques échouent sur les géométries réelles (coins, sauts de perméabilité/permittivité). En multipliant par une fonction de test et en intégrant par parties, on transfère la dérivée, garantissant existence et stabilité (Lax-Milgram)."
+  },
+  {
+    "id": 9,
+    "cat": "sobolev",
+    "tag": "Espaces de Sobolev",
+    "question": "Que représente physiquement et mathématiquement l'espace de Hilbert $L^2(\\Omega)$ ?",
+    "indice": "Fonctions de carré intégrable = états d'énergie finie.",
+    "reponse": "C'est l'espace des fonctions de carré sommable : $\\int_\\Omega |u|^2 d\\Omega < \\infty$. En physique, il correspond aux <strong>champs d'énergie totale finie</strong> (ex. $\\frac{1}{2} \\int (\\varepsilon |\\mathbf{E}|^2 + \\mu |\\mathbf{H}|^2) d\\Omega < \\infty$). Il n'impose aucune continuité inter-élément."
+  },
+  {
+    "id": 10,
+    "cat": "sobolev",
+    "tag": "Espaces de Sobolev",
+    "question": "Pourquoi l'espace $H^1(\\Omega)$ interdit-il les sauts de valeurs aux interfaces inter-éléments ?",
+    "indice": "Le saut de valeur crée un Dirac de gradient, dont le carré n'est pas intégrable.",
+    "reponse": "Un saut fini $\\Delta u$ à travers une interface $\\Sigma$ génère un terme en distribution de Dirac dans le gradient : $(\\Delta u \\, \\mathbf{n}_\\Sigma) \\delta_\\Sigma$. Comme $\\int |\\delta_\\Sigma|^2 d\\Omega \\to \\infty$, $\\nabla u$ n'appartiendrait pas à $L^2$. Le saut doit donc être nul ($C^0$)."
+  },
+  {
+    "id": 11,
+    "cat": "sobolev",
+    "tag": "Espaces de Sobolev",
+    "question": "Quelle condition de continuité caractérise l'espace fonctionnel vectoriel $H(\\text{div}, \\Omega)$ ?",
+    "indice": "Continuité de la composante normale v . n, analogie du fluide incompressible.",
+    "reponse": "La divergence faible doit être dans $L^2$, ce qui impose la <strong>continuité stricte de la composante normale</strong> : $\\mathbf{v}_1 \\cdot \\mathbf{n} = \\mathbf{v}_2 \\cdot \\mathbf{n}$ (conservation de flux). En revanche, la composante tangentielle est libre de sauter."
+  },
+  {
+    "id": 12,
+    "cat": "sobolev",
+    "tag": "Espaces de Sobolev",
+    "question": "Quelle condition de continuité caractérise l'espace fonctionnel vectoriel $H(\\text{curl}, \\Omega)$ ?",
+    "indice": "Continuité de la composante tangentielle n x v (Faraday).",
+    "reponse": "Le rotationnel faible doit être dans $L^2$, ce qui impose la <strong>continuité stricte de la composante tangentielle</strong> : $\\mathbf{n} \\times \\mathbf{v}_1 = \\mathbf{n} \\times \\mathbf{v}_2$. La composante normale $\\mathbf{v} \\cdot \\mathbf{n}$ peut sauter librement (nappes de charges)."
+  },
+  {
+    "id": 13,
+    "cat": "vectoriels",
+    "tag": "Éléments Vectoriels",
+    "question": "Quelles sont les deux pathologies majeures de l'interpolation de Lagrange appliquée au champ électrique de Maxwell ?",
+    "indice": "Continuité normale forcée erronée et modes parasites (spurious modes).",
+    "reponse": "1. <strong>Continuité normale forcée</strong> : aux dioptres ($\\varepsilon_1 \\neq \\varepsilon_2$), elle empêche le saut physique $E_{n,1} \\neq E_{n,2}$, créant des charges fictives.<br>2. <strong>Modes parasites</strong> : rupture de la suite de de Rham, faisant apparaître des résonances spectrales non physiques à $\\omega \\neq 0$."
+  },
+  {
+    "id": 14,
+    "cat": "vectoriels",
+    "tag": "Éléments Vectoriels",
+    "question": "Comment sont définis les éléments d'arête de Nédélec d'ordre 0 et quel problème résolvent-ils ?",
+    "indice": "Degré de liberté = circulation sur l'arête. Conforme H(curl).",
+    "reponse": "Les DDL sont les <strong>circulations le long des arêtes</strong> $\\int_{e_{ij}} \\mathbf{E} \\cdot \\mathbf{t} \\, d\\ell$, avec $\\mathbf{w}_{ij} = \\lambda_i \\nabla \\lambda_j - \\lambda_j \\nabla \\lambda_i$. Ils assurent la continuité tangentielle tout en laissant sauter la composante normale, éliminant totalement les modes parasites."
+  },
+  {
+    "id": 15,
+    "cat": "vectoriels",
+    "tag": "Éléments Vectoriels",
+    "question": "Qu'est-ce que l'élément Raviart-Thomas $\\text{RT}_0$ et où se situent ses degrés de liberté ?",
+    "indice": "Conforme H(div). DDL = flux à travers les faces/arêtes.",
+    "reponse": "C'est l'élément conforme dans $H(\\text{div}, \\Omega)$. Les DDL sont les <strong>flux normaux nets</strong> $\\iint_{F_k} \\mathbf{v} \\cdot \\mathbf{n} \\, dS$ à travers les faces. Sa divergence est constante par morceaux et le flux normal est strictement continu sans fuite."
+  },
+  {
+    "id": 16,
+    "cat": "vectoriels",
+    "tag": "Éléments Vectoriels",
+    "question": "Comment est définie analytiquement une fonction de Rao-Wilton-Glisson (RWG) sur un doublet de triangles ?",
+    "indice": "Projection RT0 surfacique : (r - v+) / (2 A+) et (v- - r) / (2 A-).",
+    "reponse": "Sur la paire $(T_n^+, T_n^-)$ partageant l'arête $n$ de longueur $\\ell_n$ :<br>$$\\mathbf{f}_n(\\mathbf{r}) = \\begin{cases} \\frac{\\ell_n}{2 A_n^+} (\\mathbf{r} - \\mathbf{v}_n^+) & \\text{sur } T_n^+ \\\\ \\frac{\\ell_n}{2 A_n^-} (\\mathbf{v}_n^- - \\mathbf{r}) & \\text{sur } T_n^- \\end{cases}$$avec $\\mathbf{v}_n^{\\pm}$ les sommets opposés à l'arête."
+  },
+  {
+    "id": 17,
+    "cat": "vectoriels",
+    "tag": "Éléments Vectoriels",
+    "question": "Pourquoi le degré de liberté d'une fonction RWG est-il porté par l'arête et quelle est sa signification physique ?",
+    "indice": "f_n . n_arête = 1, pas de charge filiforme fictive. Inconnue = courant total en Ampères.",
+    "reponse": "Sur l'arête commune, $\\mathbf{f}_n \\cdot \\mathbf{n}_{\\text{arête}} = 1$. Cela garantit la <strong>continuité du flux normal de courant</strong> et évite l'apparition d'une charge fictive linéique infinie (Dirac) par $\\nabla_S \\cdot \\mathbf{J} = -i\\omega \\rho_S$. L'inconnue $I_n$ est le courant total traversant l'arête (en Ampères)."
+  },
+  {
+    "id": 18,
+    "cat": "formulations",
+    "tag": "Formulations Intégrales",
+    "question": "Quelles sont les différences majeures entre les formulations EFIE, MFIE et CFIE en BEM électromagnétique ?",
+    "indice": "EFIE : E tangentiel (1ère espèce, hypersingulier). MFIE : saut magnétique (2ème espèce). CFIE : combinaison stable.",
+    "reponse": "• <strong>EFIE</strong> : $\\mathbf{E}_{\\text{tot}} \\times \\mathbf{n} = \\mathbf{0}$, Fredholm de 1ère espèce, hypersingulière.<br>• <strong>MFIE</strong> : saut tangentiel de $\\mathbf{H}$, Fredholm de 2ème espèce, opérateur borné.<br>• <strong>CFIE</strong> : combinaison linéaire $\\alpha \\text{EFIE} + (1-\\alpha)\\eta \\mathbf{n} \\times \\text{MFIE}$ éliminant les résonances internes fictives."
+  },
+  {
+    "id": 19,
+    "cat": "formulations",
+    "tag": "Formulations Intégrales",
+    "question": "Quel est le principe de la formulation PMCHWT pour les objets diélectriques pénétrables ?",
+    "indice": "Élimine les résonances en couplant courants électriques J et magnétiques M aux interfaces.",
+    "reponse": "Nommée d'après ses 6 auteurs, elle résout le couplage intérieur/extérieur pour un corps pénétrable via un système $2 \\times 2$ associant courants équivalents $\\mathbf{J} = \\mathbf{n} \\times \\mathbf{H}$ et $\\mathbf{M} = -\\mathbf{n} \\times \\mathbf{E}$, sans instabilité de résonance."
+  },
+  {
+    "id": 20,
+    "cat": "formulations",
+    "tag": "Formulations Intégrales",
+    "question": "Pourquoi les fonctions RWG et l'espace $H^{-1/2}(\\text{div}_\\Gamma, \\Gamma)$ sont-ils requis par la formulation variationnelle EFIE ?",
+    "indice": "L'intégration par parties de Stokes sur le terme capacitif reporte le gradient sur la divergence de la fonction de test.",
+    "reponse": "Dans l'EFIE, le terme $\\nabla \\Phi$ est intégré par parties : $\\iint \\mathbf{t}_m \\cdot \\nabla \\Phi = -\\iint (\\nabla_S \\cdot \\mathbf{t}_m) \\Phi$. Il faut donc que le courant et les fonctions de test possèdent une divergence surfacique de carré sommable, ce qui correspond exactement à l'espace trace $H^{-1/2}(\\text{div}_\\Gamma)$."
+  },
+  {
+    "id": 21,
+    "cat": "looptree",
+    "tag": "Décomposition Loop-Tree",
+    "question": "Qu'appelle-t-on la catastrophe basse fréquence (low-frequency breakdown) de l'EFIE discrétisée par RWG ?",
+    "indice": "Le terme inductif est en O(omega) alors que le terme capacitif explose en O(1/omega). Conditionnement en O(1/omega^2).",
+    "reponse": "La matrice s'écrit $\\mathbb{Z} = \\mathcal{O}(\\omega) \\mathbb{L}_{\\mathbf{A}} + \\mathcal{O}(1/\\omega) \\mathbb{L}_\\Phi$. Quand $\\omega \\to 0$, le terme capacitif sature la précision machine, masquant la physique inductive. Le conditionnement explose en $\\mathcal{O}(1/\\omega^2)$ et les solveurs itératifs stagnent."
+  },
+  {
+    "id": 22,
+    "cat": "looptree",
+    "tag": "Décomposition Loop-Tree",
+    "question": "Comment la décomposition discrète Loop-Tree sépare-t-elle la physique du problème sur le graphe de maillage ?",
+    "indice": "Loops = courants solénoïdaux à div nulle (noyau de L_Phi). Trees = courants à divergence non nulle (charges).",
+    "reponse": "Par le théorème de Helmholtz-Hodge discret $\\mathbf{J} = \\mathbf{J}_{\\text{Loop}} + \\mathbf{J}_{\\text{Tree}}$ :<br>• <strong>Loops (Boucles)</strong> : combinaisons fermées autour des nœuds, $\\nabla_S \\cdot \\mathbf{J}_{\\text{Loop}} = 0$ (isolent l'inductance).<br>• <strong>Trees (Arbres)</strong> : branches d'un arbre couvrant, $\\nabla_S \\cdot \\mathbf{J}_{\\text{Tree}} \\neq 0$ (portent la charge électrostatique en $1/\\omega$)."
+  },
+  {
+    "id": 23,
+    "cat": "looptree",
+    "tag": "Décomposition Loop-Tree",
+    "question": "Comment le préconditionnement par blocs de la décomposition Loop-Tree restaure-t-il le conditionnement matriciel ?",
+    "indice": "Multiplication des DDL Loop par omega^-1/2 et Tree par omega^1/2 pour ramener tous les blocs en O(1).",
+    "reponse": "On applique un rééchelonnement symétrique diagonal par blocs : $\\mathbf{I}_{\\text{Loop}} \\times \\omega^{-1/2}$ et $\\mathbf{I}_{\\text{Tree}} \\times \\omega^{1/2}$. Tous les blocs deviennent d'ordre $\\mathcal{O}(1)$, rendant le conditionnement stable et indépendant de $\\omega$ quand $\\omega \\to 0$."
+  },
+  {
+    "id": 24,
+    "cat": "looptree",
+    "tag": "Décomposition Loop-Tree",
+    "question": "Quelles métaphores simples résument la différence entre Nédélec, RWG, Loop et Tree ?",
+    "indice": "Tourniquet, sablier à deux triangles, rond-point et réseau de rivières.",
+    "reponse": "• <strong>Nédélec</strong> : Tourniquet de métro (circulation le long du passage).<br>• <strong>RWG</strong> : Sablier à deux triangles (écoulement sans fuite à l'arête).<br>• <strong>Loop</strong> : Rond-point routier (boucle continue fermée sans accumulation).<br>• <strong>Tree</strong> : Réseau d'affluents (convergence de flux vers des réservoirs de charge)."
+  }
+]

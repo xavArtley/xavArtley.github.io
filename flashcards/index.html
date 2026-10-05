@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flashcards & Fiches de Révision - Xavier Artusi</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -204,28 +204,41 @@
 
   <main class="main">
     <p class="section-title">Séries disponibles</p>
-    <div class="grid">
-
-      <!-- Deck 1 : Électromagnétisme -->
-      <div class="deck-card" onclick="openDeck('flashcards/electromagnetisme_bobine.html')">
-        <div class="deck-header">
-          <span class="deck-icon">⚡</span>
-          <span class="deck-badge">24 Cartes</span>
-        </div>
-        <h2 class="deck-name">Électromagnétisme de la Bobine</h2>
-        <p class="deck-desc">
-          Maxwell, potentiels retardés, jauge de Lorenz, équation d'onde, équation de Helmholtz, milieux conducteurs et approximation quasi-statique (ARQM).
-        </p>
-        <div class="deck-footer">
-          <span class="deck-meta">🔬 Physique & Ondes</span>
-          <span class="deck-cta">Démarrer →</span>
-        </div>
-      </div>
-
+    <div class="grid" id="decks-grid">
+      <!-- Les decks seront chargés dynamiquement depuis decks.json -->
     </div>
   </main>
 
   <script>
+    // Chargement dynamique depuis decks.json
+    async function loadDecks() {
+      try {
+        const response = await fetch('decks.json');
+        if (!response.ok) return;
+        const decks = await response.json();
+        const grid = document.getElementById('decks-grid');
+        if (!grid || !decks || !decks.length) return;
+
+        grid.innerHTML = decks.map(d => `
+          <div class="deck-card" onclick="openDeck('${d.page}')">
+            <div class="deck-header">
+              <span class="deck-icon">${d.icon || '📚'}</span>
+              <span class="deck-badge">${d.cardCount} Cartes</span>
+            </div>
+            <h2 class="deck-name">${d.title}</h2>
+            <p class="deck-desc">${d.description}</p>
+            <div class="deck-footer">
+              <span class="deck-meta">${d.category || 'Flashcards'}</span>
+              <span class="deck-cta">Démarrer →</span>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        // En cas de restriction CORS (ex: ouverture directe en file://), le contenu HTML fallback reste affiché
+        console.warn('decks.json non accessible via fetch, utilisation du fallback statique HTML.', err);
+      }
+    }
+
     function openDeck(page) {
       if (window.parent && window.parent.navigateTo) {
         window.parent.navigateTo(page);
@@ -233,6 +246,8 @@
         window.location.href = page.replace('flashcards/', '');
       }
     }
+
+    document.addEventListener('DOMContentLoaded', loadDecks);
   </script>
 </body>
 </html>

@@ -1,0 +1,210 @@
+[
+    {
+        "id":  1,
+        "cat":  "sommerfeld",
+        "tag":  "Sommerfeld \u0026 Hankel",
+        "question":  "Quelle est l\u0027identité intégrale fondamentale de Sommerfeld pour une onde sphérique en coordonnées cylindriques ?",
+        "indice":  "Décomposition d\u0027une onde sphérique en superposition continue d\u0027ondes planes / cylindriques évanescentes et propagatives.",
+        "reponse":  "$$\\int_0^\\infty \\frac{e^{-|z| k_z}}{k_z} J_0(k_\\rho \\rho) k_\\rho \\, \\mathrm{d}k_\\rho = \\frac{e^{-j k R}}{R}$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eavec $R = \\sqrt{\\rho^2 + z^2}$ et $k_z = \\sqrt{k_\\rho^2 - k^2}$. En quasi-statique ($k \\to 0$), elle donne l\u0027intégrale de Weber : $\\int_0^\\infty e^{-|z| k_\\rho} J_0(k_\\rho \\rho) \\, \\mathrm{d}k_\\rho = \\frac{1}{R}$.\u003c/span\u003e"
+    },
+    {
+        "id":  2,
+        "cat":  "sommerfeld",
+        "tag":  "Sommerfeld \u0026 Hankel",
+        "question":  "Quelle est la définition générale de la transformée de Hankel d\u0027ordre $\\nu$ et sa transformée inverse ?",
+        "indice":  "Projection orthogonale sur la base des fonctions de Bessel $J_\\nu(k_\\rho \\rho)$.",
+        "reponse":  "$$\\tilde{f}(k_\\rho) = \\mathcal{H}_\\nu\\{f\\} = \\int_0^\\infty f(\\rho) J_\\nu(k_\\rho \\rho) \\rho \\, \\mathrm{d}\\rho$$$$f(\\rho) = \\mathcal{H}_\\nu^{-1}\\{\\tilde{f}\\} = \\int_0^\\infty \\tilde{f}(k_\\rho) J_\\nu(k_\\rho \\rho) k_\\rho \\, \\mathrm{d}k_\\rho$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003ePour un potentiel azimutal $A_\\theta$ ou une bobine axisymétrique en CND, on utilise la transformée d\u0027ordre 1 ($J_1$).\u003c/span\u003e"
+    },
+    {
+        "id":  3,
+        "cat":  "sommerfeld",
+        "tag":  "Sommerfeld \u0026 Hankel",
+        "question":  "Comment s\u0027écrit la constante de propagation verticale $\\alpha_i(k_\\rho)$ dans un milieu conducteur caractérisé par $(\\sigma_i, \\mu_i)$ en CND-CF ?",
+        "indice":  "Racine carrée issue de l\u0027équation de Helmholtz après transformée spatiale de Fourier-Bessel.",
+        "reponse":  "$$\\alpha_i = \\sqrt{k_\\rho^2 + j \\omega \\mu_i \\sigma_i}$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eDans l\u0027air ($\\sigma_0 = 0$), $\\alpha_0 = k_\\rho$. Dans le conducteur, la partie réelle $\\mathrm{Re}(\\alpha_i) \u003e k_\\rho$ régit l\u0027atténuation exponentielle rapide sous la surface ($e^{-\\alpha_i z}$).\u003c/span\u003e"
+    },
+    {
+        "id":  4,
+        "cat":  "sommerfeld",
+        "tag":  "Sommerfeld \u0026 Hankel",
+        "question":  "Quelle est la relation de récurrence matricielle pour les coefficients de réflexion d\u0027un milieu multicouche plan (matrice de transfert $2 \\times 2$) ?",
+        "indice":  "Continuité de $A_\\theta$ et de $\\frac{1}{\\mu} \\frac{\\partial A_\\theta}{\\partial z}$ à chaque interface.",
+        "reponse":  "$$\\begin{pmatrix} A_i(k_\\rho) \\\\ B_i(k_\\rho) \\end{pmatrix} = \\mathbf{T}_{i, i+1} \\begin{pmatrix} A_{i+1}(k_\\rho) \\\\ B_{i+1}(k_\\rho) \\end{pmatrix}$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003ePermet d\u0027évaluer analytiquement la réponse d\u0027un empilement de tôles ou de revêtements d\u0027oxydation en CND sans discrétisation volumique.\u003c/span\u003e"
+    },
+    {
+        "id":  5,
+        "cat":  "sommerfeld",
+        "tag":  "Sommerfeld \u0026 Hankel",
+        "question":  "Quelle est la difficulté numérique principale de l\u0027évaluation des intégrales de Sommerfeld et comment la résout-on ?",
+        "indice":  "Oscillations lentes de Bessel et singularités (branches / pôles) sur l\u0027axe réel.",
+        "reponse":  "• \u003cstrong\u003eOscillations lentes :\u003c/strong\u003e La décroissance en $1/\\sqrt{k_\\rho}$ de $J_n$ impose une intégration sur de très larges intervalles.\u003cbr\u003e• \u003cstrong\u003eRemèdes :\u003c/strong\u003e Déformation de contour dans le plan complexe (chemin de plus grande pente), méthodes de sommation accélérée (Shanks, $\\varepsilon$-algorithme) ou méthode DGF (Discrete Complex Images)."
+    },
+    {
+        "id":  6,
+        "cat":  "dodddeeds",
+        "tag":  "Modèle de Dodd \u0026 Deeds",
+        "question":  "Quelle est l\u0027expression analytique du potentiel vecteur azimutal $A_\\theta(\\rho, z)$ d\u0027une spire circulaire de rayon $r_0$ à la hauteur $z_0$ dans l\u0027air ?",
+        "indice":  "Formule de Dodd \u0026 Deeds pour une spire élémentaire avec intégrale de Sommerfeld.",
+        "reponse":  "$$A_\\theta(\\rho, z) = \\frac{\\mu_0 I r_0}{2} \\int_0^\\infty J_1(k_\\rho r_0) J_1(k_\\rho \\rho) e^{-k_\\rho |z - z_0|} \\, \\mathrm{d}k_\\rho$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eEn présence d\u0027un demi-espace conducteur ($z \u003c 0$), une onde réfléchie en $C(k_\\rho) e^{-k_\\rho z}$ s\u0027ajoute pour $z \u003e 0$.\u003c/span\u003e"
+    },
+    {
+        "id":  7,
+        "cat":  "dodddeeds",
+        "tag":  "Modèle de Dodd \u0026 Deeds",
+        "question":  "Quelle est la valeur du coefficient de réflexion d\u0027interface $R(k_\\rho)$ pour un demi-espace conducteur homogène $(\\sigma, \\mu_r)$ selon Dodd \u0026 Deeds ?",
+        "indice":  "Rapport d\u0027impédance de mode à la surface de la pièce $z = 0$.",
+        "reponse":  "$$R(k_\\rho) = \\frac{\\mu_r k_\\rho - \\alpha}{\\mu_r k_\\rho + \\alpha} \\quad \\text{avec} \\quad \\alpha = \\sqrt{k_\\rho^2 + j \\omega \\mu_0 \\mu_r \\sigma}$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eSi la pièce est non magnétique ($\\mu_r = 1$), on a simplement $R(k_\\rho) = \\frac{k_\\rho - \\alpha}{k_\\rho + \\alpha}$. Pour un isolant ($\\sigma = 0$), $R(k_\\rho) = 0$.\u003c/span\u003e"
+    },
+    {
+        "id":  8,
+        "cat":  "dodddeeds",
+        "tag":  "Modèle de Dodd \u0026 Deeds",
+        "question":  "Comment s\u0027exprime la fonction de forme de bobine $I(k_\\rho)$ pour une bobine cylindrique à section rectangulaire $[r_1, r_2] \\times [z_1, z_2]$ ?",
+        "indice":  "Intégration analytique de $r J_1(k_\\rho r)$ et de l\u0027exponentielle $e^{-k_\\rho z}$.",
+        "reponse":  "$$I(k_\\rho) = \\left( \\int_{r_1}^{r_2} r J_1(k_\\rho r) \\, \\mathrm{d}r \\right) \\left( \\int_{z_1}^{z_2} e^{-k_\\rho z} \\, \\mathrm{d}z \\right)$$$$\\int_{r_1}^{r_2} r J_1(k_\\rho r) \\, \\mathrm{d}r = \\frac{\\chi(k_\\rho r_2) - \\chi(k_\\rho r_1)}{k_\\rho^2}, \\quad \\chi(x) = \\int_0^x u J_1(u) \\, \\mathrm{d}u$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eCette factorisation sépare complètement la géométrie de la sonde des propriétés de la cible.\u003c/span\u003e"
+    },
+    {
+        "id":  9,
+        "cat":  "dodddeeds",
+        "tag":  "Modèle de Dodd \u0026 Deeds",
+        "question":  "Quelle est l\u0027expression de la variation d\u0027impédance $\\Delta Z = Z - Z_0$ d\u0027une bobine au-dessus d\u0027un conducteur selon Dodd \u0026 Deeds ?",
+        "indice":  "Intégrale pondérée par le coefficient de réflexion $R(k_\\rho)$ et le carré de la fonction de sonde.",
+        "reponse":  "$$\\Delta Z = j \\omega \\pi \\mu_0 n^2 \\int_0^\\infty \\frac{P^2(k_\\rho)}{k_\\rho^5} R(k_\\rho) \\, \\mathrm{d}k_\\rho$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eoù $n$ est la densité de spires ($N / [(r_2 - r_1)(z_2 - z_1)]$), $P(k_\\rho) = \\int_{k_\\rho r_1}^{k_\\rho r_2} x J_1(x) \\mathrm{d}x \\cdot (e^{-k_\\rho z_1} - e^{-k_\\rho z_2})$.\u003c/span\u003e"
+    },
+    {
+        "id":  10,
+        "cat":  "dodddeeds",
+        "tag":  "Modèle de Dodd \u0026 Deeds",
+        "question":  "Quelles sont les hypothèses restrictives fondamentales du modèle de Dodd \u0026 Deeds ?",
+        "indice":  "Symétrie de révolution, structure multicouche infinie dans le plan transverse.",
+        "reponse":  "• Symétrie cylindrique axiale (axisymétrie $\\partial / \\partial \\theta = 0$).\u003cbr\u003e• Matériaux stratifiés homogènes et isotropes de dimensions transverses infinies.\u003cbr\u003e• Ne modélise pas directement les défauts 3D finis (fissures, piqûres) sans méthode perturbative."
+    },
+    {
+        "id":  11,
+        "cat":  "reciprocite",
+        "tag":  "Théorème dAuld \u0026 Réciprocité",
+        "question":  "Quelle est l\u0027équation fondamentale du théorème d\u0027Auld (1979) pour la variation d\u0027impédance $\\Delta Z$ due à un défaut ?",
+        "indice":  "Intégrale volumique du produit croisé des champs non perturbé (0) et perturbé (1) sur le volume du défaut.",
+        "reponse":  "$$\\Delta Z = Z_1 - Z_0 = \\frac{1}{I^2} \\iiint_{\\Delta V} \\left[ (\\sigma_1 - \\sigma_0) \\mathbf{E}_0 \\cdot \\mathbf{E}_1 - j \\omega (\\mu_1 - \\mu_0) \\mathbf{H}_0 \\cdot \\mathbf{H}_1 \\right] \\mathrm{d}V$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eC\u0027est la formule maîtresse en CND pour relier directement le signal de mesure $\\Delta Z$ aux contrastes de conductivité $(\\Delta \\sigma)$ et de perméabilité $(\\Delta \\mu)$.\u003c/span\u003e"
+    },
+    {
+        "id":  12,
+        "cat":  "reciprocite",
+        "tag":  "Théorème dAuld \u0026 Réciprocité",
+        "question":  "Pour une fissure fine non conductrice (air : $\\sigma_1 = 0$) dans une pièce conductrice $\\sigma_0$, que devient le théorème d\u0027Auld ?",
+        "indice":  "Contraste négatif de conductivité et volume réduit au domaine de la fissure.",
+        "reponse":  "$$\\Delta Z = -\\frac{\\sigma_0}{I^2} \\iiint_{V_{\\text{fissure}}} \\mathbf{E}_0 \\cdot \\mathbf{E}_1 \\, \\mathrm{d}V$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003ePour une fissure très mince idéalisée, l\u0027intégrale volumique se réduit à une intégrale de surface portant sur le saut de potentiel ou le dipôle de courant équivalent.\u003c/span\u003e"
+    },
+    {
+        "id":  13,
+        "cat":  "reciprocite",
+        "tag":  "Théorème dAuld \u0026 Réciprocité",
+        "question":  "Quelle est l\u0027approximation de Born appliquée au théorème d\u0027Auld pour un défaut de petite taille ?",
+        "indice":  "Remplacement du champ perturbé par le champ incident non perturbé dans le défaut.",
+        "reponse":  "$$\\Delta Z \\approx \\frac{1}{I^2} \\iiint_{\\Delta V} \\Delta \\sigma \\|\\mathbf{E}_0\\|^2 \\, \\mathrm{d}V$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eValable lorsque la perturbation du champ local reste négligeable (très petites inclusions, défauts à très faible contraste). Permet un calcul direct sans résoudre le problème inverse couplé.\u003c/span\u003e"
+    },
+    {
+        "id":  14,
+        "cat":  "reciprocite",
+        "tag":  "Théorème dAuld \u0026 Réciprocité",
+        "question":  "Comment le théorème d\u0027Auld se formule-t-il sur la frontière fermée entourant la sonde ou le défaut (formulation surfacique de Lorentz) ?",
+        "indice":  "Flux du vecteur de Poynting d\u0027interaction sur une surface fermée $S$.",
+        "reponse":  "$$\\Delta Z = \\frac{1}{I^2} \\iint_S \\left( \\mathbf{E}_0 \\times \\mathbf{H}_1 - \\mathbf{E}_1 \\times \\mathbf{H}_0 \\right) \\cdot \\mathbf{n} \\, \\mathrm{d}S$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eDérivé du lemme de réciprocité de Lorentz. Permet de délimiter le calcul au seul domaine de frontière séparant la pièce de l\u0027air.\u003c/span\u003e"
+    },
+    {
+        "id":  15,
+        "cat":  "reciprocite",
+        "tag":  "Théorème dAuld \u0026 Réciprocité",
+        "question":  "Pourquoi le théorème d\u0027Auld est-il crucial pour la résolution de problèmes inverses et l\u0027optimisation en CND ?",
+        "indice":  "Calcul du gradient (état adjoint) sans relancer une simulation pour chaque paramètre de fissure.",
+        "reponse":  "Il fournit naturellement la \u003cstrong\u003eformulation de l\u0027état adjoint\u003c/strong\u003e : la sensibilité de l\u0027impédance par rapport à la position ou la taille d\u0027une fissure s\u0027obtient simplement par le produit du champ incident et du champ de Green adjoint, évitant de remailler à chaque itération."
+    },
+    {
+        "id":  16,
+        "cat":  "diffusion",
+        "tag":  "Diffusion \u0026 Effet de Peau",
+        "question":  "Quelle est la formule de l\u0027épaisseur de peau standard $\\delta$ et que représente-t-elle physiquement en CND ?",
+        "indice":  "Profondeur où la densité de courant est atténuée d\u0027un facteur $1/e$ (~37%).",
+        "reponse":  "$$\\delta = \\sqrt{\\frac{2}{\\omega \\mu \\sigma}} = \\frac{1}{\\sqrt{\\pi f \\mu_0 \\mu_r \\sigma}}$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eFixe la profondeur maximale de pénétration des courants de Foucault. Pour détecter un défaut sous-jacent (sub-surface), il est nécessaire de baisser la fréquence $f$.\u003c/span\u003e"
+    },
+    {
+        "id":  17,
+        "cat":  "diffusion",
+        "tag":  "Diffusion \u0026 Effet de Peau",
+        "question":  "Comment varie la densité de courants de Foucault $J(z)$ et son déphasage $\\phi(z)$ avec la profondeur $z$ dans un demi-espace infini ?",
+        "indice":  "Décroissance exponentielle d\u0027amplitude et retard de phase proportionnel à la profondeur.",
+        "reponse":  "$$J(z) = J_0 e^{-z / \\delta} e^{-j z / \\delta} \\implies |J(z)| = J_0 e^{-z/\\delta}, \\quad \\phi(z) = -\\frac{z}{\\delta} \\, \\text{rad}$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eÀ une profondeur $z = \\delta$, le courant est déphasé de 1 radian (~$57.3^\\circ$). Ce déphasage permet de discriminer la profondeur d\u0027un défaut sur le plan d\u0027impédance complexe !\u003c/span\u003e"
+    },
+    {
+        "id":  18,
+        "cat":  "diffusion",
+        "tag":  "Diffusion \u0026 Effet de Peau",
+        "question":  "Quelle est l\u0027équation de diffusion régissant le potentiel vecteur $\\mathbf{A}$ en régime harmonique dans un conducteur (jauge de Coulomb) ?",
+        "indice":  "Équation de Helmholtz avec terme de conduction prépondérant devant le terme de déplacement.",
+        "reponse":  "$$\\nabla^2 \\mathbf{A} - j \\omega \\mu \\sigma \\mathbf{A} = -\\mu \\mathbf{J}_{\\text{source}}$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eEn régime quasi-statique (ARQM : $\\omega \\varepsilon \\ll \\sigma$), le courant de déplacement $\\omega^2 \\mu \\varepsilon \\mathbf{A}$ est totalement négligé devant la conduction.\u003c/span\u003e"
+    },
+    {
+        "id":  19,
+        "cat":  "diffusion",
+        "tag":  "Diffusion \u0026 Effet de Peau",
+        "question":  "Qu\u0027est-ce que l\u0027impédance de surface d\u0027un conducteur $Z_s$ (condition aux limites de Leontovich) ?",
+        "indice":  "Rapport entre la composante tangentielle de E et celle de H à la surface du métal.",
+        "reponse":  "$$Z_s = \\frac{1 + j}{\\sigma \\delta} = \\sqrt{\\frac{j \\omega \\mu}{\\sigma}} \\quad \\left( \\mathbf{E}_t = Z_s (\\mathbf{n} \\times \\mathbf{H}_t) \\right)$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003ePermet d\u0027éviter de mailler l\u0027intérieur du conducteur dans les codes BEM / FEM à haute fréquence (forte effet de peau).\u003c/span\u003e"
+    },
+    {
+        "id":  20,
+        "cat":  "diffusion",
+        "tag":  "Diffusion \u0026 Effet de Peau",
+        "question":  "Que vaut la puissance totale dissipée par effet Joule $P_J$ par unité de surface pour un conducteur plan ?",
+        "indice":  "Intégrale de $\\frac{1}{2 \\sigma} |J|^2$ sur la profondeur $z \\in [0, \\infty[$.",
+        "reponse":  "$$P_J = \\frac{1}{2} R_s |H_{t0}|^2 = \\frac{1}{4} \\sigma \\delta |E_{t0}|^2 = \\frac{1}{2 \\sigma \\delta} |J_s|^2$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eoù $R_s = \\frac{1}{\\sigma \\delta}$ est la résistance de surface et $J_s$ est la nappe de courant équivalente linéique ($A/m$).\u003c/span\u003e"
+    },
+    {
+        "id":  21,
+        "cat":  "green_sie",
+        "tag":  "Green \u0026 SIE / BEM",
+        "question":  "Qu\u0027est-ce qu\u0027une dyade (ou tenseur) de Green $\\bar{\\bar{\\mathbf{G}}}^{ee}$ en électromagnétisme 3D et quelle est sa signification physique composante par composante ?",
+        "indice":  "Opérateur tensoriel $3 \\times 3$ reliant un vecteur source de courant $\\mathbf{J}(\\mathbf{r}\u0027)$ au vecteur champ électrique $\\mathbf{E}(\\mathbf{r})$.",
+        "reponse":  "$$\\mathbf{E}(\\mathbf{r}) = \\bar{\\bar{\\mathbf{G}}}^{ee}(\\mathbf{r}, \\mathbf{r}\u0027) \\cdot \\mathbf{J}(\\mathbf{r}\u0027) = \\begin{bmatrix} G_{xx} \u0026 G_{xy} \u0026 G_{xz} \\\\ G_{yx} \u0026 G_{yy} \u0026 G_{yz} \\\\ G_{zx} \u0026 G_{zy} \u0026 G_{zz} \\end{bmatrix} \\begin{bmatrix} J_x \\\\ J_y \\\\ J_z \\end{bmatrix}$$\u003cdiv class=\u0027text-left text-xs text-slate-600 mt-2 space-y-1.5 leading-relaxed\u0027\u003e• \u003cstrong\u003eSens physique :\u003c/strong\u003e Chaque élément $G_{ij}(\\mathbf{r}, \\mathbf{r}\u0027)$ est la composante selon la direction $i$ du champ électrique observé en $\\mathbf{r}$, générée par un dipôle de courant unitaire orienté selon la direction $j$ situé en $\\mathbf{r}\u0027$.\u003cbr\u003e• \u003cstrong\u003eSuperposition volumique :\u003c/strong\u003e Pour un volume de courant $\\mathbf{J}$ étendu : $$\\mathbf{E}(\\mathbf{r}) = \\int_{\\Omega} \\bar{\\bar{\\mathbf{G}}}^{ee}(\\mathbf{r}, \\mathbf{r}\u0027) \\cdot \\mathbf{J}(\\mathbf{r}\u0027) \\, \\mathrm{d}\\mathbf{r}\u0027$$\u003c/div\u003e"
+    },
+    {
+        "id":  22,
+        "cat":  "green_sie",
+        "tag":  "Green \u0026 SIE / BEM",
+        "question":  "Quelle est l\u0027équation intégrale de volume fondamentale pour le champ électrique perturbé $\\mathbf{E}(\\mathbf{r})$ en présence d\u0027une anomalie $\\Delta \\sigma$ ?",
+        "indice":  "Représentation intégrale de Lippmann-Schwinger avec le tenseur de Green dyadique $\\overline{\\overline{\\mathbf{G}}}_{ee}$.",
+        "reponse":  "$$\\mathbf{E}(\\mathbf{r}) = \\mathbf{E}_0(\\mathbf{r}) - j \\omega \\mu_0 \\iiint_{\\Omega_{\\text{def}}} \\overline{\\overline{\\mathbf{G}}}_{ee}(\\mathbf{r}, \\mathbf{r}\u0027) \\cdot [\\Delta \\sigma(\\mathbf{r}\u0027) \\mathbf{E}(\\mathbf{r}\u0027)] \\, \\mathrm{d}V\u0027$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eLe terme $\\mathbf{J}_{\\text{fictif}} = \\Delta \\sigma \\mathbf{E}$ agit comme une source de courant secondaire équivalente rayonnant via le tenseur de Green du milieu sain.\u003c/span\u003e"
+    },
+    {
+        "id":  23,
+        "cat":  "green_sie",
+        "tag":  "Green \u0026 SIE / BEM",
+        "question":  "Comment s\u0027exprime la fonction de Green scalaire 3D dans un milieu infini homogène conducteur en quasi-statique ?",
+        "indice":  "Potentiel avec constante de propagation complexe $k = (1 - j)/\\delta$.",
+        "reponse":  "$$G(\\mathbf{r}, \\mathbf{r}\u0027) = \\frac{e^{-j k R}}{4 \\pi R} \\quad \\text{avec} \\quad k = \\sqrt{-j \\omega \\mu \\sigma} = \\frac{1 - j}{\\delta}$$$$G(\\mathbf{r}, \\mathbf{r}\u0027) = \\frac{e^{-R / \\delta} e^{-j R / \\delta}}{4 \\pi R}$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eCette fonction décroît exponentiellement avec la distance $R$, illustrant le confinement spatial des courants induits.\u003c/span\u003e"
+    },
+    {
+        "id":  24,
+        "cat":  "green_sie",
+        "tag":  "Green \u0026 SIE / BEM",
+        "question":  "Quelle est la relation reliant le tenseur de Green dyadique électrique $\\overline{\\overline{\\mathbf{G}}}_{ee}$ à la fonction de Green scalaire $G$ ?",
+        "indice":  "Opérateur différentiel $\\mathbf{I} + \\frac{1}{k^2} \\nabla \\nabla$.",
+        "reponse":  "$$\\overline{\\overline{\\mathbf{G}}}_{ee}(\\mathbf{r}, \\mathbf{r}\u0027) = \\left( \\overline{\\overline{\\mathbf{I}}} + \\frac{\\nabla \\nabla}{k^2} \\right) G(\\mathbf{r}, \\mathbf{r}\u0027)$$\u003cspan class=\u0027text-xs text-slate-600 block mt-1\u0027\u003eLa double dérivation spatiale introduit une singularité hypersingulière en $1/R^3$ lorsque $\\mathbf{r} \\to \\mathbf{r}\u0027$, nécessitant une extraction de valeur principale et une régularisation.\u003c/span\u003e"
+    },
+    {
+        "id":  25,
+        "cat":  "green_sie",
+        "tag":  "Green \u0026 SIE / BEM",
+        "question":  "Comment modélise-t-on une fissure idéale débouchante d\u0027épaisseur nulle par éléments de frontière (BEM / SIE) ?",
+        "indice":  "Nappe de dipôles de courant ou discontinuité du potentiel scalaire magnétique $[\\psi]$.",
+        "reponse":  "On remplace la fente par sa surface moyenne $\\Sigma_f$ supportant un saut de potentiel $[\\phi] = \\phi^+ - \\phi^-$ ou une nappe de courant fictive $\\mathbf{j}_s = \\mathbf{n} \\times [\\mathbf{H}]$. La condition de non-fonctionnement / non-franchissement du courant s\u0027écrit $\\mathbf{J} \\cdot \\mathbf{n} = 0$ sur les lèvres de la fissure."
+    },
+    {
+        "id":  26,
+        "cat":  "green_sie",
+        "tag":  "Green \u0026 SIE / BEM",
+        "question":  "Pourquoi couple-t-on fréquemment la BEM (Boundary Element Method) et la FEM (Finite Element Method) en CND-CF ?",
+        "indice":  "BEM pour l\u0027espace infini et la sonde mobile, FEM pour le voisinage complexe du défaut.",
+        "reponse":  "• \u003cstrong\u003eBEM :\u003c/strong\u003e Gère naturellement l\u0027espace libre infini (air) et le déplacement continu de la sonde sans avoir à remailler l\u0027air.\u003cbr\u003e• \u003cstrong\u003eFEM :\u003c/strong\u003e Traite les géométries complexes, les inhomogénéités locales et les non-linéarités ferromagnétiques (courbe $B-H$) à l\u0027intérieur de la pièce."
+    }
+]

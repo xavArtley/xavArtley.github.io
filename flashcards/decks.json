@@ -1,0 +1,22 @@
+[
+  {
+    "id": "electromagnetisme_bobine",
+    "title": "Électromagnétisme de la Bobine",
+    "description": "Maxwell, potentiels retardés, jauge de Lorenz, équation d'onde, équation de Helmholtz, milieux conducteurs et approximation quasi-statique (ARQM).",
+    "icon": "⚡",
+    "category": "Physique & Ondes",
+    "cardCount": 24,
+    "page": "flashcards/viewer.html?deck=electromagnetisme_bobine",
+    "dataFile": "flashcards/data/electromagnetisme_bobine.json"
+  },
+  {
+    "id": "energie_meca_vers_em",
+    "title": "Bilan d'Énergie : Mécanique & Électromagnétisme",
+    "description": "Travail, forces conservatives/non conservatives, couplage de Lorentz, densité d'énergie des champs E et B, et théorème de Poynting (local & intégral).",
+    "icon": "⚡",
+    "category": "Physique & Énergie",
+    "cardCount": 24,
+    "page": "flashcards/viewer.html?deck=energie_meca_vers_em",
+    "dataFile": "flashcards/data/energie_meca_vers_em.json"
+  }
+]

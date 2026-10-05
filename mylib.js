@@ -19,7 +19,7 @@ function navigateTo(page) {
 function _doLoadPage(page) {
     var content = document.getElementById('content');
     if (!content) return;
-    content.innerHTML = '<iframe src="' + page + '"></iframe>';
+    content.innerHTML = '<iframe id="page-frame" src="' + page + '" onload="this.contentWindow && this.contentWindow.focus()"></iframe>';
     // Close mobile nav after navigation
     var ul  = document.querySelector('.topnav ul');
     var btn = document.getElementById('hamburger-btn');

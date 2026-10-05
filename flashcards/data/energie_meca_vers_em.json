@@ -1,0 +1,194 @@
+[
+  {
+    "id": 1,
+    "cat": "meca_base",
+    "tag": "Mécanique Classique",
+    "question": "Quelle est la définition générale du travail élémentaire $\\delta W$ et de la puissance instantanée $\\mathcal{P}$ d'une force $\\mathbf{F}$ ?",
+    "indice": "Produit scalaire de la force avec le déplacement élémentaire ou la vitesse.",
+    "reponse": "$$\\delta W = \\mathbf{F} \\cdot \\mathrm{d}\\mathbf{r} \\qquad \\text{et} \\qquad \\mathcal{P} = \\frac{\\delta W}{\\mathrm{d}t} = \\mathbf{F} \\cdot \\mathbf{v}$$<span class='text-xs text-slate-600 block mt-1'>Le travail est une forme d'échange ordonné d'énergie à l'échelle macroscopique. Si $\\mathbf{F} \\perp \\mathbf{v}$, la force ne travaille pas (puissance strictement nulle).</span>"
+  },
+  {
+    "id": 2,
+    "cat": "meca_base",
+    "tag": "Mécanique Classique",
+    "question": "Quelles sont les trois conditions équivalentes définissant une force conservative $\\mathbf{F}_{\\text{cons}}$ ?",
+    "indice": "Indépendance du chemin, circulation sur boucle fermée, dérivation d'un potentiel scalaire.",
+    "reponse": "• Le travail $W_{A \\to B}$ ne dépend que des points extrêmes $A$ et $B$, pas du chemin suivi.<br>• La circulation sur tout contour fermé est nulle : $\\oint \\mathbf{F} \\cdot \\mathrm{d}\\mathbf{r} = 0$.<br>• La force dérive d'une énergie potentielle scalaire locale : $$\\mathbf{F} = -\\nabla E_p$$"
+  },
+  {
+    "id": 3,
+    "cat": "meca_base",
+    "tag": "Mécanique Classique",
+    "question": "Quel est le critère différentiel (local) garantissant qu'un champ de force stationnaire est conservatif ?",
+    "indice": "Rotationnel nul sur un domaine simplement connexe (lemme de Poincaré).",
+    "reponse": "$$\\nabla \\times \\mathbf{F} = \\mathbf{0}$$<span class='text-xs text-slate-600 block mt-1'>Puisque $\\nabla \\times (\\nabla E_p) = \\mathbf{0}$ pour tout champ scalaire régulier, l'irrotationnalité est la condition nécessaire et suffisante (dans un domaine sans trou) pour qu'il existe un potentiel $E_p$.</span>"
+  },
+  {
+    "id": 4,
+    "cat": "meca_base",
+    "tag": "Mécanique Classique",
+    "question": "Quel est l'énoncé du Théorème de l'Énergie Cinétique (TEC) sous formes différentielle et intégrale ?",
+    "indice": "Variation d'énergie cinétique égale à la somme des travaux de TOUTES les forces.",
+    "reponse": "$$\\mathrm{d}E_c = \\delta W_{\\text{tot}} = \\sum \\mathbf{F}_i \\cdot \\mathrm{d}\\mathbf{r} \\quad \\iff \\quad \\Delta E_c = W_{\\text{tot}} = W_{\\text{cons}} + W_{\\text{nc}}$$<span class='text-xs text-slate-600 block mt-1'>Ce théorème s'applique sans distinction aux forces conservatives, non conservatives, intérieures ou extérieures.</span>"
+  },
+  {
+    "id": 5,
+    "cat": "meca_base",
+    "tag": "Mécanique Classique",
+    "question": "Comment le Théorème de l'Énergie Mécanique (TEM) isole-t-il l'effet des forces non conservatives ?",
+    "indice": "Transfert du travail conservatif sous forme d'énergie potentielle Delta E_p = -W_cons.",
+    "reponse": "En définissant l'énergie mécanique $E_m = E_c + E_p$, avec $\\Delta E_p = -W_{\\text{cons}}$ :<br>$$\\Delta E_m = W_{\\text{nc}} \\quad \\iff \\quad \\frac{\\mathrm{d}E_m}{\\mathrm{d}t} = \\mathcal{P}_{\\text{nc}}$$<span class='text-xs text-slate-600 block mt-1'>Si $W_{\\text{nc}} < 0$, il y a dissipation irréversible (frottements) ; si $W_{\\text{nc}} > 0$, un opérateur extérieur injecte de l'énergie mécanique dans le système.</span>"
+  },
+  {
+    "id": 6,
+    "cat": "meca_base",
+    "tag": "Mécanique Classique",
+    "question": "Pourquoi l'énergie potentielle $E_p$ n'a-t-elle aucun sens pour une particule isolée ?",
+    "indice": "Une particule seule dans l'univers a une masse et une vitesse, mais aucune interaction.",
+    "reponse": "Seule dans l'univers, une particule n'a qu'une énergie cinétique $E_c = \\frac{1}{2}mv^2$. L'énergie potentielle n'apparaît qu'en présence d'une <strong>interaction mutuelle</strong> entre au moins deux entités (dépendance en distance relative $\\|\\mathbf{r}_1 - \\mathbf{r}_2\\|$).<br><br>Attribuer $E_p$ à un seul objet est un abus de langage : elle appartient à la configuration géométrique du système global (couple Terre-masse, paire de charges), avant d'être réinterprétée en électrodynamique comme de l'énergie stockée localement dans le champ."
+  },
+  {
+    "id": 7,
+    "cat": "lorentz_matiere",
+    "tag": "Charnière Lorentz",
+    "question": "Quelle est l'expression de la force de Lorentz et de la puissance instantanée cédée à une charge ponctuelle $q$ ?",
+    "indice": "Force totale F = q(E + v x B) et produit scalaire avec la vitesse v.",
+    "reponse": "$$\\mathbf{F} = q(\\mathbf{E} + \\mathbf{v} \\times \\mathbf{B})$$$$\\mathcal{P} = \\mathbf{F} \\cdot \\mathbf{v} = q\\mathbf{E} \\cdot \\mathbf{v} + q(\\mathbf{v} \\times \\mathbf{B}) \\cdot \\mathbf{v} = q\\mathbf{E} \\cdot \\mathbf{v}$$"
+  },
+  {
+    "id": 8,
+    "cat": "lorentz_matiere",
+    "tag": "Charnière Lorentz",
+    "question": "Pourquoi la composante magnétique de la force de Lorentz ne travaille-t-elle JAMAIS sur une particule ponctuelle ?",
+    "indice": "Orthogonalité stricte du produit vectoriel v x B avec le vecteur vitesse v.",
+    "reponse": "$$(\\mathbf{v} \\times \\mathbf{B}) \\cdot \\mathbf{v} = 0$$<span class='text-xs text-slate-600 block mt-1'>La force magnétique est orthogonale à la trajectoire à chaque instant. Elle modifie la direction du vecteur vitesse (courbure de trajectoire, déviation) mais ne change jamais la norme de la vitesse, donc ne modifie pas l'énergie cinétique de la particule.</span>"
+  },
+  {
+    "id": 9,
+    "cat": "lorentz_matiere",
+    "tag": "Charnière Lorentz",
+    "question": "Comment démontre-t-on que la puissance volumique cédée par le champ à la matière vaut $p = \\mathbf{j} \\cdot \\mathbf{E}$ ?",
+    "indice": "Force de Lorentz totale, annulation du terme magnétique, puis sommation sur Delta V avec j = rho * v.",
+    "reponse": "1. <strong>Force de Lorentz</strong> : chaque particule subit $\\mathbf{F}_k = q(\\mathbf{E} + \\mathbf{v}_k \\times \\mathbf{B})$.<br>2. <strong>Puissance individuelle</strong> : $\\mathcal{P}_k = \\mathbf{F}_k \\cdot \\mathbf{v}_k = q(\\mathbf{E} \\cdot \\mathbf{v}_k) + q \\underbrace{(\\mathbf{v}_k \\times \\mathbf{B}) \\cdot \\mathbf{v}_k}_{= 0} = q(\\mathbf{E} \\cdot \\mathbf{v}_k)$.<br>3. <strong>Somme sur un volume $\\Delta V$</strong> : $$\\mathcal{P}_{\\Delta V} = \\sum_{k=1}^N \\mathcal{P}_k = \\left( \\sum_{k=1}^N q \\mathbf{v}_k \\right) \\cdot \\mathbf{E}$$4. <strong>Passage au continu</strong> : la charge globale en mouvement s'écrit $\\sum q \\mathbf{v}_k = (\\rho \\Delta V) \\mathbf{v} = \\mathbf{j} \\, \\Delta V$.<br>5. <strong>Densité volumique</strong> : en divisant par $\\Delta V$, on obtient : $$p = \\mathbf{j} \\cdot \\mathbf{E} \\quad (\\text{en } \\mathrm{W}\\cdot\\mathrm{m}^{-3})$$"
+  },
+  {
+    "id": 10,
+    "cat": "lorentz_matiere",
+    "tag": "Charnière Lorentz",
+    "question": "Que traduit physiquement le signe de la puissance volumique $\\mathbf{j} \\cdot \\mathbf{E}$ échangée entre le champ et la matière ?",
+    "indice": "Sens du transfert d'énergie : récepteur/dissipation vs générateur/source.",
+    "reponse": "Ce produit scalaire mesure l'échange d'énergie entre les charges matérielles en mouvement ($\\mathbf{j}$) et le champ électromagnétique ($\\mathbf{E}$) :<br><br>• Si $\\mathbf{j} \\cdot \\mathbf{E} > 0$ : le champ <strong>donne</strong> de l'énergie à la matière (accélération de charges, dissipation par effet Joule $\\sigma \\|\\mathbf{E}\\|^2$ dans une résistance). Le milieu agit comme un <em>récepteur</em>.<br><br>• Si $\\mathbf{j} \\cdot \\mathbf{E} < 0$ : la matière <strong>fournit</strong> de l'énergie au champ électromagnétique (forces mécaniques ou chimiques forçant les charges contre le champ électrique, comme dans une pile ou un générateur). Le milieu agit comme une <em>source</em>."
+  },
+  {
+    "id": 11,
+    "cat": "lorentz_matiere",
+    "tag": "Charnière Lorentz",
+    "question": "Pourquoi l'effet Joule dans un conducteur ohmique correspond-il à un travail non conservatif dissipatif ?",
+    "indice": "Loi d'Ohm locale j = sigma * E et collisions inélastiques avec le réseau cristallin.",
+    "reponse": "Par la loi d'Ohm $\\mathbf{j} = \\sigma \\mathbf{E}$, la puissance volumique vaut :<br>$$p_J = \\mathbf{j} \\cdot \\mathbf{E} = \\sigma \\|\\mathbf{E}\\|^2 = \\frac{\\|\\mathbf{j}\\|^2}{\\sigma} > 0$$Les électrons accélérés par le champ cèdent en continu leur énergie cinétique au réseau cristallin par collisions inélastiques : cette énergie est dégradée de façon irréversible sous forme d'agitation thermique."
+  },
+  {
+    "id": 12,
+    "cat": "energie_champs",
+    "tag": "Énergie des Champs",
+    "question": "Pourquoi le champ électrostatique $\\mathbf{E} = -\\nabla V$ est-il conservatif et comment s'écrit l'énergie potentielle mutuelle de deux charges ?",
+    "indice": "En régime statique, rot E = 0, et l'intégration du travail de Coulomb depuis l'infini donne q1*q2 / (4*pi*eps0*r).",
+    "reponse": "$$\\nabla \\times \\mathbf{E} = \\mathbf{0} \\implies \\mathbf{E} = -\\nabla V$$$$E_p(r) = \\frac{q_1 q_2}{4\\pi \\varepsilon_0 r}$$<span class='text-xs text-slate-600 block mt-1'>C'est le travail fourni contre la répulsion coulombienne pour rapprocher les deux charges depuis une distance infinie où l'interaction est nulle.</span>"
+  },
+  {
+    "id": 13,
+    "cat": "energie_champs",
+    "tag": "Énergie des Champs",
+    "question": "Comment démontre-t-on que l'énergie électrostatique (dans le vide) est stockée dans le champ avec $u_e = \\frac{1}{2}\\varepsilon_0 \\|\\mathbf{E}\\|^2$ ?",
+    "indice": "Remplacer rho par eps0 * div(E) dans 1/2 * int(rho*V), intégrer par parties et annuler le flux à l'infini.",
+    "reponse": "1. <strong>Énergie d'assemblage globale</strong> : $E_{\\text{es}} = \\frac{1}{2} \\iiint \\rho V \\, \\mathrm{d}V$ (le facteur $1/2$ évite de compter les paires deux fois).<br>2. <strong>Maxwell-Gauss (dans le vide)</strong> : on injecte $\\rho = \\varepsilon_0 \\nabla \\cdot \\mathbf{E}$.<br>3. <strong>Intégration par parties</strong> : $(\\nabla \\cdot \\mathbf{E}) V = \\nabla \\cdot (V\\mathbf{E}) - \\mathbf{E} \\cdot \\nabla V$.<br>4. <strong>Flux à l'infini nul</strong> : le terme de frontière $\\iint_{S_\\infty} V \\mathbf{E} \\cdot \\mathbf{n} \\, \\mathrm{d}S \\to 0$ s'annule car le potentiel décroît plus vite que la surface ne croît.<br>5. <strong>Lien potentiel-champ</strong> : comme $-\\nabla V = \\mathbf{E}$, il reste : $$E_{\\text{es}} = \\iiint \\frac{1}{2}\\varepsilon_0 \\|\\mathbf{E}\\|^2 \\, \\mathrm{d}V \\implies u_e = \\frac{1}{2}\\varepsilon_0 \\|\\mathbf{E}\\|^2$$<em>(Dans un milieu matériel diélectrique, l'expression se généralise simplement en $u_e = \\frac{1}{2}\\mathbf{D} \\cdot \\mathbf{E} = \\frac{1}{2}\\varepsilon \\|\\mathbf{E}\\|^2$.)</em>"
+  },
+  {
+    "id": 14,
+    "cat": "energie_champs",
+    "tag": "Énergie des Champs",
+    "question": "Quelle est la densité volumique d'énergie magnétique $u_m$ stockée dans l'espace autour des courants ?",
+    "indice": "Équivalent magnétique du terme électrostatique, inversement proportionnel à mu0.",
+    "reponse": "$$u_m = \\frac{1}{2\\mu_0} \\|\\mathbf{B}\\|^2 \\quad \\left(\\text{ou } \\frac{1}{2} \\mathbf{B} \\cdot \\mathbf{H}\\right)$$<span class='text-xs text-slate-600 block mt-1'>De même qu'une bobine d'inductance $L$ stocke $\\frac{1}{2} L I^2$, cette énergie n'est pas confinée dans le fil conducteur mais réside dans le champ magnétique déployé dans tout l'espace environnant.</span>"
+  },
+  {
+    "id": 15,
+    "cat": "energie_champs",
+    "tag": "Énergie des Champs",
+    "question": "Pourquoi le champ électrique dynamique (induit) n'est-il PLUS conservatif ?",
+    "indice": "Équation de Maxwell-Faraday : le rotationnel de E est non nul en présence de dB/dt.",
+    "reponse": "$$\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t} \\neq \\mathbf{0}$$<span class='text-xs text-slate-600 block mt-1'>Puisque son rotationnel n'est pas nul, $\\mathbf{E}$ ne dérive plus d'un simple gradient scalaire $-\\nabla V$. On doit introduire le potentiel vecteur $\\mathbf{A}$ : $\\mathbf{E} = -\\nabla V - \\frac{\\partial \\mathbf{A}}{\\partial t}$. La circulation de $\\mathbf{E}$ sur une boucle fermée n'est plus nulle.</span>"
+  },
+  {
+    "id": 16,
+    "cat": "energie_champs",
+    "tag": "Énergie des Champs",
+    "question": "Quelle conséquence a la non-conservativité du champ électrique induit sur le travail d'une charge parcourant un circuit fermé ?",
+    "indice": "Définition de la force électromotrice induite fem e = circ(E) = -dPhi/dt.",
+    "reponse": "Le travail par unité de charge le long d'un contour fermé $\\mathcal{C}$ n'est pas nul : c'est la <strong>force électromotrice (f.e.m.) induite</strong> $e$ :<br>$$e = \\oint_{\\mathcal{C}} \\mathbf{E} \\cdot \\mathrm{d}\\mathbf{r} = -\\frac{\\mathrm{d}\\Phi_{\\mathbf{B}}}{\\mathrm{d}t}$$<span class='text-xs text-slate-600 block mt-1'>Ce travail non nul permet de mettre en mouvement continu les charges dans un circuit fermé (principe du générateur et de l'alternateur).</span>"
+  },
+  {
+    "id": 17,
+    "cat": "poynting_bilan",
+    "tag": "Bilan de Poynting",
+    "question": "Pourquoi la conservation de l'énergie en électromagnétisme impose-t-elle un bilan local plutôt qu'un simple bilan instantané à distance ?",
+    "indice": "Vitesse finie c de propagation des interactions et causalité relativiste.",
+    "reponse": "En mécanique newtonienne, l'interaction à distance est supposée instantanée. En électrodynamique, toute perturbation se propage à la vitesse finie $c$. Si un système perd de l'énergie en un point $A$, celle-ci ne peut réapparaître en $B$ qu'après un délai : elle doit obligatoirement transiter continûment à travers l'espace sous forme de flux dans les champs."
+  },
+  {
+    "id": 18,
+    "cat": "poynting_bilan",
+    "tag": "Bilan de Poynting",
+    "question": "Quel est l'énoncé du théorème de Poynting sous sa forme locale différentielle ?",
+    "indice": "Équation de continuité de l'énergie reliant l'accumulation, la divergence du flux et le travail cédé à la matière.",
+    "reponse": "$$\\frac{\\partial u_{\\text{em}}}{\\partial t} + \\nabla \\cdot \\mathbf{\\Pi} = -\\mathbf{j} \\cdot \\mathbf{E}$$avec la densité d'énergie totale du champ :<br>$$u_{\\text{em}} = \\frac{1}{2}\\varepsilon_0 \\|\\mathbf{E}\\|^2 + \\frac{1}{2\\mu_0} \\|\\mathbf{B}\\|^2$$"
+  },
+  {
+    "id": 19,
+    "cat": "poynting_bilan",
+    "tag": "Bilan de Poynting",
+    "question": "Quelle est l'expression et l'interprétation physique du vecteur de Poynting $\\mathbf{\\Pi}$ ?",
+    "indice": "Produit vectoriel de E et B normalisé par mu0. Unité de puissance surfacique.",
+    "reponse": "$$\\mathbf{\\Pi} = \\frac{\\mathbf{E} \\times \\mathbf{B}}{\\mu_0} \\quad (\\text{ou } \\mathbf{E} \\times \\mathbf{H})$$<span class='text-xs text-slate-600 block mt-1'>Il représente la densité de flux de puissance électromagnétique (en $\\mathrm{W}\\cdot\\mathrm{m}^{-2}$). Sa direction indique le sens de propagation de l'énergie à travers le vide ou les milieux matériels.</span>"
+  },
+  {
+    "id": 20,
+    "cat": "poynting_bilan",
+    "tag": "Bilan de Poynting",
+    "question": "Quelle est la forme intégrale du théorème de Poynting sur un volume fermé $V$ délimité par une surface $S$ ?",
+    "indice": "Intégration du bilan local et application du théorème de Green-Ostrogradski.",
+    "reponse": "$$-\\frac{\\mathrm{d}}{\\mathrm{d}t} \\iiint_V u_{\\text{em}} \\, \\mathrm{d}V = \\iint_S \\mathbf{\\Pi} \\cdot \\mathbf{n} \\, \\mathrm{d}S + \\iiint_V (\\mathbf{j} \\cdot \\mathbf{E}) \\, \\mathrm{d}V$$<span class='text-xs text-slate-600 block mt-1'>Diminution de l'énergie du champ = Énergie rayonnée/sortie à travers la frontière $S$ + Travail fourni aux charges dans le volume.</span>"
+  },
+  {
+    "id": 21,
+    "cat": "poynting_bilan",
+    "tag": "Bilan de Poynting",
+    "question": "Dans une résistance cylindrique traversée par un courant stationnaire, d'où provient physiquement l'énergie dissipée par effet Joule selon Poynting ?",
+    "indice": "Orientation du vecteur E axial et B orthoradial à la surface du conducteur.",
+    "reponse": "À la surface de la résistance : $\\mathbf{E} = E\\mathbf{u}_z$ (axial) et $\\mathbf{B} = B\\mathbf{u}_\\theta$ (orhto-radial).<br>$$\\mathbf{\\Pi} = \\frac{\\mathbf{E} \\times \\mathbf{B}}{\\mu_0} = -\\frac{E B}{\\mu_0} \\mathbf{u}_r$$Le vecteur de Poynting est dirigé <strong>radialement vers l'intérieur</strong> du conducteur. L'énergie ne chemine pas le long des fils métalliques : elle voyage dans l'espace diélectrique extérieur et pénètre latéralement dans la résistance pour s'y dissiper !"
+  },
+  {
+    "id": 22,
+    "cat": "poynting_bilan",
+    "tag": "Bilan de Poynting",
+    "question": "Comment le vecteur de Poynting explique-t-il le stockage d'énergie lors de la charge d'un condensateur plan ?",
+    "indice": "Champ E axial croissant, champ B azimutal induit par le courant de déplacement.",
+    "reponse": "Quand $E(t)$ augmente dans l'entrefer, le courant de déplacement $\\varepsilon_0 \\frac{\\partial \\mathbf{E}}{\\partial t}$ engendre un champ magnétique circulaire $\\mathbf{B}_\\theta$. Le produit $\\mathbf{E} \\times \\mathbf{B}$ produit un vecteur $\\mathbf{\\Pi}$ orienté <strong>vers le centre de l'entrefer</strong> : le flux entrant à travers la frontière latérale correspond exactement à l'accroissement de $\\frac{1}{2} C U^2$."
+  },
+  {
+    "id": 23,
+    "cat": "poynting_bilan",
+    "tag": "Bilan de Poynting",
+    "question": "Quel lien unifie le flux d'énergie électromagnétique $\\mathbf{\\Pi}$ et la quantité de mouvement mécanique (pression de radiation) ?",
+    "indice": "Densité d'impulsion du champ électromagnétique g = Pi / c^2.",
+    "reponse": "Le champ électromagnétique possède une quantité de mouvement volumique :<br>$$\\mathbf{g}_{\\text{em}} = \\frac{\\mathbf{\\Pi}}{c^2} = \\varepsilon_0 (\\mathbf{E} \\times \\mathbf{B})$$<span class='text-xs text-slate-600 block mt-1'>Une onde électromagnétique transportant de l'énergie transporte aussi une impulsion $p = U/c$. Lors de son absorption ou réflexion par une surface matérielle, la variation d'impulsion du champ crée une force mécanique mesurable : la pression de radiation.</span>"
+  },
+  {
+    "id": 24,
+    "cat": "poynting_bilan",
+    "tag": "Bilan de Poynting",
+    "question": "Comment s'écrit le bilan de conservation global de l'énergie pour un système couplé {matière + champs} ?",
+    "indice": "Somme des énergies cinétique de la matière, énergie propre des champs et terme de rayonnement vers l'infini.",
+    "reponse": "$$\\frac{\\mathrm{d}}{\\mathrm{d}t} \\left( E_{c,\\text{matière}} + \\iiint u_{\\text{em}} \\, \\mathrm{d}V \\right) + \\iint_{S_\\infty} \\mathbf{\\Pi} \\cdot \\mathbf{n} \\, \\mathrm{d}S = 0$$<span class='text-xs text-slate-600 block mt-1'>L'énergie mécanique des particules et l'énergie des champs s'échangent sans aucune perte interne via le terme charnière $\\mathbf{j} \\cdot \\mathbf{E}$. L'énergie globale n'est modifiée que si le système rayonne à travers sa frontière lointaine.</span>"
+  }
+]

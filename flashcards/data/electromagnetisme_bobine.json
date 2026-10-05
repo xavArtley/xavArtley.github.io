@@ -1,0 +1,194 @@
+[
+    {
+        "id":  1,
+        "cat":  "maxwell",
+        "tag":  "Maxwell \u0026 Potentiels",
+        "question":  "Équation locale de Maxwell-Gauss",
+        "indice":  "Divergence de E en présence de charges.",
+        "reponse":  "$$\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\varepsilon}$$\u003cspan class=\u0027text-xs text-slate-500 block mt-1\u0027\u003eRelie la divergence du champ électrique à la densité volumique de charge.\u003c/span\u003e"
+    },
+    {
+        "id":  2,
+        "cat":  "maxwell",
+        "tag":  "Maxwell \u0026 Potentiels",
+        "question":  "Équation locale de Maxwell-Thomson (conservation du flux)",
+        "indice":  "Flux conservatif du champ magnétique.",
+        "reponse":  "$$\\nabla \\cdot \\mathbf{B} = 0$$\u003cspan class=\u0027text-xs text-slate-500 block mt-1\u0027\u003eTraduit l\u0027absence de monopôles magnétiques isolés.\u003c/span\u003e"
+    },
+    {
+        "id":  3,
+        "cat":  "maxwell",
+        "tag":  "Maxwell \u0026 Potentiels",
+        "question":  "Équation locale de Maxwell-Faraday",
+        "indice":  "Rotationnel de E relié à la variation temporelle de B.",
+        "reponse":  "$$\\nabla \\times \\mathbf{E} = -\\frac{\\partial \\mathbf{B}}{\\partial t}$$\u003cspan class=\u0027text-xs text-slate-500 block mt-1\u0027\u003ePhénomène d\u0027induction électromagnétique.\u003c/span\u003e"
+    },
+    {
+        "id":  4,
+        "cat":  "maxwell",
+        "tag":  "Maxwell \u0026 Potentiels",
+        "question":  "Équation locale de Maxwell-Ampère (régime dynamique)",
+        "indice":  "Courant de conduction et courant de déplacement.",
+        "reponse":  "$$\\nabla \\times \\mathbf{B} = \\mu \\mathbf{J} + \\mu \\varepsilon \\frac{\\partial \\mathbf{E}}{\\partial t} = \\mu \\mathbf{J} + \\frac{1}{c^2}\\frac{\\partial \\mathbf{E}}{\\partial t}$$"
+    },
+    {
+        "id":  5,
+        "cat":  "maxwell",
+        "tag":  "Maxwell \u0026 Potentiels",
+        "question":  "Comment déduire l\u0027équation de continuité de la charge $\\nabla \\cdot \\mathbf{J} + \\frac{\\partial \\rho}{\\partial t} = 0$ des équations de Maxwell ?",
+        "indice":  "Prendre la divergence de Maxwell-Ampère.",
+        "reponse":  "En appliquant la divergence à Maxwell-Ampère (sachant $\\nabla \\cdot (\\nabla \\times \\mathbf{B}) = 0$) :\u003cbr\u003e$$\\mu \\nabla \\cdot \\mathbf{J} + \\mu \\varepsilon \\frac{\\partial}{\\partial t}(\\nabla \\cdot \\mathbf{E}) = 0$$Puis en injectant Maxwell-Gauss $\\nabla \\cdot \\mathbf{E} = \\frac{\\rho}{\\varepsilon}$."
+    },
+    {
+        "id":  6,
+        "cat":  "maxwell",
+        "tag":  "Maxwell \u0026 Potentiels",
+        "question":  "Pourquoi et comment définit-on le potentiel vecteur $\\mathbf{A}$ ?",
+        "indice":  "Pourquoi : simplification \u0026 découplage. Comment : Poincaré sur div B = 0.",
+        "reponse":  "\u003cdiv class=\u0027text-left space-y-2 text-xs sm:text-[13px]\u0027\u003e\u003cp\u003e\u003cstrong\u003ePourquoi ?\u003c/strong\u003e Simplifie la résolution :\u003cbr\u003e• Satisfait d\u0027office 2 équations de Maxwell ($\\nabla \\cdot \\mathbf{B} = 0$ et Faraday).\u003cbr\u003e• Découple en équations de d\u0027Alembert / Helmholtz vectorielles.\u003cbr\u003e• Aligne les inconnues avec la géométrie des courants $\\mathbf{J}$.\u003c/p\u003e\u003cp\u003e\u003cstrong\u003eComment ?\u003c/strong\u003e Puisque $\\nabla \\cdot \\mathbf{B} = 0$, le lemme de Poincaré assure :\u003cbr\u003e$$\\mathbf{B} = \\nabla \\times \\mathbf{A}$$\u003c/p\u003e\u003c/div\u003e"
+    },
+    {
+        "id":  7,
+        "cat":  "maxwell",
+        "tag":  "Maxwell \u0026 Potentiels",
+        "question":  "Dérivation de l\u0027expression du champ $\\mathbf{E}$ en fonction des potentiels $(\\mathbf{A}, V)$",
+        "indice":  "Injecter B = rot A dans Maxwell-Faraday.",
+        "reponse":  "$$\\nabla \\times \\left(\\mathbf{E} + \\frac{\\partial \\mathbf{A}}{\\partial t}\\right) = \\mathbf{0}$$Le champ à rotationnel nul dérive d\u0027un potentiel scalaire :\u003cbr\u003e$$\\mathbf{E} = -\\nabla V - \\frac{\\partial \\mathbf{A}}{\\partial t}$$"
+    },
+    {
+        "id":  8,
+        "cat":  "jauge",
+        "tag":  "Jauge \u0026 D\u0027Alembert",
+        "question":  "Transformation de jauge laissant le champ $\\mathbf{B}$ invariant",
+        "indice":  "Gradient d\u0027un champ scalaire.",
+        "reponse":  "$$\\mathbf{A}\u0027 = \\mathbf{A} + \\nabla \\psi$$\u003cspan class=\u0027text-xs text-slate-500 block mt-1\u0027\u003eCar $\\nabla \\times (\\nabla \\psi) = \\mathbf{0}$ pour toute fonction $\\psi$ régulière.\u003c/span\u003e"
+    },
+    {
+        "id":  9,
+        "cat":  "jauge",
+        "tag":  "Jauge \u0026 D\u0027Alembert",
+        "question":  "Transformation de jauge sur le potentiel scalaire $V$ pour conserver $\\mathbf{E}$",
+        "indice":  "Compense la dérivée temporelle de psi.",
+        "reponse":  "$$V\u0027 = V - \\frac{\\partial \\psi}{\\partial t}$$\u003cspan class=\u0027text-xs text-slate-500 block mt-1\u0027\u003eGarantit $\\mathbf{E}\u0027 = -\\nabla V\u0027 - \\frac{\\partial \\mathbf{A}\u0027}{\\partial t} = \\mathbf{E}$.\u003c/span\u003e"
+    },
+    {
+        "id":  10,
+        "cat":  "jauge",
+        "tag":  "Jauge \u0026 D\u0027Alembert",
+        "question":  "Identité vectorielle du double rotationnel pour un vecteur $\\mathbf{A}$",
+        "indice":  "Grad-div moins Laplacien vectoriel.",
+        "reponse":  "$$\\nabla \\times (\\nabla \\times \\mathbf{A}) = \\nabla(\\nabla \\cdot \\mathbf{A}) - \\Delta \\mathbf{A}$$"
+    },
+    {
+        "id":  11,
+        "cat":  "jauge",
+        "tag":  "Jauge \u0026 D\u0027Alembert",
+        "question":  "Quelle est la condition de jauge de Lorenz ?",
+        "indice":  "Divergence de A liée à la dérivée temporelle de V.",
+        "reponse":  "$$\\nabla \\cdot \\mathbf{A} + \\frac{1}{c^2}\\frac{\\partial V}{\\partial t} = 0$$\u003cspan class=\u0027text-xs text-slate-500 block mt-1\u0027\u003eElle permet de découpler les équations d\u0027ondes gouvernant $\\mathbf{A}$ et $V$.\u003c/span\u003e"
+    },
+    {
+        "id":  12,
+        "cat":  "jauge",
+        "tag":  "Jauge \u0026 D\u0027Alembert",
+        "question":  "Équation d\u0027onde pour le potentiel vecteur $\\mathbf{A}$ sous jauge de Lorenz",
+        "indice":  "Équation de d\u0027Alembert avec terme source.",
+        "reponse":  "$$\\Delta \\mathbf{A} - \\frac{1}{c^2}\\frac{\\partial^2 \\mathbf{A}}{\\partial t^2} = -\\mu \\mathbf{J} \\iff \\Box \\mathbf{A} = -\\mu \\mathbf{J}$$"
+    },
+    {
+        "id":  13,
+        "cat":  "jauge",
+        "tag":  "Jauge \u0026 D\u0027Alembert",
+        "question":  "Équation d\u0027onde pour le potentiel scalaire $V$ sous jauge de Lorenz",
+        "indice":  "Analogue à celle de A, avec terme source volumique de charge.",
+        "reponse":  "$$\\Delta V - \\frac{1}{c^2}\\frac{\\partial^2 V}{\\partial t^2} = -\\frac{\\rho}{\\varepsilon} \\iff \\Box V = -\\frac{\\rho}{\\varepsilon}$$"
+    },
+    {
+        "id":  14,
+        "cat":  "helmholtz",
+        "tag":  "Régime Harmonique",
+        "question":  "Règle de dérivation temporelle en régime harmonique ($\\mathrm{e}^{i\\omega t}$)",
+        "indice":  "Multiplication algébrique par i*omega.",
+        "reponse":  "$$\\frac{\\partial}{\\partial t} \\longrightarrow i\\omega \\qquad \\text{et} \\qquad \\frac{\\partial^2}{\\partial t^2} \\longrightarrow -\\omega^2$$"
+    },
+    {
+        "id":  15,
+        "cat":  "helmholtz",
+        "tag":  "Régime Harmonique",
+        "question":  "Passage de l\u0027équation de d\u0027Alembert temporelle à l\u0027équation de Helmholtz en régime harmonique",
+        "indice":  "Remplacer la dérivée seconde temporelle par -omega^2.",
+        "reponse":  "De $\\Delta \\mathbf{A} - \\frac{1}{c^2}\\frac{\\partial^2 \\mathbf{A}}{\\partial t^2} = -\\mu \\mathbf{J}$, on obtient :\u003cbr\u003e$$\\Delta \\underline{\\mathbf{A}} + \\frac{\\omega^2}{c^2} \\underline{\\mathbf{A}} = -\\mu \\underline{\\mathbf{J}}$$"
+    },
+    {
+        "id":  16,
+        "cat":  "helmholtz",
+        "tag":  "Régime Harmonique",
+        "question":  "Forme canonique de l\u0027équation de Helmholtz vectorielle pour $\\mathbf{A}$",
+        "indice":  "Introduction du nombre d\u0027onde k.",
+        "reponse":  "$$\\Delta \\mathbf{A} + k^2 \\mathbf{A} = -\\mu \\mathbf{J}$$"
+    },
+    {
+        "id":  17,
+        "cat":  "helmholtz",
+        "tag":  "Régime Harmonique",
+        "question":  "Expression du nombre d\u0027onde $k$ dans un diélectrique parfait LHI",
+        "indice":  "Pulsation sur célérité de phase.",
+        "reponse":  "$$k = \\frac{\\omega}{c} = \\omega\\sqrt{\\mu\\varepsilon} = \\frac{2\\pi}{\\lambda}$$"
+    },
+    {
+        "id":  18,
+        "cat":  "helmholtz",
+        "tag":  "Régime Harmonique",
+        "question":  "Sens physique du terme dynamique $k^2 \\mathbf{A}$",
+        "indice":  "Effet d\u0027oscillation et de retard par rapport au statique.",
+        "reponse":  "Il représente la correction dynamique due au retard de propagation et au déphasage spatial à haute fréquence par rapport à la magnétostatique pure."
+    },
+    {
+        "id":  19,
+        "cat":  "conducteurs",
+        "tag":  "Conducteurs \u0026 ARQM",
+        "question":  "Loi d\u0027Ohm locale dans un conducteur ohmique",
+        "indice":  "Densité de courant de conduction et champ électrique.",
+        "reponse":  "$$\\mathbf{J}_{\\text{cond}} = \\sigma \\mathbf{E}$$\u003cspan class=\u0027text-xs text-slate-500 block mt-1\u0027\u003eavec $\\sigma$ la conductivité électrique en $\\text{S}\\cdot\\text{m}^{-1}$.\u003c/span\u003e"
+    },
+    {
+        "id":  20,
+        "cat":  "conducteurs",
+        "tag":  "Conducteurs \u0026 ARQM",
+        "question":  "Expression de la permittivité diélectrique complexe équivalente $\\underline{\\varepsilon}$",
+        "indice":  "Englobe conduction et déplacement.",
+        "reponse":  "$$\\underline{\\varepsilon} = \\varepsilon - i\\frac{\\sigma}{\\omega}$$"
+    },
+    {
+        "id":  21,
+        "cat":  "conducteurs",
+        "tag":  "Conducteurs \u0026 ARQM",
+        "question":  "Paramètre de dispersion généralisé $k^2$ en milieu conducteur",
+        "indice":  "Composante diélectrique réelle et perte ohmique imaginaire.",
+        "reponse":  "$$k^2 = \\omega^2 \\mu \\underline{\\varepsilon} = \\omega^2 \\mu \\varepsilon - i\\omega\\mu\\sigma$$"
+    },
+    {
+        "id":  23,
+        "cat":  "conducteurs",
+        "tag":  "Conducteurs \u0026 ARQM",
+        "question":  "Cas limite : bon conducteur à basse fréquence ($\\sigma \\gg \\omega\\varepsilon$)",
+        "indice":  "Le terme dissipatif domine le terme diélectrique.",
+        "reponse":  "$$k^2 \\approx -i\\omega\\mu\\sigma$$\u003cspan class=\u0027text-xs text-slate-500 block mt-1\u0027\u003eRégime purement diffusif avec fort amortissement des ondes.\u003c/span\u003e"
+    },
+    {
+        "id":  24,
+        "cat":  "conducteurs",
+        "tag":  "Conducteurs \u0026 ARQM",
+        "question":  "Expression de l\u0027épaisseur de peau $\\delta$ dans un bon conducteur",
+        "indice":  "Distance caractéristique d\u0027atténuation.",
+        "reponse":  "$$\\delta = \\sqrt{\\frac{2}{\\omega\\mu\\sigma}}$$"
+    },
+    {
+        "id":  25,
+        "cat":  "conducteurs",
+        "tag":  "Conducteurs \u0026 ARQM",
+        "question":  "Limite quasi-statique (ARQM) de l\u0027équation de Helmholtz",
+        "indice":  "Taille du domaine très inférieure à la longueur d\u0027onde (k -\u003e 0).",
+        "reponse":  "Quand $k \\to 0$ (soit $r \\ll \\lambda$), $k^2 \\mathbf{A} \\to 0$ :\u003cbr\u003e$$\\Delta \\mathbf{A} = -\\mu \\mathbf{J}$$\u003cspan class=\u0027text-xs text-slate-500 block mt-1\u0027\u003eOn retrouve rigoureusement l\u0027équation de Poisson de la magnétostatique.\u003c/span\u003e"
+    }
+]

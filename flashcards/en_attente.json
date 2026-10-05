@@ -1,0 +1,22 @@
+[
+  {
+    "id": "discretisation_sobolev_elements_finis",
+    "title": "Discrétisation & Espaces de Sobolev",
+    "description": "Formulations intégrales BEM/SIE, Lagrange P0-P2, espaces L², H¹, H(div), H(curl), éléments vectoriels Nédélec, Raviart-Thomas, RWG et décomposition Loop-Tree.",
+    "icon": "📐",
+    "category": "Analyse Numérique & BEM",
+    "cardCount": 24,
+    "page": "flashcards/viewer.html?deck=discretisation_sobolev_elements_finis",
+    "dataFile": "flashcards/data/discretisation_sobolev_elements_finis.json"
+  },
+  {
+    "id": "cnd_courants_foucault_formules",
+    "title": "Formules Clés CND-CF & Modélisation EM",
+    "description": "Identité de Sommerfeld, transformée de Hankel, modèle Dodd & Deeds, théorème d'Auld, variation d'impédance ΔZ, impédance de surface et tenseurs de Green.",
+    "icon": "🧲",
+    "category": "CND & Méthodes Intégrales",
+    "cardCount": 26,
+    "page": "flashcards/viewer.html?deck=cnd_courants_foucault_formules",
+    "dataFile": "flashcards/data/cnd_courants_foucault_formules.json"
+  }
+]
